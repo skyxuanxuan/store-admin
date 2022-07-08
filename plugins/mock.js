@@ -1,16 +1,49 @@
-import { mock } from 'mockjs';
+import { mock } from 'mockjs'
 
-mock(RegExp('/api/auth/login'), 'post', (data) => {
-    console.log(data);
-    return {
-        code: 20000,
-        message: 'success',
-        data: {
-            token: {
-                accessToken: 'abcdefg',
-                refreshToken: '1234569'
-            }
-        }
+mock(/\/api\/auth\/login/, 'post', (data) => {
+  console.log(data)
+  return {
+    res: 20000,
+    msg: 'success',
+    data: {
+      token: {
+        accessToken: 'sdgfdgsfdgsfdgsdfg',
+        refreshToken: '1234569'
+      }
     }
+  }
+})
 
-});
+mock(/\/api\/auth\/refresh/, 'post', (data) => {
+  console.log(data)
+  return {
+    res: 20000,
+    msg: 'success',
+    data: {
+      token: {
+        accessToken: 'sdgfdgsfdgsfdgsdfg' + Math.random(),
+        refreshToken: '1234569' + Math.random()
+      }
+    }
+  }
+})
+
+mock(/\/api\/auth\/logout/, 'post', (data) => {
+  return {
+    res: 20000,
+    msg: 'success'
+  }
+})
+
+mock(/\/api\/auth\/user/, 'get', (data) => {
+  console.log(data)
+  return {
+    res: 20000,
+    msg: 'success',
+    data: {
+      info: {
+        username: 'From User'
+      }
+    }
+  }
+})

@@ -15,13 +15,15 @@ export default {
     return {
 
     }
+  },
+  created () {
   }
 }
 </script>
 
 <style>
 .bg {
-  background: url('../static/background.jpg');
+  background: url('~/static/background.jpg');
   background-size: cover;
   height: 100vh;
 }

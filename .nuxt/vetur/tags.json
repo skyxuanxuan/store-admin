@@ -1,0 +1,20 @@
+{
+  "MyLoading": {
+    "description": "Auto imported from components/MyLoading.vue"
+  },
+  "NuxtLogo": {
+    "description": "Auto imported from components/NuxtLogo.vue"
+  },
+  "PageStatisticCard": {
+    "description": "Auto imported from components/PageStatisticCard.vue"
+  },
+  "ToTop": {
+    "description": "Auto imported from components/ToTop.vue"
+  },
+  "Tutorial": {
+    "description": "Auto imported from components/Tutorial.vue"
+  },
+  "VuetifyLogo": {
+    "description": "Auto imported from components/VuetifyLogo.vue"
+  }
+}

@@ -1,0 +1,257 @@
+<template>
+  <div>
+    <v-app-bar color="white" app>
+      <v-app-bar-nav-icon />
+
+      <v-toolbar-title>門市票券(整批發行)</v-toolbar-title>
+
+      <v-spacer />
+
+      <v-menu bottom left>
+        <template #activator="{ on, attrs }">
+          <v-btn class="d-flex d-sm-none" icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item-group>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-send</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>發送票券</v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-plus</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>建立產品</v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-file-plus</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>申請空白票券</v-list-item-title>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-menu>
+
+      <v-btn class="d-none d-sm-flex" color="#666666" width="140" dark>
+        發送票券
+      </v-btn>
+    </v-app-bar>
+    <div class="pa-4">
+      <v-tabs-items
+        v-model="CurrentPageSectionIndex"
+        :class="{ none: loadingStatus }"
+      >
+        <v-tab-item class="background-color">
+          <PageStatisticCard :items="pageStatisticCardItems" />
+
+          <v-container class="white mt-8">
+            <v-toolbar dense flat>
+              <v-text-field
+                class="searchInput top-15"
+                label="Outlined"
+                outlined
+                dense
+              />
+
+              <v-btn class="left-10" outlined width="80">
+                顯示
+              </v-btn>
+
+              <v-spacer />
+
+              <v-btn
+                class="right-10 d-none d-sm-flex"
+                color="#666666"
+                width="160"
+                dark
+              >
+                建立產品
+              </v-btn>
+              <v-btn class="d-none d-sm-flex" color="#666666" width="160" dark>
+                申請空白票券
+              </v-btn>
+            </v-toolbar>
+            <div>
+              <v-data-table
+                mobile-breakpoint="770"
+                :headers="sec1_table_header"
+                :items="sec1_data_list"
+                :items-per-page="10"
+                :search="sec1_search"
+                item-key="d0"
+                calculate-widths
+                :page.sync="sec1_table_page"
+                :footer-props="{
+                  'disable-pagination': true,
+                  'next-icon': '',
+                  'prev-icon': ''
+                }"
+                @page-count="sec1_table_page_count = $event"
+              >
+                <template #item.actions="{}">
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        class="no-backgroud-hover white"
+                        elevation="0"
+                        color="white"
+                        fab
+                        x-small
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon color="primary">
+                          mdi-pencil
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <span>修改</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        class="no-backgroud-hover white"
+                        elevation="0"
+                        color="white"
+                        fab
+                        x-small
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon color="error">
+                          mdi-delete
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <span>刪除</span>
+                  </v-tooltip>
+                </template>
+              </v-data-table>
+            </div>
+            <div class="text-center pt-2">
+              <v-pagination
+                v-model="sec1_table_page"
+                :length="sec1_table_page_count"
+                :total-visible="7"
+              />
+            </div>
+          </v-container>
+        </v-tab-item>
+      </v-tabs-items>
+    </div>
+    <to-top />
+  </div>
+</template>
+
+<script>
+import PageStatisticCard from '~/components/PageStatisticCard.vue'
+import ToTop from '~/components/ToTop.vue'
+
+export default {
+  name: 'IndexPage',
+  title: '門市票券(整批發行)',
+  components: { PageStatisticCard, ToTop },
+  layout: 'adminLayout',
+  data() {
+    return {
+      loadingStatus: true,
+      CurrentPageSectionIndex: 0,
+      func_fab: false,
+
+      pageStatisticCardItems: [
+        {
+          title: '門市架上產品 (個)',
+          value: 0
+        },
+        {
+          title: '本月銷售票券 (張)',
+          value: 0
+        },
+        {
+          title: '本月銷售金額 (元)',
+          value: 33333
+        },
+        {
+          title: '庫存空白票券 (張)',
+          value: 0
+        }
+      ],
+
+      /* Table1 */
+      sec1_table_header: [
+        {
+          text: '代碼',
+          align: 'start',
+          value: 'd1'
+        },
+        {
+          text: '產品/規格',
+          align: 'start',
+          value: 'd2'
+        },
+        {
+          text: '分類標籤',
+          align: 'start',
+          value: 'd3'
+        },
+        {
+          text: '售價',
+          align: 'start',
+          value: 'd4',
+          filterable: false
+        },
+        {
+          text: '售出',
+          align: 'center',
+          value: 'd5',
+          filterable: false
+        },
+        {
+          text: '剩餘',
+          align: 'center',
+          value: 'd6',
+          filterable: false
+        }
+      ],
+      sec1_search: '',
+      sec1_table_page: 1,
+      sec1_table_page_count: 0,
+      sec1_data_list: []
+    }
+  },
+  watch: {},
+  created() {}
+}
+</script>
+<style lang="scss" scoped>
+.background-color {
+  background-color: $store_admin_background_color !important;
+}
+
+.right-10 {
+  right: 10px;
+}
+
+.left-10 {
+  left: 10px;
+}
+
+.left-20 {
+  left: 20px;
+}
+
+.top-15 {
+  top: 15px;
+}
+
+.searchInput.v-text-field {
+  max-width: 250px;
+  width: 250px;
+}
+</style>

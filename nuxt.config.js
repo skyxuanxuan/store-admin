@@ -11,15 +11,11 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    '@mdi/font/css/materialdesignicons.min.css'
-  ],
+  css: ['@mdi/font/css/materialdesignicons.min.css', '~/assets/transition.css'],
 
   // server: {
   //   host: '0.0.0.0',
@@ -30,8 +26,9 @@ export default {
   plugins: [
     '~/plugins/lodash.js',
     '~/plugins/md5.js',
-    '@/plugins/mock',
-    '@/plugins/axios'
+    '~/plugins/mock', // 開發用測試 api 回傳
+    '~/plugins/axios',
+    '~/plugins/filters' // 全局過濾器
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -42,8 +39,18 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    // sass auto import
+    '@nuxtjs/style-resources'
   ],
+
+  /*
+   ** 這邊是要自己手動新加入的位置
+   ** 樣式資源位置
+   */
+  styleResources: {
+    scss: ['~/assets/scss/*.scss']
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -55,43 +62,49 @@ export default {
     '@nuxtjs/auth-next'
   ],
 
-  auth: {
-    strategies: {
-      local: {
-        scheme: 'refresh',
-        token: {
-          property: 'data.token.accessToken',
-          global: true,
-          maxAge: 60 * 30
-        },
-        refreshToken: {
-          property: 'data.token.refreshToken',
-          data: 'refreshToken',
-          tokenRequired: true,
-          maxAge: 60 * 60 * 24 * 30
-        },
-        user: {
-          property: false
-        },
-        endpoints: {
-          login: { url: '/api/auth/login', method: 'post' },
-          logout: { url: '/api/auth/logout', method: 'get' },
-          refresh: { url: '/api/auth/refresh', method: 'post' },
-          user: false
-        }
-      }
-    },
-    redirect: {
-      login: '/login',
-      logout: '/login',
-      callback: '/login',
-      home: '/'
-    }
-  },
+  // auth: {
+  //   strategies: {
+  //     local: {
+  //       scheme: 'refresh',
+  //       token: {
+  //         property: 'data.token.accessToken',
+  //         global: true,
+  //         maxAge: 60
+  //       },
+  //       refreshToken: {
+  //         property: 'data.token.refreshToken',
+  //         data: 'refreshToken',
+  //         tokenRequired: true,
+  //         maxAge: 60 * 60 * 24 * 30
+  //       },
+  //       user: {
+  //         property: false
+  //       },
+  //       endpoints: {
+  //         login: { url: '/api/auth/login', method: 'post' },
+  //         logout: { url: '/api/auth/logout', method: 'post' },
+  //         refresh: { url: '/api/auth/refresh', method: 'post' },
+  //         user: false
+  //       }
+  //     }
+  //   },
+  //   redirect: {
+  //     login: '/login',
+  //     logout: '/login',
+  //     callback: '/login',
+  //     home: '/'
+  //   },
+  //   cookie: {
+  //     options: {
+  //       maxAge: 60 * 60 * 24 * 30
+  //     }
+  //   },
+  //   localStorage: false
+  // },
 
-  router: {
-    middleware: ['auth']
-  },
+  // router: {
+  //   middleware: ['auth']
+  // },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -137,6 +150,5 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  }
+  build: {}
 }

@@ -1,0 +1,30 @@
+[
+  {
+    "name": "inspire",
+    "path": "/inspire",
+    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220704\\\\pages\\\\inspire.vue",
+    "chunkName": "pages/inspire",
+    "_name": "_0cd217bb"
+  },
+  {
+    "name": "login",
+    "path": "/login",
+    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220704\\\\pages\\\\login.vue",
+    "chunkName": "pages/login",
+    "_name": "_28bc19ec"
+  },
+  {
+    "name": "S01",
+    "path": "/S01",
+    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220704\\\\pages\\\\S01.vue",
+    "chunkName": "pages/S01",
+    "_name": "_38d401f5"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220704\\\\pages\\\\index.vue",
+    "chunkName": "pages/index",
+    "_name": "_21fa4ff3"
+  }
+]

@@ -9,10 +9,10 @@
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img src="~/logo_Sunpay.svg" contain />
+          <v-img src="/logo_Sunpay.svg" contain />
         </v-list-item-avatar>
 
-        <v-list-item-title />
+        <v-list-item-title>{{ userInfo.username }}</v-list-item-title>
 
         <v-btn icon @click.stop="miniVariant = !miniVariant">
           <v-icon>mdi-chevron-left</v-icon>
