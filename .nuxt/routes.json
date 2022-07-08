@@ -2,29 +2,29 @@
   {
     "name": "inspire",
     "path": "/inspire",
-    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220704\\\\pages\\\\inspire.vue",
+    "component": "C:\\\\Users\\\\colds\\\\OneDrive\\\\桌面\\\\sunpay\\\\store-admin\\\\pages\\\\inspire.vue",
     "chunkName": "pages/inspire",
-    "_name": "_0cd217bb"
+    "_name": "_bb2b8872"
   },
   {
     "name": "login",
     "path": "/login",
-    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220704\\\\pages\\\\login.vue",
+    "component": "C:\\\\Users\\\\colds\\\\OneDrive\\\\桌面\\\\sunpay\\\\store-admin\\\\pages\\\\login.vue",
     "chunkName": "pages/login",
-    "_name": "_28bc19ec"
+    "_name": "_24cbaa16"
   },
   {
     "name": "S01",
     "path": "/S01",
-    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220704\\\\pages\\\\S01.vue",
+    "component": "C:\\\\Users\\\\colds\\\\OneDrive\\\\桌面\\\\sunpay\\\\store-admin\\\\pages\\\\S01.vue",
     "chunkName": "pages/S01",
-    "_name": "_38d401f5"
+    "_name": "_3a4fe7fe"
   },
   {
     "name": "index",
     "path": "/",
-    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220704\\\\pages\\\\index.vue",
+    "component": "C:\\\\Users\\\\colds\\\\OneDrive\\\\桌面\\\\sunpay\\\\store-admin\\\\pages\\\\index.vue",
     "chunkName": "pages/index",
-    "_name": "_21fa4ff3"
+    "_name": "_5b2406ff"
   }
 ]

@@ -3,7 +3,7 @@
     <v-app-bar color="white" app>
       <v-app-bar-nav-icon />
 
-      <v-toolbar-title>門市票券(整批發行)</v-toolbar-title>
+      <v-toolbar-title>門市票券(整批發行)TEST</v-toolbar-title>
 
       <v-spacer />
 

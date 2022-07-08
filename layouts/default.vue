@@ -105,12 +105,12 @@ export default {
           icon: 'mdi-storefront-outline',
           to: '/S01'
         },
-        { text: '商城票券(逐筆發行)', icon: 'mdi-cloud-outline', to: '/S02' },
-        { text: '店家資訊', icon: 'mdi-book-open-variant', to: '/S03' },
-        { text: '訂單', icon: 'mdi-sticker-text-outline', to: '/S04' },
-        { text: '報告', icon: 'mdi-poll', to: '/S05' },
-        { text: '通知中心', icon: 'mdi-bell-outline', to: '/S06' },
-        { text: '操作權限', icon: 'mdi-account-multiple', to: '/S07' }
+        { text: '商城票券(逐筆發行)', icon: 'mdi-cloud-outline', to: '/S01' },
+        { text: '店家資訊', icon: 'mdi-book-open-variant', to: '/S01' },
+        { text: '訂單', icon: 'mdi-sticker-text-outline', to: '/S01' },
+        { text: '報告', icon: 'mdi-poll', to: '/S01' },
+        { text: '通知中心', icon: 'mdi-bell-outline', to: '/S01' },
+        { text: '操作權限', icon: 'mdi-account-multiple', to: '/S01' }
       ],
       miniVariant: false
     }
