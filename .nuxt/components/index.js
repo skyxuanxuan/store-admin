@@ -1,9 +1,9 @@
-export const MyLoading = () => import('../..\\components\\MyLoading.vue' /* webpackChunkName: "components/my-loading" */).then(c => wrapFunctional(c.default || c))
-export const NuxtLogo = () => import('../..\\components\\NuxtLogo.vue' /* webpackChunkName: "components/nuxt-logo" */).then(c => wrapFunctional(c.default || c))
-export const PageStatisticCard = () => import('../..\\components\\PageStatisticCard.vue' /* webpackChunkName: "components/page-statistic-card" */).then(c => wrapFunctional(c.default || c))
-export const ToTop = () => import('../..\\components\\ToTop.vue' /* webpackChunkName: "components/to-top" */).then(c => wrapFunctional(c.default || c))
-export const Tutorial = () => import('../..\\components\\Tutorial.vue' /* webpackChunkName: "components/tutorial" */).then(c => wrapFunctional(c.default || c))
-export const VuetifyLogo = () => import('../..\\components\\VuetifyLogo.vue' /* webpackChunkName: "components/vuetify-logo" */).then(c => wrapFunctional(c.default || c))
+export { default as MyLoading } from '../..\\components\\MyLoading.vue'
+export { default as NuxtLogo } from '../..\\components\\NuxtLogo.vue'
+export { default as PageStatisticCard } from '../..\\components\\PageStatisticCard.vue'
+export { default as ToTop } from '../..\\components\\ToTop.vue'
+export { default as Tutorial } from '../..\\components\\Tutorial.vue'
+export { default as VuetifyLogo } from '../..\\components\\VuetifyLogo.vue'
 
 // nuxt/nuxt.js#8607
 function wrapFunctional(options) {

@@ -59,9 +59,37 @@
                 dense
               />
 
-              <v-btn class="left-10" outlined width="80">
-                顯示
-              </v-btn>
+              <v-menu offset-y :close-on-content-click="false">
+                <template #activator="{ on, attrs }">
+                  <v-btn
+                    class="left-10"
+                    outlined
+                    width="80"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    顯示
+                  </v-btn>
+                </template>
+                <v-list flat>
+                  <v-list-item-group v-model="display_settings" multiple>
+                    <v-list-item
+                      v-for="item in sec1_table_header"
+                      :key="item.text"
+                    >
+                      <template #default="{ active }">
+                        <v-list-item-action>
+                          <v-checkbox :input-value="active" color="primary" />
+                        </v-list-item-action>
+
+                        <v-list-item-content>
+                          <v-list-item-title>{{ item.text }}</v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+              </v-menu>
 
               <v-spacer />
 
@@ -80,7 +108,7 @@
             <div>
               <v-data-table
                 mobile-breakpoint="770"
-                :headers="sec1_table_header"
+                :headers="sec1_showHeaders"
                 :items="sec1_data_list"
                 :items-per-page="10"
                 :search="sec1_search"
@@ -164,6 +192,8 @@ export default {
       CurrentPageSectionIndex: 0,
       func_fab: false,
 
+      display_settings: [0, 1, 2, 3, 4, 5],
+
       pageStatisticCardItems: [
         {
           title: '門市架上產品 (個)',
@@ -225,6 +255,17 @@ export default {
       sec1_data_list: []
     }
   },
+  computed: {
+    sec1_showHeaders() {
+      const arr = []
+      for (let i = 0; i < this.sec1_table_header.length; i++) {
+        if (this.display_settings.includes(i)) {
+          arr.push(this.sec1_table_header[i])
+        }
+      }
+      return arr
+    }
+  },
   watch: {},
   created() {}
 }
@@ -254,4 +295,5 @@ export default {
   max-width: 250px;
   width: 250px;
 }
+
 </style>

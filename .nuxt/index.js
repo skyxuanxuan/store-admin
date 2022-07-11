@@ -13,18 +13,18 @@ import { createStore } from './store.js'
 
 /* Plugins */
 
-import nuxt_plugin_plugin_523a2264 from 'nuxt_plugin_plugin_523a2264' // Source: .\\components\\plugin.js (mode: 'all')
-import nuxt_plugin_plugin_35935410 from 'nuxt_plugin_plugin_35935410' // Source: .\\vuetify\\plugin.js (mode: 'all')
-import nuxt_plugin_workbox_1a267be3 from 'nuxt_plugin_workbox_1a267be3' // Source: .\\workbox.js (mode: 'client')
-import nuxt_plugin_metaplugin_7b14dd63 from 'nuxt_plugin_metaplugin_7b14dd63' // Source: .\\pwa\\meta.plugin.js (mode: 'all')
-import nuxt_plugin_iconplugin_7fbc82d7 from 'nuxt_plugin_iconplugin_7fbc82d7' // Source: .\\pwa\\icon.plugin.js (mode: 'all')
-import nuxt_plugin_axios_75e70c87 from 'nuxt_plugin_axios_75e70c87' // Source: .\\axios.js (mode: 'all')
+import nuxt_plugin_plugin_32dcb868 from 'nuxt_plugin_plugin_32dcb868' // Source: .\\components\\plugin.js (mode: 'all')
+import nuxt_plugin_plugin_387ce8b0 from 'nuxt_plugin_plugin_387ce8b0' // Source: .\\vuetify\\plugin.js (mode: 'all')
+import nuxt_plugin_workbox_61451f4b from 'nuxt_plugin_workbox_61451f4b' // Source: .\\workbox.js (mode: 'client')
+import nuxt_plugin_metaplugin_daa4ce6a from 'nuxt_plugin_metaplugin_daa4ce6a' // Source: .\\pwa\\meta.plugin.js (mode: 'all')
+import nuxt_plugin_iconplugin_d1558382 from 'nuxt_plugin_iconplugin_d1558382' // Source: .\\pwa\\icon.plugin.js (mode: 'all')
+import nuxt_plugin_axios_2ba769ef from 'nuxt_plugin_axios_2ba769ef' // Source: .\\axios.js (mode: 'all')
 import nuxt_plugin_lodash_5d4c7b8c from 'nuxt_plugin_lodash_5d4c7b8c' // Source: ..\\plugins\\lodash.js (mode: 'all')
 import nuxt_plugin_md5_50df32a2 from 'nuxt_plugin_md5_50df32a2' // Source: ..\\plugins\\md5.js (mode: 'all')
 import nuxt_plugin_mock_6a83aa00 from 'nuxt_plugin_mock_6a83aa00' // Source: ..\\plugins\\mock (mode: 'all')
 import nuxt_plugin_axios_3566aa80 from 'nuxt_plugin_axios_3566aa80' // Source: ..\\plugins\\axios (mode: 'all')
 import nuxt_plugin_filters_98405076 from 'nuxt_plugin_filters_98405076' // Source: ..\\plugins\\filters (mode: 'all')
-import nuxt_plugin_auth_8595206e from 'nuxt_plugin_auth_8595206e' // Source: .\\auth.js (mode: 'all')
+import nuxt_plugin_auth_78bfc561 from 'nuxt_plugin_auth_78bfc561' // Source: .\\auth.js (mode: 'all')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -92,7 +92,7 @@ async function createApp(ssrContext, config = {}) {
   // here we inject the router and store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
-    head: {"titleTemplate":"紅陽優惠券店家後台 - %s","title":"店家後臺","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""},{"name":"format-detection","content":"telephone=no"},{"hid":"charset","charset":"utf-8"},{"hid":"mobile-web-app-capable","name":"mobile-web-app-capable","content":"yes"},{"hid":"apple-mobile-web-app-title","name":"apple-mobile-web-app-title","content":"sunpay-coupon-store-admin"},{"hid":"og:type","name":"og:type","property":"og:type","content":"website"},{"hid":"og:title","name":"og:title","property":"og:title","content":"sunpay-coupon-store-admin"},{"hid":"og:site_name","name":"og:site_name","property":"og:site_name","content":"sunpay-coupon-store-admin"},{"hid":"og:description","name":"og:description","property":"og:description","content":"## Build Setup"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"},{"hid":"shortcut-icon","rel":"shortcut icon","href":"\u002F_nuxt\u002Ficons\u002Ficon_64x64.e3e9fb.png"},{"hid":"apple-touch-icon","rel":"apple-touch-icon","href":"\u002F_nuxt\u002Ficons\u002Ficon_512x512.e3e9fb.png","sizes":"512x512"},{"rel":"manifest","href":"\u002F_nuxt\u002Fmanifest.8a235e58.json","hid":"manifest"}],"style":[],"script":[],"htmlAttrs":{"lang":"en"}},
+    head: {"titleTemplate":"紅陽優惠券店家後台 - %s","title":"店家後臺","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""},{"name":"format-detection","content":"telephone=no"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"}],"style":[],"script":[]},
 
     store,
     router,
@@ -221,28 +221,28 @@ async function createApp(ssrContext, config = {}) {
   }
   // Plugin execution
 
-  if (typeof nuxt_plugin_plugin_523a2264 === 'function') {
-    await nuxt_plugin_plugin_523a2264(app.context, inject)
+  if (typeof nuxt_plugin_plugin_32dcb868 === 'function') {
+    await nuxt_plugin_plugin_32dcb868(app.context, inject)
   }
 
-  if (typeof nuxt_plugin_plugin_35935410 === 'function') {
-    await nuxt_plugin_plugin_35935410(app.context, inject)
+  if (typeof nuxt_plugin_plugin_387ce8b0 === 'function') {
+    await nuxt_plugin_plugin_387ce8b0(app.context, inject)
   }
 
-  if (process.client && typeof nuxt_plugin_workbox_1a267be3 === 'function') {
-    await nuxt_plugin_workbox_1a267be3(app.context, inject)
+  if (process.client && typeof nuxt_plugin_workbox_61451f4b === 'function') {
+    await nuxt_plugin_workbox_61451f4b(app.context, inject)
   }
 
-  if (typeof nuxt_plugin_metaplugin_7b14dd63 === 'function') {
-    await nuxt_plugin_metaplugin_7b14dd63(app.context, inject)
+  if (typeof nuxt_plugin_metaplugin_daa4ce6a === 'function') {
+    await nuxt_plugin_metaplugin_daa4ce6a(app.context, inject)
   }
 
-  if (typeof nuxt_plugin_iconplugin_7fbc82d7 === 'function') {
-    await nuxt_plugin_iconplugin_7fbc82d7(app.context, inject)
+  if (typeof nuxt_plugin_iconplugin_d1558382 === 'function') {
+    await nuxt_plugin_iconplugin_d1558382(app.context, inject)
   }
 
-  if (typeof nuxt_plugin_axios_75e70c87 === 'function') {
-    await nuxt_plugin_axios_75e70c87(app.context, inject)
+  if (typeof nuxt_plugin_axios_2ba769ef === 'function') {
+    await nuxt_plugin_axios_2ba769ef(app.context, inject)
   }
 
   if (typeof nuxt_plugin_lodash_5d4c7b8c === 'function') {
@@ -265,8 +265,8 @@ async function createApp(ssrContext, config = {}) {
     await nuxt_plugin_filters_98405076(app.context, inject)
   }
 
-  if (typeof nuxt_plugin_auth_8595206e === 'function') {
-    await nuxt_plugin_auth_8595206e(app.context, inject)
+  if (typeof nuxt_plugin_auth_78bfc561 === 'function') {
+    await nuxt_plugin_auth_78bfc561(app.context, inject)
   }
 
   // Lock enablePreview in context
