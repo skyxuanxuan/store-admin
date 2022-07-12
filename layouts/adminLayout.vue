@@ -1,5 +1,9 @@
 <template>
   <v-app v-cloak>
+    <v-fade-transition>
+      <my-loading v-if="showHideSpinner" />
+    </v-fade-transition>
+
     <v-navigation-drawer
       v-model="drawer"
       dark
@@ -91,10 +95,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import MyLoading from '~/components/MyLoading.vue'
 export default {
   name: 'DefaultLayout',
+  components: { MyLoading },
   data() {
     return {
+      showHideSpinner: true,
       drawer: true,
 
       selectedItem: 0,
@@ -120,6 +127,15 @@ export default {
       userInfo: 'userInfo/getUserInfo'
     })
   },
+
+  beforeCreate() {
+    this.showHideSpinner = true
+  },
+
+  mounted() {
+    this.showHideSpinner = false
+  },
+
   created() {
     // this.items.splice(7, 1);
     if (this.$store.state.userInfo.user === null) {
@@ -127,7 +143,6 @@ export default {
     }
   },
 
-  mounted() {},
   methods: {
     userLogOut() {
       this.$store.dispatch('userInfo/cleanInfo')

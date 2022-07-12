@@ -192,7 +192,7 @@ export default {
       CurrentPageSectionIndex: 0,
       func_fab: false,
 
-      display_settings: [0, 1, 2, 3, 4, 5],
+      display_settings: [0, 1, 2, 3, 4, 5, 6],
 
       pageStatisticCardItems: [
         {
@@ -247,6 +247,13 @@ export default {
           align: 'center',
           value: 'd6',
           filterable: false
+        },
+        {
+          text: '操作',
+          align: 'center',
+          value: 'actions',
+          filterable: false,
+          sortable: false
         }
       ],
       sec1_search: '',
@@ -295,5 +302,4 @@ export default {
   max-width: 250px;
   width: 250px;
 }
-
 </style>

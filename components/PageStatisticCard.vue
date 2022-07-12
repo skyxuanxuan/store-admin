@@ -1,7 +1,13 @@
 <template>
   <v-container>
     <v-row class="white">
-      <v-col v-for="(item, index) in items" :key="index" cols="12" md="3" sm="6">
+      <v-col
+        v-for="(item, index) in items"
+        :key="index"
+        cols="12"
+        :md="colNum"
+        sm="6"
+      >
         <v-card outlined rounded="md" color="#EEEEEE">
           <v-card-title class="">
             {{ item.title }}
@@ -22,6 +28,19 @@ export default {
     items: {
       type: Array,
       required: true
+    }
+  },
+  data() {
+    return {
+      detailItems: this.items
+    }
+  },
+  computed: {
+    colNum() {
+      if (this.items.length === 0) {
+        return 3
+      }
+      return 12 / this.items.length
     }
   }
 }
