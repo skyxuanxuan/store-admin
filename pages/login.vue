@@ -13,10 +13,23 @@
         <v-form @submit.prevent="userLogin">
           <v-col>
             <p class="font-weight-bold">
+              店家號碼
+            </p>
+            <v-text-field
+              v-model="login.id"
+              class="mt-3"
+              outlined
+              hide-details
+              type="text"
+              autocomplete="off"
+            />
+          </v-col>
+          <v-col>
+            <p class="font-weight-bold">
               帳號
             </p>
             <v-text-field
-              v-model="login.username"
+              v-model="login.ac"
               class="mt-3"
               outlined
               hide-details
@@ -29,7 +42,7 @@
               密碼
             </p>
             <v-text-field
-              v-model="login.password"
+              v-model="login.pw"
               class="mt-3"
               outlined
               hide-details
@@ -58,7 +71,7 @@
 </template>
 
 <script>
-const md5 = require('md5')
+// const md5 = require('md5')
 export default {
   title: '登入系統',
   layout: 'loginLayout',
@@ -67,8 +80,9 @@ export default {
       loggedIn: true,
       showPwd: false,
       login: {
-        username: '',
-        password: ''
+        id: '',
+        ac: '',
+        pw: ''
       }
     }
   },
@@ -80,7 +94,6 @@ export default {
   methods: {
     async userLogin() {
       try {
-        console.log('%s', md5(this.login.password))
         const response = await this.$auth.loginWith('local', {
           data: this.login
         })
@@ -92,7 +105,6 @@ export default {
           )
         }
       } catch (err) {
-        console.log(err)
       }
     }
   }

@@ -16,9 +16,9 @@
   {
     "name": "S01",
     "path": "/S01",
-    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S01.vue",
-    "chunkName": "pages/S01",
-    "_name": "_1aa368a5"
+    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S01\\\\index.vue",
+    "chunkName": "pages/S01/index",
+    "_name": "_aea84f86"
   },
   {
     "name": "index",

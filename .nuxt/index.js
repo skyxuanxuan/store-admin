@@ -21,7 +21,6 @@ import nuxt_plugin_iconplugin_d1558382 from 'nuxt_plugin_iconplugin_d1558382' //
 import nuxt_plugin_axios_2ba769ef from 'nuxt_plugin_axios_2ba769ef' // Source: .\\axios.js (mode: 'all')
 import nuxt_plugin_lodash_5d4c7b8c from 'nuxt_plugin_lodash_5d4c7b8c' // Source: ..\\plugins\\lodash.js (mode: 'all')
 import nuxt_plugin_md5_50df32a2 from 'nuxt_plugin_md5_50df32a2' // Source: ..\\plugins\\md5.js (mode: 'all')
-import nuxt_plugin_mock_6a83aa00 from 'nuxt_plugin_mock_6a83aa00' // Source: ..\\plugins\\mock (mode: 'all')
 import nuxt_plugin_axios_3566aa80 from 'nuxt_plugin_axios_3566aa80' // Source: ..\\plugins\\axios (mode: 'all')
 import nuxt_plugin_filters_98405076 from 'nuxt_plugin_filters_98405076' // Source: ..\\plugins\\filters (mode: 'all')
 import nuxt_plugin_auth_78bfc561 from 'nuxt_plugin_auth_78bfc561' // Source: .\\auth.js (mode: 'all')
@@ -251,10 +250,6 @@ async function createApp(ssrContext, config = {}) {
 
   if (typeof nuxt_plugin_md5_50df32a2 === 'function') {
     await nuxt_plugin_md5_50df32a2(app.context, inject)
-  }
-
-  if (typeof nuxt_plugin_mock_6a83aa00 === 'function') {
-    await nuxt_plugin_mock_6a83aa00(app.context, inject)
   }
 
   if (typeof nuxt_plugin_axios_3566aa80 === 'function') {
