@@ -13,9 +13,13 @@
             {{ item.title }}
           </v-card-title>
 
-          <v-card-actions>
+          <v-card-actions v-if="item.type === 1">
             <v-spacer />
-            {{ item.value }}
+            {{ item.value | numberWithCommas }}
+          </v-card-actions>
+          <v-card-actions v-else-if="item.type === 2">
+            <v-spacer />
+            {{ item.value | toDollars }}
           </v-card-actions>
         </v-card>
       </v-col>

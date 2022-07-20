@@ -10,6 +10,8 @@ import '..\\node_modules\\@mdi\\font\\css\\materialdesignicons.min.css'
 
 import '..\\assets\\transition.css'
 
+import '..\\node_modules\\@sweetalert2\\theme-material-ui\\material-ui.css'
+
 import '..\\node_modules\\vuetify\\dist\\vuetify.css'
 
 import _501d71a3 from '..\\layouts\\adminLayout.vue'

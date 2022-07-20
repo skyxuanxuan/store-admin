@@ -4,7 +4,9 @@ export const state = () => ({
 
 export const getters = {
   getUserInfo: (state) => {
-    if (state.user !== null) { return state.user }
+    if (state.user !== null) {
+      return state.user
+    }
     return { username: '無' }
   }
 }

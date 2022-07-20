@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-app-bar color="white" app>
-      <v-app-bar-nav-icon />
+      <v-app-bar-nav-icon @click="$parent.$emit('eventname')" />
 
-      <v-toolbar-title>門市票券(整批發行)TEST</v-toolbar-title>
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
 
       <v-spacer />
 
@@ -98,6 +98,8 @@
                 color="#666666"
                 width="160"
                 dark
+                nuxt
+                to="/S01/product/create"
               >
                 建立產品
               </v-btn>
@@ -190,26 +192,30 @@ export default {
     return {
       loadingStatus: true,
       CurrentPageSectionIndex: 0,
-      func_fab: false,
+      title: '門市票券(整批發行)',
 
       display_settings: [0, 1, 2, 3, 4, 5, 6],
 
       pageStatisticCardItems: [
         {
           title: '門市架上產品 (個)',
-          value: 0
+          value: 0,
+          type: 1
         },
         {
           title: '本月銷售票券 (張)',
-          value: 0
+          value: 0,
+          type: 1
         },
         {
           title: '本月銷售金額 (元)',
-          value: 33333
+          value: 33333,
+          type: 2
         },
         {
           title: '庫存空白票券 (張)',
-          value: 0
+          value: 0,
+          type: 1
         }
       ],
 
@@ -273,8 +279,7 @@ export default {
       return arr
     }
   },
-  watch: {},
-  created() {}
+  methods: {}
 }
 </script>
 <style lang="scss" scoped>

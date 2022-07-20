@@ -15,7 +15,11 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@mdi/font/css/materialdesignicons.min.css', '~/assets/transition.css'],
+  css: [
+    '@mdi/font/css/materialdesignicons.min.css',
+    '~/assets/transition.css',
+    '@sweetalert2/theme-material-ui/material-ui.css'
+  ],
 
   server: {
     host: '0.0.0.0',
@@ -27,7 +31,9 @@ export default {
     '~/plugins/lodash.js',
     '~/plugins/md5.js',
     '~/plugins/axios',
-    '~/plugins/filters' // 全局過濾器
+    '~/plugins/filters', // 全局過濾器
+    { src: '~/plugins/notifications-ssr', ssr: true },
+    { src: '~/plugins/notifications-client', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -58,67 +64,67 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/proxy',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    'nuxt-sweetalert2'
   ],
 
-  auth: {
-    strategies: {
-      local: {
-        scheme: 'refresh',
-        token: {
-          property: 'accessToken',
-          global: true,
-          maxAge: 60
-        },
-        refreshToken: {
-          property: 'refreshToken',
-          data: 'refreshToken',
-          tokenRequired: true,
-          maxAge: 60 * 60 * 24 * 30
-        },
-        user: {
-          property: false
-        },
-        endpoints: {
-          login: { url: '/api/auth/login', method: 'post' },
-          logout: { url: '/api/auth/logout', method: 'post' },
-          refresh: { url: '/api/auth/refresh', method: 'post' },
-          user: false
-        }
-      }
-    },
-    redirect: {
-      login: '/login',
-      logout: '/login',
-      callback: '/login',
-      home: '/'
-    },
-    cookie: {
-      options: {
-        maxAge: 60 * 60 * 24 * 30
-      }
-    },
-    localStorage: false
-  },
+  // auth: {
+  //   strategies: {
+  //     local: {
+  //       scheme: 'refresh',
+  //       token: {
+  //         property: 'accessToken',
+  //         global: true,
+  //         maxAge: 60 * 30
+  //       },
+  //       refreshToken: {
+  //         property: 'refreshToken',
+  //         data: 'refreshToken',
+  //         tokenRequired: true,
+  //         maxAge: 60 * 60 * 24 * 30
+  //       },
+  //       user: {
+  //         property: false
+  //       },
+  //       endpoints: {
+  //         login: { url: '/auth/login', method: 'post' },
+  //         logout: { url: '/auth/logout', method: 'post' },
+  //         refresh: { url: '/auth/refresh', method: 'post' },
+  //         user: false
+  //       }
+  //     }
+  //   },
+  //   redirect: {
+  //     login: '/login',
+  //     logout: '/login',
+  //     callback: '/login',
+  //     home: '/'
+  //   },
+  //   cookie: {
+  //     options: {
+  //       maxAge: 60 * 60 * 24 * 30
+  //     }
+  //   },
+  //   localStorage: false
+  // },
 
-  router: {
-    middleware: ['auth']
-  },
+  // router: {
+  //   middleware: ['auth']
+  // },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     proxy: true,
-    prefix: '/spc/store'
+    prefix: '/spc/api/store'
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     // baseURL: '/'
   },
 
   proxy: {
-    '/api': {
+    '/spc/api/store': {
       target: 'http://localhost:8080',
-      changeOrigin: true,
       pathRewrite: {
-        '^/api': '/api'
+        '^/spc/api/store': '/spc/api/store'
       }
     }
   },

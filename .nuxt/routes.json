@@ -21,6 +21,13 @@
     "_name": "_aea84f86"
   },
   {
+    "name": "S01-product-create",
+    "path": "/S01/product/create",
+    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S01\\\\product\\\\create.vue",
+    "chunkName": "pages/S01/product/create",
+    "_name": "_153c6cd4"
+  },
+  {
     "name": "index",
     "path": "/",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\index.vue",

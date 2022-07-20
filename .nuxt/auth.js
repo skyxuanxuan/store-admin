@@ -2,7 +2,6 @@ import Middleware from './middleware'
 import { Auth, authMiddleware, ExpiredAuthSessionError } from '~auth/runtime'
 
 // Active schemes
-import { RefreshScheme } from '~auth/runtime'
 
 Middleware.auth = authMiddleware
 
@@ -17,7 +16,7 @@ export default function (ctx, inject) {
   "watchLoggedIn": true,
   "redirect": {
     "login": "/login",
-    "logout": "/login",
+    "logout": "/",
     "home": "/",
     "callback": "/login"
   },
@@ -27,51 +26,19 @@ export default function (ctx, inject) {
   "cookie": {
     "prefix": "auth.",
     "options": {
-      "path": "/",
-      "maxAge": 2592000
+      "path": "/"
     }
   },
-  "localStorage": false,
-  "defaultStrategy": "local"
+  "localStorage": {
+    "prefix": "auth."
+  },
+  "defaultStrategy": ""
 }
 
   // Create a new Auth instance
   const $auth = new Auth(ctx, options)
 
   // Register strategies
-  // local
-  $auth.registerStrategy('local', new RefreshScheme($auth, {
-  "token": {
-    "property": "accessToken",
-    "global": true,
-    "maxAge": 60
-  },
-  "refreshToken": {
-    "property": "refreshToken",
-    "data": "refreshToken",
-    "tokenRequired": true,
-    "maxAge": 2592000
-  },
-  "user": {
-    "property": false
-  },
-  "endpoints": {
-    "login": {
-      "url": "/api/auth/login",
-      "method": "post"
-    },
-    "logout": {
-      "url": "/api/auth/logout",
-      "method": "post"
-    },
-    "refresh": {
-      "url": "/api/auth/refresh",
-      "method": "post"
-    },
-    "user": false
-  },
-  "name": "local"
-}))
 
   // Inject it to nuxt context as $auth
   inject('auth', $auth)

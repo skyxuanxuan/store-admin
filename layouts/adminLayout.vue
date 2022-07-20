@@ -30,7 +30,6 @@
           <v-list-item
             v-for="(item, i) in items"
             :key="i"
-            exact
             nuxt
             :to="item.to"
           >
@@ -72,7 +71,7 @@
     </v-app-bar> -->
 
     <v-main>
-      <Nuxt />
+      <Nuxt @eventname="drawerChange()" />
     </v-main>
 
     <!-- <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
@@ -147,6 +146,10 @@ export default {
     userLogOut() {
       this.$store.dispatch('userInfo/cleanInfo')
       this.$auth.logout()
+    },
+
+    drawerChange() {
+      this.drawer = !this.drawer
     }
   }
 }
