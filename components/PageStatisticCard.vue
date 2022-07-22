@@ -9,17 +9,21 @@
         sm="6"
       >
         <v-card outlined rounded="md" color="#EEEEEE">
-          <v-card-title class="">
+          <v-card-title class="pb-1">
             {{ item.title }}
           </v-card-title>
 
-          <v-card-actions v-if="item.type === 1">
+          <v-card-actions v-if="item.type === 1" :class="item.color || ''" class="pt-0">
             <v-spacer />
-            {{ item.value | numberWithCommas }}
+            <div class="text-h5">
+              {{ item.value | numberWithCommas }}
+            </div>
           </v-card-actions>
-          <v-card-actions v-else-if="item.type === 2">
+          <v-card-actions v-else-if="item.type === 2" :class="item.color || ''" class="pt-0">
             <v-spacer />
-            {{ item.value | toDollars }}
+            <div class="text-h5">
+              {{ item.value | toDollars }}
+            </div>
           </v-card-actions>
         </v-card>
       </v-col>

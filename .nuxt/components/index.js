@@ -1,3 +1,4 @@
+export { default as CustomNotify } from '../..\\components\\CustomNotify.vue'
 export { default as MyLoading } from '../..\\components\\MyLoading.vue'
 export { default as NuxtLogo } from '../..\\components\\NuxtLogo.vue'
 export { default as PageStatisticCard } from '../..\\components\\PageStatisticCard.vue'

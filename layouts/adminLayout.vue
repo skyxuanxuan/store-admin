@@ -1,7 +1,7 @@
 <template>
-  <v-app v-cloak>
+  <v-app>
     <v-fade-transition>
-      <my-loading v-if="showHideSpinner" />
+      <MyLoading v-if="showHideSpinner" />
     </v-fade-transition>
 
     <v-navigation-drawer
@@ -27,12 +27,7 @@
 
       <v-list nav dense class="custom-index-list">
         <v-list-item-group v-model="selectedItem">
-          <v-list-item
-            v-for="(item, i) in items"
-            :key="i"
-            nuxt
-            :to="item.to"
-          >
+          <v-list-item v-for="(item, i) in items" :key="i" nuxt :to="item.to">
             <v-list-item-icon>
               <v-icon v-text="item.icon" />
             </v-list-item-icon>
@@ -74,6 +69,9 @@
       <Nuxt @eventname="drawerChange()" />
     </v-main>
 
+    <CustomNotify />
+    <!-- Custom template example -->
+
     <!-- <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
       <v-list>
         <v-list-item @click.native="right = !right">
@@ -94,10 +92,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import MyLoading from '~/components/MyLoading.vue'
 export default {
   name: 'DefaultLayout',
-  components: { MyLoading },
   data() {
     return {
       showHideSpinner: true,
@@ -154,7 +150,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .custom-index-list .v-list-item.v-list-item--active-primary {
   color: #2196f3 !important;
   caret-color: #2196f3 !important;
@@ -163,9 +159,5 @@ export default {
 .theme--light.v-application {
   background: #e8ecf5;
   color: rgba(0, 0, 0, 0.87);
-}
-
-[v-cloak] {
-  display: none;
 }
 </style>

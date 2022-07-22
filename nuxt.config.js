@@ -18,7 +18,7 @@ export default {
   css: [
     '@mdi/font/css/materialdesignicons.min.css',
     '~/assets/transition.css',
-    '@sweetalert2/theme-material-ui/material-ui.css'
+    '@sweetalert2/theme-material-ui'
   ],
 
   server: {
@@ -65,7 +65,7 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/proxy',
     '@nuxtjs/auth-next',
-    'nuxt-sweetalert2'
+    'vue-sweetalert2/nuxt/no-css'
   ],
 
   // auth: {

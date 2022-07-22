@@ -567,18 +567,22 @@ import moment from 'moment'
 import 'vue2-datepicker/index.css'
 import { set } from 'vue'
 import util from '~/assets/js/util'
-import ToTop from '~/components/ToTop.vue'
 
 export default {
   name: 'IndexPage',
   title: '門市票券(整批發行) - 新增產品',
-  components: { ToTop, DatePicker },
+  components: { DatePicker },
   layout: 'adminLayout',
+
+  asyncData({ params }) {
+    console.log(params)
+  },
+
   data() {
     return {
       loadingStatus: true,
       CurrentPageSectionIndex: 0,
-      title: '門市票券(整批發行) - 新增產品',
+      title: '門市票券(整批發行) - ㄟ黑產品',
       time2: null,
       e1: 1,
       bulk_arr: [
@@ -686,23 +690,19 @@ export default {
         d4: null,
         d5: null
       })
-      const text = `
-        This is notification text!<br>
-        Date: ${new Date()}
-      `
 
-      setTimeout(() => {
-        this.$notify({
-          title: "Test '' notification #",
-          text,
-          type: 'success',
-          duration: 2000
-        })
-      }, 1000)
+      this.$notify({
+        title: '新增規格',
+        type: 'info'
+      })
     },
     step2_remove(index) {
       this.step2_form.spec_arr.splice(index, 1)
       this.$refs.step2form.validate()
+      this.$notify({
+        title: `'刪除規格${index + 1}`,
+        type: 'info'
+      })
     },
     step2_num_modify(type, val) {
       if (this.step2_form.spec_arr[val].d5 === null) {

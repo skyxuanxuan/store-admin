@@ -1,4 +1,7 @@
 {
+  "CustomNotify": {
+    "description": "Auto imported from components/CustomNotify.vue"
+  },
   "MyLoading": {
     "description": "Auto imported from components/MyLoading.vue"
   },

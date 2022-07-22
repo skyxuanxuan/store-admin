@@ -21,11 +21,25 @@
     "_name": "_aea84f86"
   },
   {
+    "name": "S01-apply",
+    "path": "/S01/apply",
+    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S01\\\\apply\\\\index.vue",
+    "chunkName": "pages/S01/apply/index",
+    "_name": "_46c14cee"
+  },
+  {
     "name": "S01-product-create",
     "path": "/S01/product/create",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S01\\\\product\\\\create.vue",
     "chunkName": "pages/S01/product/create",
     "_name": "_153c6cd4"
+  },
+  {
+    "name": "S01-product-id",
+    "path": "/S01/product/:id?",
+    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S01\\\\product\\\\_id.vue",
+    "chunkName": "pages/S01/product/_id",
+    "_name": "_7434b290"
   },
   {
     "name": "index",
