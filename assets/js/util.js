@@ -15,7 +15,32 @@ const util = {
         return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
       }
     )
+  },
+  numberWithCommas(value) {
+    return (value ?? '')
+      .toString()
+      .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+  },
+
+  toDollars(value) {
+    return (
+      'NT$ ' +
+      (value ?? '').toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+    )
+  },
+
+  reverseString(str) {
+    if (str === undefined) {
+      return ''
+    } else {
+      return str.split('').reverse().join('')
+    }
+  },
+
+  paddingLeft(str, lenght) {
+    if (str.length >= lenght) { return str } else { return this.paddingLeft('0' + str, lenght) }
   }
+
 }
 
 export default util

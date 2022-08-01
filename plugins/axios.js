@@ -4,4 +4,12 @@ export default function ({ $axios, redirect }) {
     console.log('config ', config)
     return config
   })
+
+  $axios.onResponse((response) => {
+    console.log(response)
+  })
+
+  $axios.onError((err) => {
+    console.log(err)
+  })
 }
