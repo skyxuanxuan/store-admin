@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <v-fade-transition>
+    <!-- <v-fade-transition>
       <MyLoading v-if="showHideSpinner" />
-    </v-fade-transition>
+    </v-fade-transition> -->
 
     <v-navigation-drawer
       v-model="drawer"

@@ -63,6 +63,7 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/proxy',
     '@nuxtjs/auth-next',
     'vue-sweetalert2/nuxt/no-css'
   ],
