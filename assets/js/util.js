@@ -19,13 +19,13 @@ const util = {
   numberWithCommas(value) {
     return (value ?? '')
       .toString()
-      .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   },
 
   toDollars(value) {
     return (
       'NT$ ' +
-      (value ?? '').toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+      (value ?? '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     )
   },
 

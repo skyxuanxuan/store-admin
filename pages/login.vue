@@ -94,15 +94,13 @@ export default {
   methods: {
     async userLogin() {
       try {
-        const response = await this.$auth.loginWith('local', {
+        const data = await this.$auth.loginWith('local', {
           data: this.login
         })
-        if (response) {
-          this.$auth.$storage.setUniversal(
-            'user',
-            { email: 'aaa', pasww: 'bdfgf' },
-            true
-          )
+        if (data.data.res === 'CODE0000') {
+          this.$store.dispatch('userInfo/fetchUserInfo')
+        } else {
+          this.$swal.fire('小提示', data.data.msg, 'error')
         }
       } catch (err) {
       }

@@ -7,9 +7,12 @@ import scrollBehavior from './router.scrollBehavior.js'
 const _162ea66b = () => interopDefault(import('..\\pages\\inspire.vue' /* webpackChunkName: "pages/inspire" */))
 const _d19b248c = () => interopDefault(import('..\\pages\\login.vue' /* webpackChunkName: "pages/login" */))
 const _aea84f86 = () => interopDefault(import('..\\pages\\S01\\index.vue' /* webpackChunkName: "pages/S01/index" */))
+const _9f4504c8 = () => interopDefault(import('..\\pages\\S02\\index.vue' /* webpackChunkName: "pages/S02/index" */))
 const _46c14cee = () => interopDefault(import('..\\pages\\S01\\apply\\index.vue' /* webpackChunkName: "pages/S01/apply/index" */))
 const _153c6cd4 = () => interopDefault(import('..\\pages\\S01\\product\\create.vue' /* webpackChunkName: "pages/S01/product/create" */))
+const _7be78435 = () => interopDefault(import('..\\pages\\S02\\product\\create.vue' /* webpackChunkName: "pages/S02/product/create" */))
 const _7434b290 = () => interopDefault(import('..\\pages\\S01\\product\\_id.vue' /* webpackChunkName: "pages/S01/product/_id" */))
+const _41df1451 = () => interopDefault(import('..\\pages\\S02\\product\\_id.vue' /* webpackChunkName: "pages/S02/product/_id" */))
 const _64ea6aba = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
@@ -36,6 +39,10 @@ export const routerOptions = {
     component: _aea84f86,
     name: "S01"
   }, {
+    path: "/S02",
+    component: _9f4504c8,
+    name: "S02"
+  }, {
     path: "/S01/apply",
     component: _46c14cee,
     name: "S01-apply"
@@ -44,9 +51,17 @@ export const routerOptions = {
     component: _153c6cd4,
     name: "S01-product-create"
   }, {
+    path: "/S02/product/create",
+    component: _7be78435,
+    name: "S02-product-create"
+  }, {
     path: "/S01/product/:id?",
     component: _7434b290,
     name: "S01-product-id"
+  }, {
+    path: "/S02/product/:id?",
+    component: _41df1451,
+    name: "S02-product-id"
   }, {
     path: "/",
     component: _64ea6aba,

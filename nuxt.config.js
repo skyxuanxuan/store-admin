@@ -17,9 +17,12 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@mdi/font/css/materialdesignicons.min.css',
-    '~/assets/transition.css',
-    '@sweetalert2/theme-material-ui'
+    '~/assets/transition.css'
   ],
+
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
 
   server: {
     host: '0.0.0.0',
@@ -65,52 +68,52 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/proxy',
     '@nuxtjs/auth-next',
-    'vue-sweetalert2/nuxt/no-css'
+    'vue-sweetalert2/nuxt'
   ],
 
-  // auth: {
-  //   strategies: {
-  //     local: {
-  //       scheme: 'refresh',
-  //       token: {
-  //         property: 'accessToken',
-  //         global: true,
-  //         maxAge: 60 * 30
-  //       },
-  //       refreshToken: {
-  //         property: 'refreshToken',
-  //         data: 'refreshToken',
-  //         tokenRequired: true,
-  //         maxAge: 60 * 60 * 24 * 30
-  //       },
-  //       user: {
-  //         property: false
-  //       },
-  //       endpoints: {
-  //         login: { url: '/auth/login', method: 'post' },
-  //         logout: { url: '/auth/logout', method: 'post' },
-  //         refresh: { url: '/auth/refresh', method: 'post' },
-  //         user: false
-  //       }
-  //     }
-  //   },
-  //   redirect: {
-  //     login: '/login',
-  //     logout: '/login',
-  //     callback: '/login',
-  //     home: '/'
-  //   },
-  //   cookie: {
-  //     options: {
-  //       maxAge: 60 * 60 * 24 * 30
-  //     }
-  //   },
-  //   localStorage: false
-  // },
+  auth: {
+    strategies: {
+      local: {
+        scheme: 'refresh',
+        token: {
+          property: 'accessToken',
+          global: true,
+          maxAge: 60 * 30
+        },
+        refreshToken: {
+          property: 'refreshToken',
+          data: 'refreshToken',
+          tokenRequired: true,
+          maxAge: 60 * 60 * 24 * 30
+        },
+        user: {
+          property: false
+        },
+        endpoints: {
+          login: { url: '/auth/login', method: 'post' },
+          logout: { url: '/auth/logout', method: 'post' },
+          refresh: { url: '/auth/refresh', method: 'post' },
+          user: false
+        }
+      }
+    },
+    redirect: {
+      login: '/login',
+      logout: '/login',
+      callback: '/login',
+      home: '/'
+    },
+    cookie: {
+      options: {
+        maxAge: 60 * 60 * 24 * 30
+      }
+    },
+    localStorage: false
+  },
 
-  // router: {
-  //   middleware: ['auth']
-  // },
+  router: {
+    middleware: ['auth']
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -153,6 +156,10 @@ export default {
           success: colors.green.accent3
         }
       }
+    },
+    sweetalert: {
+      confirmButtonColor: '#ffffff',
+      cancelButtonColor: '#ff7674'
     }
   },
 

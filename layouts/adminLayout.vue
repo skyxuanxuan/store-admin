@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <!-- <v-fade-transition>
+    <v-fade-transition>
       <MyLoading v-if="showHideSpinner" />
-    </v-fade-transition> -->
+    </v-fade-transition>
 
     <v-navigation-drawer
       v-model="drawer"
@@ -41,7 +41,7 @@
       <template #append>
         <div class="pa-2">
           <v-btn dark block @click="userLogOut">
-            Logout
+            登出
           </v-btn>
         </div>
       </template>
@@ -93,7 +93,7 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  name: 'DefaultLayout',
+  name: 'AdminLayout',
   data() {
     return {
       showHideSpinner: true,
