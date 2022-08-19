@@ -2,6 +2,12 @@
   "CustomNotify": {
     "description": "Auto imported from components/CustomNotify.vue"
   },
+  "FileUpload": {
+    "description": "Auto imported from components/FileUpload.vue"
+  },
+  "ImgViewer": {
+    "description": "Auto imported from components/ImgViewer.vue"
+  },
   "MyLoading": {
     "description": "Auto imported from components/MyLoading.vue"
   },

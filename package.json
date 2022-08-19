@@ -12,6 +12,7 @@
     "lintfix": "yarn lint:js --fix"
   },
   "dependencies": {
+    "@chenfengyuan/vue-qrcode": "1",
     "@mdi/font": "^6.9.96",
     "@nuxtjs/auth-next": "5.0.0-1648802546.c9880dc",
     "@nuxtjs/axios": "^5.13.6",

@@ -98,7 +98,8 @@ export default {
           data: this.login
         })
         if (data.data.res === 'CODE0000') {
-          this.$store.dispatch('userInfo/fetchUserInfo')
+          await this.$store.dispatch('userInfo/fetchUserInfo')
+          await this.$store.dispatch('basic/fetchBasic')
         } else {
           this.$swal.fire('小提示', data.data.msg, 'error')
         }

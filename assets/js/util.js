@@ -39,6 +39,15 @@ const util = {
 
   paddingLeft(str, lenght) {
     if (str.length >= lenght) { return str } else { return this.paddingLeft('0' + str, lenght) }
+  },
+
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = error => reject(error)
+    })
   }
 
 }

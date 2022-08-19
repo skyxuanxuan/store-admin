@@ -7,6 +7,8 @@ You can directly use them in pages and other components without the need to impo
 **Tip:** If a component is conditionally rendered with `v-if` and is big, it is better to use `Lazy` or `lazy-` prefix to lazy load.
 
 - `<CustomNotify>` | `<custom-notify>` (components/CustomNotify.vue)
+- `<FileUpload>` | `<file-upload>` (components/FileUpload.vue)
+- `<ImgViewer>` | `<img-viewer>` (components/ImgViewer.vue)
 - `<MyLoading>` | `<my-loading>` (components/MyLoading.vue)
 - `<NuxtLogo>` | `<nuxt-logo>` (components/NuxtLogo.vue)
 - `<PageStatisticCard>` | `<page-statistic-card>` (components/PageStatisticCard.vue)

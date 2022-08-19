@@ -141,7 +141,25 @@
                         <v-icon> mdi-upload </v-icon>
                       </v-btn>
                     </template>
-                    <span>上傳圖片</span>
+                    <span>上傳收據</span>
+                  </v-tooltip>
+                  <v-tooltip v-if="item.status === 2" bottom>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        class="white"
+                        elevation="0"
+                        color="primary"
+                        fab
+                        icon
+                        x-small
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="checkImg(item.img)"
+                      >
+                        <v-icon> mdi-eye </v-icon>
+                      </v-btn>
+                    </template>
+                    <span>查看收據</span>
                   </v-tooltip>
                   <v-tooltip
                     v-if="item.status === 0 || item.status === 2"
@@ -369,6 +387,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import { api as viewerApi } from 'v-viewer'
 // Import Vue FilePond
 import vueFilePond from 'vue-filepond'
 // Import image preview and file type validation plugins
@@ -383,11 +402,9 @@ import ToTop from '~/components/ToTop.vue'
 // Import FilePond styles
 import 'filepond/dist/filepond.min.css'
 
-// Import FilePond plugins
-// Please note that you need to install these plugins separately
-
 // Import image preview plugin styles
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
+import 'viewerjs/dist/viewer.css'
 
 // Create component
 const FilePond = vueFilePond(
@@ -691,6 +708,13 @@ export default {
               })
           }
         })
+    },
+
+    checkImg(img) {
+      console.log(img)
+      viewerApi({
+        images: [img]
+      })
     },
 
     uploadInit(id) {

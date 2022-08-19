@@ -7,7 +7,7 @@ export const getters = {
     if (state.user !== null) {
       return state.user
     }
-    return { username: '無' }
+    return { name: '無' }
   }
 }
 

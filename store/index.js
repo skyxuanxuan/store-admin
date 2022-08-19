@@ -7,5 +7,6 @@ export const mutations = {}
 export const actions = {
   async nuxtServerInit({ dispatch }) {
     await dispatch('userInfo/fetchUserInfo')
+    await dispatch('basic/fetchBasic')
   }
 }

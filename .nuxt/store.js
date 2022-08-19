@@ -19,6 +19,7 @@ let store = {};
   // Enforce store modules
   store.modules = store.modules || {}
 
+  resolveStoreModules(require('..\\store\\basic.js'), 'basic.js')
   resolveStoreModules(require('..\\store\\S01.js'), 'S01.js')
   resolveStoreModules(require('..\\store\\S02.js'), 'S02.js')
   resolveStoreModules(require('..\\store\\userInfo.js'), 'userInfo.js')
@@ -28,6 +29,7 @@ let store = {};
   if (process.client && module.hot) {
     // Whenever any Vuex module is updated...
     module.hot.accept([
+      '..\\store\\basic.js',
       '..\\store\\index.js',
       '..\\store\\S01.js',
       '..\\store\\S02.js',

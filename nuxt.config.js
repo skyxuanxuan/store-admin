@@ -15,13 +15,11 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    '@mdi/font/css/materialdesignicons.min.css',
-    '~/assets/transition.css'
-  ],
+  css: ['@mdi/font/css/materialdesignicons.min.css', '~/assets/transition.css'],
 
   env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    imgUrl: process.env.IMAGE_URL || 'http://localhost:8080/resources'
   },
 
   server: {
@@ -68,7 +66,8 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/proxy',
     '@nuxtjs/auth-next',
-    'vue-sweetalert2/nuxt'
+    'vue-sweetalert2/nuxt',
+    'vue2-editor/nuxt'
   ],
 
   auth: {
@@ -118,16 +117,16 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     proxy: true,
-    prefix: '/spc/api/store'
+    prefix: '/api/store'
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     // baseURL: '/'
   },
 
   proxy: {
-    '/spc/api/store': {
+    '/api/store': {
       target: 'http://localhost:8080',
       pathRewrite: {
-        '^/spc/api/store': '/spc/api/store'
+        '^/api/store': '/api/store'
       }
     }
   },

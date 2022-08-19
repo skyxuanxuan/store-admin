@@ -45,6 +45,8 @@ export const getters = {
           break
       }
 
+      const img = `${process.env.imgUrl}/store/${item.reviewId}/apply/${item.reviewImg}`
+
       initArray.push({
         d0: item.id,
         d1: item.id,
@@ -55,6 +57,7 @@ export const getters = {
         ),
         d5,
         d6,
+        img,
         status: item.reviewStatus,
         detail: initDetailArray
       })
