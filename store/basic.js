@@ -14,7 +14,6 @@ export const getters = {
         name: item.className
       })
     })
-    console.log(initArr)
     return initArr
   }
 }

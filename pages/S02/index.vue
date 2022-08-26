@@ -31,16 +31,14 @@
       </v-btn> -->
     </v-app-bar>
     <div class="pa-4">
-      <v-tabs-items
-        v-model="CurrentPageSectionIndex"
-        :class="{ none: loadingStatus }"
-      >
+      <v-tabs-items v-model="CurrentPageSectionIndex">
         <v-tab-item class="background-color">
           <PageStatisticCard :items="pageStatisticCardItems" />
 
           <v-container class="white mt-8">
             <v-toolbar dense flat>
               <v-text-field
+                v-model="sec1_search"
                 class="searchInput top-15"
                 label="Search"
                 outlined
@@ -94,12 +92,16 @@
             </v-toolbar>
             <div>
               <v-data-table
+                ref="vDataTable"
                 mobile-breakpoint="770"
                 :headers="sec1_showHeaders"
                 :items="sec1_data_list"
                 :items-per-page="10"
                 :search="sec1_search"
                 item-key="d0"
+                :expanded.sync="sec1_data_expanded"
+                show-expand
+                single-expand
                 calculate-widths
                 :page.sync="sec1_table_page"
                 :footer-props="{
@@ -109,43 +111,158 @@
                 }"
                 @page-count="sec1_table_page_count = $event"
               >
-                <template #item.actions="{}">
-                  <v-tooltip bottom>
+                <template #item.data-table-expand="props">
+                  <v-icon
+                    :class="{
+                      'v-data-table__expand-icon': true,
+                      'v-data-table__expand-icon--active':
+                        props.isExpanded && transitioned[getItemId(props.item)]
+                    }"
+                    @click="toggleExpand(props)"
+                  >
+                    mdi-chevron-down
+                  </v-icon>
+                </template>
+
+                <template #item.actions="{ item }">
+                  <v-menu
+                    v-if="item.statusCode !== '-1'"
+                    open-on-hover
+                    :close-on-content-click="false"
+                    transition="slide-x-transition"
+                    bottom
+                    right
+                    offset-y
+                  >
                     <template #activator="{ on, attrs }">
-                      <v-btn
-                        class="no-backgroud-hover white"
-                        elevation="0"
-                        color="white"
-                        fab
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        <v-icon color="primary">
-                          mdi-pencil
-                        </v-icon>
-                      </v-btn>
+                      <v-icon class="mr-2" v-bind="attrs" v-on="on">
+                        mdi-dots-vertical
+                      </v-icon>
                     </template>
-                    <span>修改</span>
-                  </v-tooltip>
-                  <v-tooltip bottom>
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        class="no-backgroud-hover white"
-                        elevation="0"
-                        color="white"
-                        fab
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
+                    <v-list dense class="py-0">
+                      <v-list-item-group no-action>
+                        <v-list-item color="primary">
+                          <v-list-item-icon>
+                            <v-icon color="primary" small>
+                              mdi-pencil
+                            </v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title>編輯</v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                        <v-divider />
+                        <v-list-item
+                          v-if="item.statusCode === '11'"
+                          color="#f95454"
+                        >
+                          <v-list-item-icon>
+                            <v-icon color="#f95454">
+                              mdi-close
+                            </v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title>停用</v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                        <v-divider v-if="item.statusCode === '11'" />
+                        <v-list-item
+                          v-if="item.statusCode === '10'"
+                          color="#f95454"
+                        >
+                          <v-list-item-icon>
+                            <v-icon color="#f95454">
+                              mdi-restart
+                            </v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title>啟用</v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                        <v-divider v-if="item.statusCode === '10'" />
+                      </v-list-item-group>
+                    </v-list>
+                  </v-menu>
+                </template>
+
+                <template #expanded-item="{ headers, item }">
+                  <td
+                    :colspan="headers.length"
+                    :class="{
+                      'ma-0 pa-0': true,
+                      'expanded-closing': !transitioned[getItemId(item)],
+                      'expanded-display': isMobile
+                    }"
+                    style="height: auto"
+                  >
+                    <v-expand-transition>
+                      <div
+                        v-show="transitioned[getItemId(item)]"
+                        v-resize="onResize"
                       >
-                        <v-icon color="error">
-                          mdi-delete
-                        </v-icon>
-                      </v-btn>
-                    </template>
-                    <span>刪除</span>
-                  </v-tooltip>
+                        <v-container class="d-none d-sm-flex flex-column">
+                          <v-row>
+                            <v-col>方案</v-col>
+                            <v-col>價格</v-col>
+                            <v-col>剩餘</v-col>
+                          </v-row>
+                          <v-row v-for="plan in item.planSet" :key="plan.dl0">
+                            <v-col>{{ plan.dl1 }}</v-col>
+                            <v-col>{{ plan.dl2 | toDollars }}</v-col>
+                            <v-col v-if="plan.dlSaleNum !== -1">
+                              {{ plan.dl3 | numberWithCommas }}
+                            </v-col>
+                            <v-col v-else>
+                              <v-icon>mdi-infinity</v-icon>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                        <v-card
+                          v-for="plan in item.planSet"
+                          :key="plan.dl0"
+                          flat
+                          color="transparent"
+                          class="d-flex d-sm-none flex-column"
+                        >
+                          <v-card
+                            flat
+                            color="transparent"
+                            class="expanded-mobil-card"
+                          >
+                            <div>方案「{{ plan.dl1 }}」</div>
+                          </v-card>
+                          <v-card flat class="expanded-mobil-card">
+                            <div class="text-body-2">
+                              價格
+                            </div>
+                            <div
+                              class="text-body-2 expanded-mobil-card-content"
+                            >
+                              {{ plan.dl2 | toDollars }}
+                            </div>
+                          </v-card>
+                          <v-card flat class="expanded-mobil-card">
+                            <div class="text-body-2">
+                              剩餘
+                            </div>
+                            <div
+                              v-if="plan.dlSaleNum !== -1"
+                              class="text-body-2 expanded-mobil-card-content"
+                            >
+                              {{ plan.dl3 | numberWithCommas }}
+                            </div>
+                            <div
+                              v-else
+                              class="text-body-2 expanded-mobil-card-content"
+                            >
+                              <v-icon>mdi-infinity</v-icon>
+                            </div>
+                          </v-card>
+                          <v-divider />
+                        </v-card>
+                      </div>
+                    </v-expand-transition>
+                  </td>
                 </template>
               </v-data-table>
             </div>
@@ -161,53 +278,38 @@
       </v-tabs-items>
     </div>
     <to-top />
+    <my-waiting :loading="loadingStatus" />
   </div>
 </template>
 
 <script>
+import util from '~/assets/js/util'
+import MyWaiting from '~/components/MyWaiting.vue'
 import PageStatisticCard from '~/components/PageStatisticCard.vue'
 import ToTop from '~/components/ToTop.vue'
 
 export default {
   name: 'IndexPage',
   title: '商城票券(逐筆發行)',
-  components: { PageStatisticCard, ToTop },
+  components: { PageStatisticCard, ToTop, MyWaiting },
   layout: 'adminLayout',
+  async asyncData({ store }) {
+    await store.dispatch('S02/fetchProductsList')
+  },
   data() {
     return {
-      loadingStatus: true,
+      loadingStatus: false,
       CurrentPageSectionIndex: 0,
       title: '網路票券(逐筆發行)',
 
       display_settings: [0, 1, 2, 3, 4, 5, 6],
 
-      pageStatisticCardItems: [
-        {
-          title: '商城架上產品 (個)',
-          value: 0,
-          type: 1
-        },
-        {
-          title: '商城架上方案 (個)',
-          value: 0,
-          type: 1
-        },
-        {
-          title: '本月銷售票券 (張)',
-          value: 0,
-          type: 1
-        },
-        {
-          title: '本月銷售金額 (元)',
-          value: 33333,
-          type: 2
-        }
-      ],
-
+      productClasses: this.$store.getters['basic/getClasses'],
+      products: this.$store.state.S02.productsList,
       /* Table1 */
       sec1_table_header: [
         {
-          text: '代碼',
+          text: '編號',
           align: 'start',
           value: 'd1'
         },
@@ -234,7 +336,7 @@ export default {
           filterable: false
         },
         {
-          text: '剩餘',
+          text: '狀態',
           align: 'center',
           value: 'd6',
           filterable: false
@@ -250,10 +352,38 @@ export default {
       sec1_search: '',
       sec1_table_page: 1,
       sec1_table_page_count: 0,
-      sec1_data_list: []
+
+      sec1_data_expanded: [],
+      isMobile: false,
+      transitioned: [],
+      closeTimeouts: {}
     }
   },
   computed: {
+    pageStatisticCardItems() {
+      return [
+        {
+          title: '商城架上產品 (個)',
+          value: this.$store.getters['S02/getProductsNum'],
+          type: 1
+        },
+        {
+          title: '商城架上方案 (個)',
+          value: this.$store.getters['S02/getPlansNum'],
+          type: 1
+        },
+        {
+          title: '本月銷售票券 (張)',
+          value: this.$store.getters['S02/getSaleNum'],
+          type: 1
+        },
+        {
+          title: '本月銷售金額 (元)',
+          value: 33333,
+          type: 2
+        }
+      ]
+    },
     sec1_showHeaders() {
       const arr = []
       for (let i = 0; i < this.sec1_table_header.length; i++) {
@@ -262,9 +392,125 @@ export default {
         }
       }
       return arr
+    },
+    sec1_data_list() {
+      const initArr = []
+      this.products.forEach((item) => {
+        const planSet = []
+        const classesArr = item.productClass.split(';')
+        let saleMin = 999999999
+        let saleMax = 0
+        item.productPlanDTOSet.forEach((y) => {
+          // 目前方案綁定一規格
+          const planSalePrice = y.productSpecificationDTOSet[0].sellingPrice
+          const planSaleNum = y.productSpecificationDTOSet[0].sellingNum
+          const PlanRemaining = planSaleNum // 尚未扣除已賣出
+
+          if (y.productSpecificationDTOSet[0].sellingPrice < saleMin) {
+            saleMin = y.productSpecificationDTOSet[0].sellingPrice
+          }
+          if (y.productSpecificationDTOSet[0].sellingPrice > saleMax) {
+            saleMax = y.productSpecificationDTOSet[0].sellingPrice
+          }
+
+          planSet.push({
+            dl0: y.planId,
+            dl1: y.planName,
+            dl2: planSalePrice,
+            dl3: PlanRemaining,
+            dlSaleNum: planSaleNum
+          })
+        })
+        let status = '未知'
+        let statusCode = '-1'
+        if (item.approval === 0) {
+          if (item.reviewProductDTO.reviewStatus === 0) {
+            status = '待審核'
+            statusCode = '00'
+          } else if (item.reviewProductDTO.reviewStatus === 9) {
+            status = '已退回'
+            statusCode = '09'
+          }
+        } else if (item.approval === 1) {
+          if (item.useType === 0) {
+            status = '停用'
+            statusCode = '10'
+          } else if (item.useType === 1) {
+            status = '審核通過'
+            statusCode = '11'
+          }
+        }
+        initArr.push({
+          d0: item.productId,
+          d1: item.productNo,
+          d2: item.productName,
+          d3: this.productClasses
+            .filter(x => classesArr.includes(x.id))
+            .map(x => x.name)
+            .join('/ '),
+          d4:
+            saleMin === saleMax
+              ? `NT$ ${util.numberWithCommas(saleMin)}`
+              : `NT$ ${util.numberWithCommas(
+                  saleMin
+                )} ~ NT$ ${util.numberWithCommas(saleMax)}`,
+          d5: 0,
+          d6: status,
+          planSet,
+          statusCode
+        })
+      })
+
+      return initArr
     }
   },
-  methods: {}
+  mounted() {},
+  methods: {
+    onResize() {
+      if (window.innerWidth < 777) {
+        this.isMobile = true
+      } else {
+        this.isMobile = false
+      }
+    },
+    getItemId(item) {
+      return item.d0 // Must be uid of record (would be nice if v-data-table exposed a "getItemKey" method)
+    },
+    toggleExpand(props) {
+      const item = props.item
+      const id = this.getItemId(item)
+      if (props.isExpanded && this.transitioned[id]) {
+        // If we're expanded and not in the process of closing, close
+        this.closeExpand(item)
+      } else {
+        // If we're closed or in the process of closing, expand
+        // Stop us from closing if a close transition was started
+        clearTimeout(this.closeTimeouts[id])
+        // Tell v-data-table to add the expansion content for the item
+        props.expand(true)
+        // Show expansion content with transition animation after it's had time to get added to the DOM
+        this.$nextTick(() => this.$set(this.transitioned, id, true))
+        // Hide all other expanded items if single-expand
+        if (this.singleExpand) {
+          this.$nextTick(() =>
+            this.sec1_data_expanded.forEach(
+              i => i !== item && this.closeExpand(i)
+            )
+          )
+        }
+      }
+    },
+    closeExpand(item) {
+      const id = this.getItemId(item)
+      // Mark that this item is in the process of closing
+      this.$set(this.transitioned, id, false)
+      // Remove expansion content from DOM after transition animation has had enough time to finish
+      this.closeTimeouts[id] = setTimeout(
+        () => this.$refs.vDataTable.expand(item, false),
+        600
+      )
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -291,5 +537,55 @@ export default {
 .searchInput.v-text-field {
   max-width: 250px;
   width: 250px;
+}
+
+.vue-custom-fadeIn tr {
+  opacity: 0;
+  animation-name: fadeIn;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+:deep(.v-data-table__expanded__content) {
+  box-shadow: none !important;
+  background-color: #e8eaf6;
+}
+
+.expand__color {
+  background-color: #e8eaf6;
+}
+
+.expanded-closing {
+  border-bottom: none !important;
+}
+
+.expanded-display {
+  display: block;
+}
+
+// expand card
+.expanded-mobil-card {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  min-height: 48px;
+  padding-right: 16px !important;
+  padding-left: 16px !important;
+  background-color: transparent;
+}
+
+.expanded-mobil-card .expanded-mobil-card-content {
+  text-align: right;
 }
 </style>

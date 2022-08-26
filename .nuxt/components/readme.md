@@ -10,6 +10,7 @@ You can directly use them in pages and other components without the need to impo
 - `<FileUpload>` | `<file-upload>` (components/FileUpload.vue)
 - `<ImgViewer>` | `<img-viewer>` (components/ImgViewer.vue)
 - `<MyLoading>` | `<my-loading>` (components/MyLoading.vue)
+- `<MyWaiting>` | `<my-waiting>` (components/MyWaiting.vue)
 - `<NuxtLogo>` | `<nuxt-logo>` (components/NuxtLogo.vue)
 - `<PageStatisticCard>` | `<page-statistic-card>` (components/PageStatisticCard.vue)
 - `<ToTop>` | `<to-top>` (components/ToTop.vue)

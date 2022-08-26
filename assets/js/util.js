@@ -17,15 +17,12 @@ const util = {
     )
   },
   numberWithCommas(value) {
-    return (value ?? '')
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    return (value ?? '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   },
 
   toDollars(value) {
     return (
-      'NT$ ' +
-      (value ?? '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      'NT$ ' + (value ?? '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     )
   },
 
@@ -38,7 +35,11 @@ const util = {
   },
 
   paddingLeft(str, lenght) {
-    if (str.length >= lenght) { return str } else { return this.paddingLeft('0' + str, lenght) }
+    if (str.length >= lenght) {
+      return str
+    } else {
+      return this.paddingLeft('0' + str, lenght)
+    }
   },
 
   getBase64(file) {
@@ -48,8 +49,22 @@ const util = {
       reader.onload = () => resolve(reader.result)
       reader.onerror = error => reject(error)
     })
+  },
+  dateTime2String(str) {
+    let reStr = ''
+    if (str instanceof Date) {
+      reStr =
+        this.paddingLeft(str.getFullYear().toString(), 4) +
+        this.paddingLeft((str.getMonth() + 1).toString(), 2) +
+        this.paddingLeft(str.getDate().toString(), 2) +
+        this.paddingLeft(str.getHours().toString(), 2) +
+        this.paddingLeft(str.getMinutes().toString(), 2) +
+        this.paddingLeft(str.getSeconds().toString(), 2)
+    } else if ((str ?? '').lenght > 0) {
+      reStr = str.replace(/[-/\s:]/g, '')
+    }
+    return reStr
   }
-
 }
 
 export default util

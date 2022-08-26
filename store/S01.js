@@ -6,13 +6,6 @@ export const state = () => ({
 })
 
 export const getters = {
-  getUserInfo: (state) => {
-    if (state.user !== null) {
-      return state.user
-    }
-    return { username: '無' }
-  },
-
   getBulkList: (state) => {
     const initArray = []
     state.bulkList.forEach((item, index) => {

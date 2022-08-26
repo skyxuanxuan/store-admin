@@ -621,7 +621,7 @@
                         </v-row>
                         <v-row dense class="px-4 py-2">
                           <v-col cols="12" sm="3" md="2">
-                            <div class="row_title font-weight-medium need">
+                            <div class="row_title font-weight-medium">
                               販售時間
                               <v-tooltip bottom>
                                 <template #activator="{ on, attrs }">
@@ -914,7 +914,15 @@
                           </tr>
                           <tr>
                             <td>方案說明</td>
-                            <td>{{ item.p2 }}</td>
+                            <td v-html="item.p2.replace(/\n/g, '<br>')" />
+                          </tr>
+                          <tr>
+                            <td>使用期限</td>
+                            <td>{{ final_use_time(item) }}</td>
+                          </tr>
+                          <tr>
+                            <td>販售期限</td>
+                            <td>{{ final_sale_time(item) }}</td>
                           </tr>
                           <tr>
                             <td>原價</td>
@@ -971,6 +979,7 @@
       :multi-files="true"
       @get-files="step2_upload_get_files"
     />
+    <my-waiting :loading="loadingStatus" />
     <to-top />
   </div>
 </template>
@@ -991,6 +1000,7 @@ export default {
   layout: 'adminLayout',
   data() {
     return {
+      loadingStatus: false,
       title: '商城票券(逐筆發行) - 新增產品',
       time2: null,
       e1: 1,
@@ -1089,15 +1099,16 @@ export default {
     }),
     final_class() {
       return this.step1_form.p5.map(x => x.name).join('/ ')
-    },
-
-    step3_use_time() {
-      if (this.step2_form.plan_use_radio === '1') {
-        const day = this.step2_form.plan_use_day ?? 90
-        return ' ~ ' + moment().add(day, 'day').format('YYYY-MM-DD hh:mm')
+    }
+  },
+  methods: {
+    final_use_time(item) {
+      if (item.p3 === '1') {
+        const day = item.p3_d ?? 90
+        return `依購買日起迄 ${day}天`
       } else {
-        const sdate = this.step2_form.plan_use_time[0]
-        const edate = this.step2_form.plan_use_time[1]
+        const sdate = item.p3_t[0]
+        const edate = item.p3_t[1]
         if (sdate === null && edate === null) {
           return '無使用期限'
         } else {
@@ -1109,9 +1120,9 @@ export default {
         }
       }
     },
-    step3_sale_time() {
-      const sdate = this.step2_form.plan_sale_time[0]
-      const edate = this.step2_form.plan_sale_time[1]
+    final_sale_time(item) {
+      const sdate = item.p4[0]
+      const edate = item.p4[1]
       if (sdate === null && edate === null) {
         return '無販售期限'
       } else {
@@ -1121,10 +1132,7 @@ export default {
           (edate === null ? '' : moment(edate).format('YYYY-MM-DD hh:mm'))
         )
       }
-    }
-  },
-  mounted() {},
-  methods: {
+    },
     changeDate(index, col) {
       if (col === 1) {
         const sdate = this.step3_form.pArr[index].p4[0]
@@ -1357,9 +1365,6 @@ export default {
     },
 
     final_submit() {
-      console.log(this.step1_form)
-      console.log(this.step2_form)
-      console.log(this.step3_form)
       if (!this.step1_form.valid) {
         this.$swal.fire('Oops!', '步驟一部分項目錯誤，請重新確認', 'error')
         return
@@ -1409,7 +1414,7 @@ export default {
       this.step3_form.pArr.forEach((item) => {
         let days = item.p3_d
         if (item.p3 === '1') {
-          if (days === null) {
+          if (days === null || days === 0) {
             days = 90
           }
         }
@@ -1418,8 +1423,14 @@ export default {
           p2: item.p2,
           p3: item.p3,
           p3_d: days,
-          p3_t: item.p3_t,
-          p4: item.p4,
+          p3_t: [
+            util.dateTime2String(item.p3_t[0]),
+            util.dateTime2String(item.p3_t[1])
+          ],
+          p4: [
+            util.dateTime2String(item.p4[0]),
+            util.dateTime2String(item.p4[1])
+          ],
           p5: item.p5.toString(),
           p6: item.p6.toString(),
           p7: item.p7_sw ? item.p7.toString() : '-1',
@@ -1431,8 +1442,6 @@ export default {
       const form = {}
       form.s1 = s1
       form.s3 = s3
-
-      console.log(form)
 
       const title = '確定要新增產品嗎'
       const content = ''
@@ -1453,22 +1462,47 @@ export default {
         })
         .then((result) => {
           if (result.isConfirmed) {
+            this.loadingStatus = true
+
             this.$axios
               .post('/S02/product', form)
               .then((response) => {
                 const data = response.data
-                console.log(data)
-                // if (data.res === 'CODE0000') {
-                //   this.$swal
-                //     .fire('小提示', '產品新增成功', 'success')
-                //     .then((result) => {
-                //       this.$router.push({
-                //         name: 'S02'
-                //       })
-                //     })
-                // }
+                if (data.res === 'CODE0000') {
+                  const imgaeForm = new FormData()
+                  imgaeForm.append('id', data.id)
+                  this.step2_form.imgArr.forEach((file) => {
+                    imgaeForm.append('files', file.file)
+                  })
+
+                  return this.$axios.post('/S02/product-l2', imgaeForm)
+                } else {
+                  this.$swal.fire('小提示', data.msg, 'error')
+                }
+              })
+              .then((response) => {
+                this.loadingStatus = false
+                const data = response.data
+                if (data.res === 'CODE0000') {
+                  this.$swal
+                    .fire('小提示', '產品新增成功', 'success')
+                    .then((result) => {
+                      this.$router.push({
+                        name: 'S02'
+                      })
+                    })
+                } else {
+                  this.$swal.fire('小提示', data.msg, 'error')
+                }
               })
               .catch((err) => {
+                this.loadingStatus = false
+                this.$notify({
+                  title: '小提示',
+                  text: '網路連線異常',
+                  type: 'error',
+                  duration: 2000
+                })
                 console.log(err)
               })
           }

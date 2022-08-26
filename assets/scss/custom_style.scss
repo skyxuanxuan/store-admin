@@ -1,9 +1,13 @@
 $store_admin_background_color: #e8ecf5;
 $store_admin_base_color: #16261f;
 $animationDuration: 0.5s;
-@import "src/vue2-animate/sass/vue2-animate.scss";
+@import 'src/vue2-animate/sass/vue2-animate.scss';
 
 .base-color--text {
-    color: $store_admin_base_color !important;
-    caret-color: $store_admin_base_color !important;
+  color: $store_admin_base_color !important;
+  caret-color: $store_admin_base_color !important;
+}
+
+html, body {
+    overscroll-behavior-x: none;
 }

@@ -11,6 +11,9 @@
   "MyLoading": {
     "description": "Auto imported from components/MyLoading.vue"
   },
+  "MyWaiting": {
+    "description": "Auto imported from components/MyWaiting.vue"
+  },
   "NuxtLogo": {
     "description": "Auto imported from components/NuxtLogo.vue"
   },
