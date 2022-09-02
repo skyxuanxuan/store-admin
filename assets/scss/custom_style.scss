@@ -1,12 +1,83 @@
 $store_admin_background_color: #e8ecf5;
-$store_admin_base_color: #16261f;
+$store_admin_brown_s1_l1: #D6BEB2;
+$store_admin_brown_s1_l2: #9B6E57;
+$store_admin_brown_s1_l3: #754933;
+$store_admin_brown_s2_l1: #EBE6E3;
+$store_admin_brown_s2_l2: #D4CCC7;
+$store_admin_brown_s2_l3: #AA998F;
+$store_admin_brown_s2_l4: #7B6465;
+$store_admin_brown_s3_l1: #D1BE9C;
+$store_admin_green_l1: #628275;
+$store_admin_green_l2: #4C6158;
+$store_admin_green_l3: #1F3B2F;
+$store_admin_green_l4: #16261F;
+$store_admin_other1: #EF6969;
+$store_admin_other2: #587FFF;
 $animationDuration: 0.5s;
+
 @import 'src/vue2-animate/sass/vue2-animate.scss';
 
-.base-color--text {
-  color: $store_admin_base_color !important;
-  caret-color: $store_admin_base_color !important;
+.custom-brown1-1--text {
+  color: $store_admin_brown_s1_l1 !important;
+  caret-color: $store_admin_brown_s1_l1 !important;
 }
+.custom-brown1-2--text {
+  color: $store_admin_brown_s1_l2 !important;
+  caret-color: $store_admin_brown_s1_l2 !important;
+}
+.custom-brown1-3--text {
+  color: $store_admin_brown_s1_l3 !important;
+  caret-color: $store_admin_brown_s1_l3 !important;
+}
+
+.custom-brown2-1--text {
+  color: $store_admin_brown_s2_l1 !important;
+  caret-color: $store_admin_brown_s2_l1 !important;
+}
+.custom-brown2-2--text {
+  color: $store_admin_brown_s2_l2 !important;
+  caret-color: $store_admin_brown_s2_l2 !important;
+}
+.custom-brown2-3--text {
+  color: $store_admin_brown_s2_l3 !important;
+  caret-color: $store_admin_brown_s2_l3 !important;
+}
+.custom-brown2-4--text {
+  color: $store_admin_brown_s2_l4 !important;
+  caret-color: $store_admin_brown_s2_l4 !important;
+}
+
+.custom-brown3-1--text {
+  color: $store_admin_brown_s3_l1 !important;
+  caret-color: $store_admin_brown_s3_l1 !important;
+}
+
+.custom-green-1--text {
+  color: $store_admin_green_l1 !important;
+  caret-color: $store_admin_green_l1 !important;
+}
+.custom-green-2--text {
+  color: $store_admin_green_l2 !important;
+  caret-color: $store_admin_green_l2 !important;
+}
+.custom-green-3--text {
+  color: $store_admin_green_l3 !important;
+  caret-color: $store_admin_green_l3 !important;
+}
+.custom-green-4--text {
+  color: $store_admin_green_l4 !important;
+  caret-color: $store_admin_green_l4 !important;
+}
+
+.custom-other-1--text {
+  color: $store_admin_other1 !important;
+  caret-color: $store_admin_other1 !important;
+}
+.custom-other-2--text {
+  color: $store_admin_other2 !important;
+  caret-color: $store_admin_other2 !important;
+}
+
 
 html, body {
     overscroll-behavior-x: none;

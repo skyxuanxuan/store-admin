@@ -153,6 +153,24 @@ export default {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3
+        },
+        light: {
+          primary: '#986E57',
+          secondary: '#AA998F',
+          brownS1: '#986E57',
+          brownS1P: '#754933',
+          brownS1M: '#D6BEB2',
+          brownS2: '#AA998F',
+          brownS2P: '#7B6465',
+          brownS2M: '#D4CCC7',
+          brownS2MM: '#EBE6E3',
+          brownS3: '#D1BE9C',
+          greenS1: '#628275',
+          greenS1P: '#4C6158',
+          greenS1PP: '#1F3B2F',
+          greenS1PPP: '#16261F',
+          other1: '#EF6969',
+          other2: '#587FFF'
         }
       }
     },

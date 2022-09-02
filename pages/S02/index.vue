@@ -141,7 +141,7 @@
                     </template>
                     <v-list dense class="py-0">
                       <v-list-item-group no-action>
-                        <v-list-item color="primary">
+                        <v-list-item color="primary" nuxt :to="'/S02/product/' + item.d0">
                           <v-list-item-icon>
                             <v-icon color="primary" small>
                               mdi-pencil
@@ -306,6 +306,7 @@ export default {
 
       productClasses: this.$store.getters['basic/getClasses'],
       products: this.$store.state.S02.productsList,
+      orders: this.$store.state.S02.orders,
       /* Table1 */
       sec1_table_header: [
         {
@@ -379,7 +380,7 @@ export default {
         },
         {
           title: '本月銷售金額 (元)',
-          value: 33333,
+          value: this.$store.getters['S02/getSaleAmt'],
           type: 2
         }
       ]
@@ -394,17 +395,30 @@ export default {
       return arr
     },
     sec1_data_list() {
+      const orderDetailFlat = this.orders.map(x => x.orderDetailDTOSet).flat()
+      console.log(orderDetailFlat)
       const initArr = []
       this.products.forEach((item) => {
         const planSet = []
         const classesArr = item.productClass.split(';')
         let saleMin = 999999999
         let saleMax = 0
+        let saleNum = 0
         item.productPlanDTOSet.forEach((y) => {
+          orderDetailFlat
+            .filter(
+              detail =>
+                detail.specId ===
+                y.productSpecificationDTOSet[0].specificationId
+            )
+            .forEach((detail) => {
+              saleNum += detail.totalNum
+            })
+
           // 目前方案綁定一規格
           const planSalePrice = y.productSpecificationDTOSet[0].sellingPrice
           const planSaleNum = y.productSpecificationDTOSet[0].sellingNum
-          const PlanRemaining = planSaleNum // 尚未扣除已賣出
+          const PlanRemaining = planSaleNum - saleNum // 尚未扣除已賣出
 
           if (y.productSpecificationDTOSet[0].sellingPrice < saleMin) {
             saleMin = y.productSpecificationDTOSet[0].sellingPrice
@@ -454,7 +468,7 @@ export default {
               : `NT$ ${util.numberWithCommas(
                   saleMin
                 )} ~ NT$ ${util.numberWithCommas(saleMax)}`,
-          d5: 0,
+          d5: saleNum,
           d6: status,
           planSet,
           statusCode
