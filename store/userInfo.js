@@ -7,7 +7,7 @@ export const getters = {
     if (state.user !== null) {
       return state.user
     }
-    return { name: '無' }
+    return { name: '無', storeId: '', storeNo: '' }
   }
 }
 
@@ -19,8 +19,10 @@ export const mutations = {
 
 export const actions = {
   async fetchUserInfo({ commit }) {
-    const data = await this.$axios.$get('auth/info')
-    commit('initInfo', data)
+    try {
+      const data = await this.$axios.$get('auth/info')
+      commit('initInfo', data)
+    } catch (err) {}
   },
 
   cleanInfo({ commit }) {

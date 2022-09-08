@@ -1,9 +1,11 @@
 <template>
   <div>
     <v-app-bar color="white" app>
-      <v-app-bar-nav-icon @click="$parent.$emit('eventname')" />
+      <v-app-bar-nav-icon color="brownS1" @click="$parent.$emit('eventname')" />
 
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="custom-brown1-2--text">
+        {{ title }}
+      </v-toolbar-title>
 
       <v-spacer />
 
@@ -52,6 +54,7 @@
                     outlined
                     width="80"
                     v-bind="attrs"
+                    style="top: 2px"
                     v-on="on"
                   >
                     顯示
@@ -65,7 +68,7 @@
                     >
                       <template #default="{ active }">
                         <v-list-item-action>
-                          <v-checkbox :input-value="active" color="primary" />
+                          <v-checkbox :input-value="active" color="greenS1" />
                         </v-list-item-action>
 
                         <v-list-item-content>
@@ -81,9 +84,10 @@
 
               <v-btn
                 class="right-10 d-none d-sm-flex"
-                color="#666666"
                 width="160"
                 dark
+                color="brownS1"
+                rounded
                 nuxt
                 to="/S02/product/create"
               >
@@ -125,7 +129,67 @@
                 </template>
 
                 <template #item.actions="{ item }">
-                  <v-menu
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        class="no-backgroud-hover white"
+                        elevation="0"
+                        color="white"
+                        fab
+                        x-small
+                        nuxt
+                        :to="'/S02/product/' + item.d0"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon color="other2">
+                          mdi-pencil
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <span>編輯</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        v-if="item.statusCode === '11'"
+                        class="no-backgroud-hover white"
+                        elevation="0"
+                        color="white"
+                        fab
+                        x-small
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon color="other1">
+                          mdi-close
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <span>停用</span>
+                  </v-tooltip>
+
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        v-if="item.statusCode === '10'"
+                        class="no-backgroud-hover white"
+                        elevation="0"
+                        color="white"
+                        fab
+                        x-small
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon color="other1">
+                          mdi-restart
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <span>啟用</span>
+                  </v-tooltip>
+
+                  <!-- <v-menu
                     v-if="item.statusCode !== '-1'"
                     open-on-hover
                     :close-on-content-click="false"
@@ -141,9 +205,13 @@
                     </template>
                     <v-list dense class="py-0">
                       <v-list-item-group no-action>
-                        <v-list-item color="primary" nuxt :to="'/S02/product/' + item.d0">
+                        <v-list-item
+                          color="other2"
+                          nuxt
+                          :to="'/S02/product/' + item.d0"
+                        >
                           <v-list-item-icon>
-                            <v-icon color="primary" small>
+                            <v-icon color="other2" small>
                               mdi-pencil
                             </v-icon>
                           </v-list-item-icon>
@@ -154,10 +222,10 @@
                         <v-divider />
                         <v-list-item
                           v-if="item.statusCode === '11'"
-                          color="#f95454"
+                          color="other1"
                         >
                           <v-list-item-icon>
-                            <v-icon color="#f95454">
+                            <v-icon color="other1">
                               mdi-close
                             </v-icon>
                           </v-list-item-icon>
@@ -168,10 +236,10 @@
                         <v-divider v-if="item.statusCode === '11'" />
                         <v-list-item
                           v-if="item.statusCode === '10'"
-                          color="#f95454"
+                          color="other1"
                         >
                           <v-list-item-icon>
-                            <v-icon color="#f95454">
+                            <v-icon color="other1">
                               mdi-restart
                             </v-icon>
                           </v-list-item-icon>
@@ -182,7 +250,7 @@
                         <v-divider v-if="item.statusCode === '10'" />
                       </v-list-item-group>
                     </v-list>
-                  </v-menu>
+                  </v-menu> -->
                 </template>
 
                 <template #expanded-item="{ headers, item }">
@@ -295,6 +363,7 @@ export default {
   layout: 'adminLayout',
   async asyncData({ store }) {
     await store.dispatch('S02/fetchProductsList')
+    await store.dispatch('S02/fetchOrdersList')
   },
   data() {
     return {
@@ -396,7 +465,6 @@ export default {
     },
     sec1_data_list() {
       const orderDetailFlat = this.orders.map(x => x.orderDetailDTOSet).flat()
-      console.log(orderDetailFlat)
       const initArr = []
       this.products.forEach((item) => {
         const planSet = []

@@ -5,7 +5,9 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-app-bar-nav-icon v-bind="attrs" @click="$router.back()" v-on="on">
-            <v-icon>mdi-arrow-left</v-icon>
+            <v-icon color="brownS1">
+              mdi-arrow-left
+            </v-icon>
           </v-app-bar-nav-icon>
         </template>
         <span>上一頁</span>
@@ -41,7 +43,21 @@
               </v-list-item-title>
             </v-list-item>
             <v-list-item
-              v-if="CurrentPageSectionIndex === 0"
+              v-if="CurrentPageSectionIndex === 0 && sec1ProductEdit"
+              color="other2"
+              @click="sec1Modify"
+            >
+              <v-list-item-icon>
+                <v-icon color="other2">
+                  mdi-pencil
+                </v-icon>
+              </v-list-item-icon>
+              <v-list-item-title class="custom-other-2--text">
+                儲存
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item
+              v-if="CurrentPageSectionIndex === 0 && !sec1ProductEdit"
               color="other2"
               @click="sec1Modify"
             >
@@ -54,11 +70,30 @@
                 編輯
               </v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="CurrentPageSectionIndex === 1">
+            <v-list-item
+              v-if="CurrentPageSectionIndex === 1"
+              @click="CurrentPageSectionIndex = 2"
+            >
               <v-list-item-icon>
                 <v-icon>mdi-plus</v-icon>
               </v-list-item-icon>
               <v-list-item-title>新增方案</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-if="CurrentPageSectionIndex === 2">
+              <v-list-item-icon>
+                <v-icon>mdi-plus</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>取消</v-list-item-title>
+            </v-list-item>
+            <v-list-item
+              v-if="CurrentPageSectionIndex === 2"
+              @click="sec3ModifySubmit"
+            >
+              <v-list-item-icon>
+                <v-icon>mdi-plus</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>新增</v-list-item-title>
             </v-list-item>
           </v-list-item-group>
         </v-list>
@@ -106,8 +141,33 @@
         width="140"
         dark
         rounded
+        @click="sec3ModifyInit"
       >
         新增方案
+      </v-btn>
+
+      <v-btn
+        v-if="CurrentPageSectionIndex === 2"
+        class="d-none d-sm-flex right-10"
+        color="brownS1"
+        width="140"
+        outlined
+        rounded
+        @click="sec3ModifyCancel"
+      >
+        取消
+      </v-btn>
+      <v-btn
+        v-if="CurrentPageSectionIndex === 2"
+        class="d-none d-sm-flex"
+        color="brownS1"
+        width="140"
+        :dark="newPlanForm.valid"
+        rounded
+        :disabled="!newPlanForm.valid"
+        @click="sec3ModifySubmit"
+      >
+        新增
       </v-btn>
 
       <template #extension>
@@ -115,16 +175,26 @@
           v-model="CurrentPageSectionIndex"
           color="brownS1"
           align-with-title
+          :class="{
+            'd-none': CurrentPageSectionIndex === 2 || sec1ProductEdit
+          }"
         >
           <v-tabs-slider color="greenS1" />
-          <v-tab>產品資訊</v-tab>
+          <v-tab class="custom-green-1--text">
+            產品資訊
+          </v-tab>
 
-          <v-tab>方案列表</v-tab>
+          <v-tab class="custom-green-1--text">
+            方案列表
+          </v-tab>
+          <v-tab class="d-none">
+            新增方案
+          </v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
     <div class="pa-4">
-      <v-tabs-items v-model="CurrentPageSectionIndex">
+      <v-tabs-items v-model="CurrentPageSectionIndex" touchless>
         <v-tab-item class="background-color">
           <v-card flat color="transparent" style="margin-bottom: 64px">
             <v-card flat color="transparent">
@@ -182,7 +252,15 @@
                 </VueSlickCarousel>
               </v-card-text>
             </v-card>
-            <v-card class="mt-2" flat color="transparent">
+            <v-card
+              v-touch="{
+                right: e => touchEvt(e, 2),
+                left: e => touchEvt(e, 1)
+              }"
+              class="mt-2"
+              flat
+              color="transparent"
+            >
               <v-container>
                 <v-row class="">
                   <v-col>
@@ -442,8 +520,772 @@
             </v-card>
           </v-card>
         </v-tab-item>
+        <v-tab-item class="background-color">
+          <v-card
+            v-touch="{
+              right: e => touchEvt(e, 2),
+              left: e => touchEvt(e, 1)
+            }"
+            flat
+            color="transparent"
+          >
+            <v-container class="white mt-8">
+              <v-toolbar dense flat>
+                <v-text-field
+                  v-model="sec2Search"
+                  class="searchInput top-15"
+                  label="Search"
+                  outlined
+                  dense
+                />
+
+                <v-menu offset-y :close-on-content-click="false">
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      class="left-10"
+                      outlined
+                      width="80"
+                      v-bind="attrs"
+                      style="top: 2px"
+                      v-on="on"
+                    >
+                      顯示
+                    </v-btn>
+                  </template>
+                  <v-list flat>
+                    <v-list-item-group v-model="display_settings" multiple>
+                      <v-list-item
+                        v-for="item in sec2TableHeader"
+                        :key="item.text"
+                      >
+                        <template #default="{ active }">
+                          <v-list-item-action>
+                            <v-checkbox :input-value="active" color="greenS1" />
+                          </v-list-item-action>
+
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ item.text }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
+                </v-menu>
+              </v-toolbar>
+              <v-data-table
+                mobile-breakpoint="770"
+                :headers="sec2_showHeaders"
+                :items="sec2DataList"
+                :items-per-page="10"
+                :search="sec2Search"
+                item-key="d0"
+                calculate-widths
+                :page.sync="sec2TablePage"
+                :footer-props="{
+                  'disable-pagination': true,
+                  'next-icon': '',
+                  'prev-icon': ''
+                }"
+                @page-count="sec2TablePageCount = $event"
+              >
+                <template #item.d3="{ item }">
+                  <span>{{ item.d3 | toDollars }}</span>
+                </template>
+                <template #item.d4="{ item }">
+                  <span v-if="item.d4 !== -1">{{
+                    item.d4 | numberWithCommas
+                  }}</span>
+                  <span v-else><v-icon>mdi-infinity</v-icon></span>
+                </template>
+                <template #item.d5="{ item }">
+                  <span>{{ item.d5 | numberWithCommas }}</span>
+                </template>
+                <template #item.actions="{ item }">
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        class="no-backgroud-hover white"
+                        elevation="0"
+                        color="white"
+                        fab
+                        x-small
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="sec2PlanDetail(item.d0)"
+                      >
+                        <v-icon color="brownS1">
+                          mdi-open-in-new
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <span>詳細資料</span>
+                  </v-tooltip>
+
+                  <v-menu
+                    open-on-hover
+                    :close-on-content-click="false"
+                    transition="slide-x-transition"
+                    offset-y
+                    bottom
+                    right
+                  >
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        class="no-backgroud-hover white"
+                        elevation="0"
+                        color="white"
+                        fab
+                        x-small
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon> mdi-dots-vertical </v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list dense class="py-0">
+                      <v-list-item-group no-action>
+                        <v-list-item
+                          v-show="item.display === 0"
+                          @click="sec2PlanDisplay(item.d0, 1)"
+                        >
+                          <v-list-item-icon>
+                            <v-icon color="brownS2P">
+                              mdi-eye
+                            </v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title class="custom-brown2-4--text">
+                              顯示
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                        <v-divider v-show="item.display === 0" />
+                        <v-list-item
+                          v-show="item.display === 1"
+                          @click="sec2PlanDisplay(item.d0, 0)"
+                        >
+                          <v-list-item-icon>
+                            <v-icon color="brownS2M">
+                              mdi-eye-off
+                            </v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title class="custom-brown2-2--text">
+                              隱藏
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                        <v-divider v-show="item.display === 1" />
+                        <v-divider v-show="item.display === 0" />
+                        <v-list-item
+                          v-show="item.useType === 0"
+                          color="success"
+                          @click="planUseType(item.d0, 1)"
+                        >
+                          <v-list-item-icon>
+                            <v-icon color="success">
+                              mdi-restart
+                            </v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title class="success--text">
+                              啟用
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                        <v-divider v-show="item.useType === 0" />
+                        <v-list-item
+                          v-show="item.useType === 1"
+                          color="other1"
+                          @click="planUseType(item.d0, 0)"
+                        >
+                          <v-list-item-icon>
+                            <v-icon color="other1">
+                              mdi-close
+                            </v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title class="custom-other-1--text">
+                              停用
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                  </v-menu>
+                </template>
+              </v-data-table>
+            </v-container>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item class="background-color">
+          <v-card
+            flat
+            max-width="1150"
+            color="transparent"
+            style="margin: 0 auto; margin-bottom: 64px"
+          >
+            <v-form ref="vnewplanform" v-model="newPlanForm.valid">
+              <v-container>
+                <v-col cols="12" class="pa-0 pt-6">
+                  <v-card class="pa-4" rounded="xl">
+                    <v-subheader class="base-color--text border_title">
+                      <v-chip color="brown lighten-3" dark>
+                        新增方案
+                      </v-chip>
+                    </v-subheader>
+                    <v-row dense class="px-4 py-2">
+                      <v-col cols="12" sm="3" md="2">
+                        <div class="row_title font-weight-medium need">
+                          方案名稱
+                        </div>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <v-text-field
+                          v-model="newPlanForm.item.p1"
+                          dense
+                          outlined
+                          color="#16261f"
+                          counter="100"
+                          :rules="[rules.required, rules.length(200)]"
+                          label="請填寫方案名稱"
+                          single-line
+                        />
+                      </v-col>
+                    </v-row>
+                    <v-row dense class="px-4 py-2">
+                      <v-col cols="12" sm="3" md="2">
+                        <div class="row_title font-weight-medium need">
+                          方案簡介
+                        </div>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <v-textarea
+                          v-model="newPlanForm.item.p2"
+                          outlined
+                          color="#16261f"
+                          counter="100"
+                          :rules="[rules.required, rules.length(250)]"
+                          label="請填寫方案簡介"
+                          auto-grow
+                          single-line
+                          rows="3"
+                        >
+                          <template #prepend-inner>
+                            <v-tooltip bottom>
+                              <template #activator="{ on, attrs }">
+                                <v-icon small v-bind="attrs" v-on="on">
+                                  mdi-information-outline
+                                </v-icon>
+                              </template>
+                              <span> 每項資訊以換行做為區隔 </span>
+                            </v-tooltip>
+                          </template>
+                        </v-textarea>
+                      </v-col>
+                    </v-row>
+                    <v-row dense class="px-4 py-2">
+                      <v-col cols="12" sm="3" md="2">
+                        <div class="row_title font-weight-medium">
+                          使用期限
+                          <v-tooltip bottom>
+                            <template #activator="{ on, attrs }">
+                              <v-icon
+                                small
+                                v-bind="attrs"
+                                class="pl-2"
+                                v-on="on"
+                              >
+                                mdi-information-outline
+                              </v-icon>
+                            </template>
+                            <span>
+                              如未填寫，系統將自動設定為無期限<br>請注意，本公司提供逐筆類型產品履保時間為購買後三個月
+                            </span>
+                          </v-tooltip>
+                        </div>
+                      </v-col>
+                      <v-col cols="12" sm="9">
+                        <v-radio-group
+                          v-model="newPlanForm.item.p3"
+                          class="mt-0"
+                          :rules="[rules.required]"
+                          row
+                        >
+                          <v-radio
+                            color="greenS1"
+                            label="依購買日起計"
+                            value="1"
+                            class="label_size09"
+                          />
+                          <v-radio
+                            color="greenS1"
+                            label="固定到期日"
+                            value="2"
+                            class="label_size09"
+                          />
+                        </v-radio-group>
+                        <v-expand-transition>
+                          <v-card v-if="newPlanForm.item.p3 === '1'" flat>
+                            <v-text-field
+                              v-model="newPlanForm.item.p3_d"
+                              color="#16261f"
+                              label="請填寫天數，如未填寫則以90天計算"
+                              single-line
+                              type="number"
+                              hide-spin-buttons
+                            />
+                          </v-card>
+                        </v-expand-transition>
+                        <v-expand-transition>
+                          <v-card v-if="newPlanForm.item.p3 === '2'" flat>
+                            <v-card
+                              class="justify-start d-none d-sm-flex"
+                              flat
+                              tile
+                            >
+                              <v-card class="pa-2" flat tile>
+                                <date-picker
+                                  v-model="newPlanForm.item.p3_t[0]"
+                                  type="date"
+                                  placeholder="請選擇開始時間"
+                                  :editable="false"
+                                  @change="changeDate(1)"
+                                />
+                              </v-card>
+                              <v-card class="pa-2" flat tile>
+                                <v-icon> mdi-tilde </v-icon>
+                              </v-card>
+                              <v-card class="pa-2" flat tile>
+                                <date-picker
+                                  v-model="newPlanForm.item.p3_t[1]"
+                                  type="date"
+                                  placeholder="請選擇結束時間"
+                                  :editable="false"
+                                  @change="changeDate(1)"
+                                />
+                              </v-card>
+                            </v-card>
+                            <v-card
+                              flat
+                              tile
+                              class="d-flex d-sm-none flex-column"
+                            >
+                              <v-card flat>
+                                <date-picker
+                                  v-model="newPlanForm.item.p3_t[0]"
+                                  type="date"
+                                  placeholder="請選擇開始時間"
+                                  :editable="false"
+                                  :confirm="true"
+                                  @change="changeDate(1)"
+                                />
+                              </v-card>
+                              <v-card class="mt-4" flat tile>
+                                <date-picker
+                                  v-model="newPlanForm.item.p3_t[1]"
+                                  type="date"
+                                  placeholder="請選擇結束時間"
+                                  :editable="false"
+                                  :confirm="true"
+                                  @change="changeDate(1)"
+                                />
+                              </v-card>
+                            </v-card>
+                          </v-card>
+                        </v-expand-transition>
+                      </v-col>
+                    </v-row>
+                    <v-row dense class="px-4 py-2">
+                      <v-col cols="12" sm="3" md="2">
+                        <div class="row_title font-weight-medium">
+                          販售時間
+                          <v-tooltip bottom>
+                            <template #activator="{ on, attrs }">
+                              <v-icon
+                                small
+                                v-bind="attrs"
+                                class="pl-2"
+                                v-on="on"
+                              >
+                                mdi-information-outline
+                              </v-icon>
+                            </template>
+                            <span>
+                              如未點選開始時間，系統將自動以當前時間帶入
+                            </span>
+                          </v-tooltip>
+                        </div>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <v-card
+                          class="justify-start d-none d-sm-flex"
+                          flat
+                          tile
+                        >
+                          <v-card class="pa-2" flat tile>
+                            <v-card flat>
+                              <date-picker
+                                v-model="newPlanForm.item.p4[0]"
+                                type="datetime"
+                                placeholder="請選擇開始時間"
+                                :editable="false"
+                                :confirm="true"
+                                @change="changeDate(2)"
+                              />
+                            </v-card>
+                          </v-card>
+                          <v-card class="pa-2" flat tile>
+                            <v-icon> mdi-tilde </v-icon>
+                          </v-card>
+                          <v-card class="pa-2" flat tile>
+                            <date-picker
+                              v-model="newPlanForm.item.p4[1]"
+                              type="datetime"
+                              placeholder="請選擇結束時間"
+                              :editable="false"
+                              :confirm="true"
+                              @change="changeDate(2)"
+                            />
+                          </v-card>
+                        </v-card>
+                        <v-card flat tile class="d-flex d-sm-none flex-column">
+                          <v-card flat>
+                            <date-picker
+                              v-model="newPlanForm.item.p4[0]"
+                              type="datetime"
+                              placeholder="請選擇開始時間"
+                              :editable="false"
+                              :confirm="true"
+                              @change="changeDate(2)"
+                            />
+                          </v-card>
+                          <v-card flat class="mt-4">
+                            <date-picker
+                              v-model="newPlanForm.item.p4[1]"
+                              type="datetime"
+                              placeholder="請選擇開始時間"
+                              :editable="false"
+                              :confirm="true"
+                              @change="changeDate(2)"
+                            />
+                          </v-card>
+                        </v-card>
+                      </v-col>
+                    </v-row>
+                    <v-row dense class="px-4 py-2">
+                      <v-col cols="6" sm="3" md="2">
+                        <div class="row_title font-weight-medium need">
+                          原價
+                        </div>
+                      </v-col>
+                      <v-col cols="6" sm="6">
+                        <v-text-field
+                          v-model="newPlanForm.item.p5"
+                          type="number"
+                          prefix="NT$"
+                          hide-spin-buttons
+                          :rules="[
+                            rules.required,
+                            rules.positive,
+                            rules.integer
+                          ]"
+                          class="pt-0"
+                        />
+                      </v-col>
+                    </v-row>
+                    <v-row dense class="px-4 py-2">
+                      <v-col cols="6" sm="3" md="2">
+                        <div class="row_title font-weight-medium need">
+                          售價
+                        </div>
+                      </v-col>
+                      <v-col cols="6" sm="6">
+                        <v-text-field
+                          v-model="newPlanForm.item.p6"
+                          type="number"
+                          hide-spin-buttons
+                          prefix="NT$"
+                          :rules="[
+                            rules.required,
+                            rules.positive,
+                            rules.integer
+                          ]"
+                          class="pt-0"
+                        />
+                      </v-col>
+                    </v-row>
+                    <v-row dense class="px-4 py-2">
+                      <v-col cols="6" sm="3" md="2">
+                        <div class="row_title font-weight-medium need">
+                          販售數量
+                        </div>
+                      </v-col>
+                      <v-col cols="6" sm="6">
+                        <v-switch
+                          v-model="newPlanForm.item.p7_sw"
+                          :label="newPlanForm.item.p7_sw ? '開啟' : '無上限'"
+                          class="mt-2"
+                        />
+                        <v-expand-transition>
+                          <v-text-field
+                            v-if="newPlanForm.item.p7_sw"
+                            v-model="newPlanForm.item.p7"
+                            type="number"
+                            hide-spin-buttons
+                            class="pt-0"
+                          >
+                            <v-icon
+                              slot="append-outer"
+                              color="red"
+                              @click="sec3NumModify(1, 3)"
+                            >
+                              mdi-plus
+                            </v-icon>
+                            <v-icon
+                              slot="prepend"
+                              color="green"
+                              @click="sec3NumModify(2, 3)"
+                            >
+                              mdi-minus
+                            </v-icon>
+                          </v-text-field>
+                        </v-expand-transition>
+                      </v-col>
+                    </v-row>
+                    <v-row dense class="px-4 py-2">
+                      <v-col cols="6" sm="3" md="2">
+                        <div class="row_title font-weight-medium">
+                          單次購買上限
+                          <v-tooltip bottom>
+                            <template #activator="{ on, attrs }">
+                              <v-icon
+                                small
+                                v-bind="attrs"
+                                class="pl-2"
+                                v-on="on"
+                              >
+                                mdi-information-outline
+                              </v-icon>
+                            </template>
+                            <span> 單次購買上限最多為20 </span>
+                          </v-tooltip>
+                        </div>
+                      </v-col>
+                      <v-col cols="6" sm="6">
+                        <v-switch
+                          v-model="newPlanForm.item.p8_sw"
+                          :label="newPlanForm.item.p8_sw ? '開啟' : '無上限'"
+                          class="mt-2"
+                        />
+                        <v-expand-transition>
+                          <v-text-field
+                            v-if="newPlanForm.item.p8_sw"
+                            v-model="newPlanForm.item.p8"
+                            type="number"
+                            hide-spin-buttons
+                            :rules="[rules.buyLimit]"
+                            class="pt-0"
+                          >
+                            <v-icon
+                              slot="append-outer"
+                              color="red"
+                              @click="sec3NumModify(1, 4)"
+                            >
+                              mdi-plus
+                            </v-icon>
+                            <v-icon
+                              slot="prepend"
+                              color="green"
+                              @click="sec3NumModify(2, 4)"
+                            >
+                              mdi-minus
+                            </v-icon>
+                          </v-text-field>
+                        </v-expand-transition>
+                      </v-col>
+                    </v-row>
+                  </v-card>
+                </v-col>
+              </v-container>
+            </v-form>
+          </v-card>
+        </v-tab-item>
       </v-tabs-items>
     </div>
+    <v-dialog v-model="planDetailDialog" max-width="580">
+      <v-card>
+        <v-card-title class="text-h5 font-weight-bold">
+          詳細資料 - {{ planDetailDialogDetail.d1 }}
+        </v-card-title>
+        <v-card class="ma-4" flat>
+          <v-container>
+            <v-row dense class="border_bottom">
+              <v-col cols="12" md="4">
+                <span>
+                  <v-icon style="top: -3px" color="brownS1">
+                    mdi-circle-small
+                  </v-icon>
+                </span>
+                <span
+                  class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                >產品名稱</span>
+              </v-col>
+              <v-col cols="12" md="8" class="text-subtitle-1">
+                <div class="px-2">
+                  {{ planDetailDialogDetail.d1 }}
+                </div>
+              </v-col>
+            </v-row>
+            <v-row dense class="border_bottom">
+              <v-col cols="12" md="4">
+                <span>
+                  <v-icon style="top: -3px" color="brownS1">
+                    mdi-circle-small
+                  </v-icon>
+                </span>
+                <span
+                  class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                >產品簡介</span>
+              </v-col>
+              <v-col cols="12" md="8" class="text-subtitle-1">
+                <div class="px-2" v-html="planDetailDialogDetail.d2" />
+              </v-col>
+            </v-row>
+            <v-row dense class="border_bottom">
+              <v-col cols="12" md="4">
+                <span>
+                  <v-icon style="top: -3px" color="brownS1">
+                    mdi-circle-small
+                  </v-icon>
+                </span>
+                <span
+                  class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                >使用期限</span>
+              </v-col>
+              <v-col cols="12" md="8" class="text-subtitle-1">
+                <div class="px-2">
+                  {{ planDetailDialogDetail.d3 }}
+                </div>
+              </v-col>
+            </v-row>
+            <v-row dense class="border_bottom">
+              <v-col cols="12" md="4">
+                <span>
+                  <v-icon style="top: -3px" color="brownS1">
+                    mdi-circle-small
+                  </v-icon>
+                </span>
+                <span
+                  class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                >販售時間</span>
+              </v-col>
+              <v-col cols="12" md="8" class="text-subtitle-1">
+                <div class="px-2">
+                  {{ planDetailDialogDetail.d4 }}
+                </div>
+              </v-col>
+            </v-row>
+            <v-row dense class="border_bottom">
+              <v-col cols="12" md="4">
+                <span>
+                  <v-icon style="top: -3px" color="brownS1">
+                    mdi-circle-small
+                  </v-icon>
+                </span>
+                <span
+                  class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                >原價</span>
+              </v-col>
+              <v-col cols="12" md="8" class="text-subtitle-1">
+                <div class="px-2">
+                  {{ planDetailDialogDetail.d5 | toDollars }}
+                </div>
+              </v-col>
+            </v-row>
+            <v-row dense class="border_bottom">
+              <v-col cols="12" md="4">
+                <span>
+                  <v-icon style="top: -3px" color="brownS1">
+                    mdi-circle-small
+                  </v-icon>
+                </span>
+                <span
+                  class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                >售價</span>
+              </v-col>
+              <v-col cols="12" md="8" class="text-subtitle-1">
+                <div class="px-2">
+                  {{ planDetailDialogDetail.d6 | toDollars }}
+                </div>
+              </v-col>
+            </v-row>
+            <v-row dense class="border_bottom">
+              <v-col cols="12" md="4">
+                <span>
+                  <v-icon style="top: -3px" color="brownS1">
+                    mdi-circle-small
+                  </v-icon>
+                </span>
+                <span
+                  class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                >販售數量</span>
+              </v-col>
+              <v-col cols="12" md="8" class="text-subtitle-1">
+                <div v-if="planDetailDialogDetail.d7 !== -1" class="px-2">
+                  {{ planDetailDialogDetail.d7 | numberWithCommas }}
+                </div>
+                <div v-else class="px-2">
+                  <v-icon>mdi-infinity</v-icon>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row dense class="border_bottom">
+              <v-col cols="12" md="4">
+                <span>
+                  <v-icon style="top: -3px" color="brownS1">
+                    mdi-circle-small
+                  </v-icon>
+                </span>
+                <span
+                  class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                >單次購買上限</span>
+              </v-col>
+              <v-col cols="12" md="8" class="text-subtitle-1">
+                <div class="px-2">
+                  {{ planDetailDialogDetail.d8 | numberWithCommas }}
+                </div>
+              </v-col>
+            </v-row>
+            <v-row dense class="border_bottom">
+              <v-col cols="12" md="4">
+                <span>
+                  <v-icon style="top: -3px" color="brownS1">
+                    mdi-circle-small
+                  </v-icon>
+                </span>
+                <span
+                  class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                >狀態</span>
+              </v-col>
+              <v-col cols="12" md="8" class="text-subtitle-1">
+                <div class="px-2">
+                  {{ planDetailDialogDetail.d9 }}
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="green darken-1" text @click="planDetailDialog = false">
+            確定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <to-top />
     <my-waiting :loading="loadingStatus" />
   </div>
@@ -451,48 +1293,80 @@
 
 <script>
 import VueSlickCarousel from 'vue-slick-carousel'
+import DatePicker from 'vue2-datepicker'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue2-datepicker/index.css'
 import util from '~/assets/js/util'
 
+const integerRegex = /[^0-9]/
 export default {
   name: 'IndexPage',
   title: '商城票券(逐筆發行) - 編輯產品',
-  components: { VueSlickCarousel },
+  components: { VueSlickCarousel, DatePicker },
+  beforeRouteLeave(to, from, next) {
+    if (this.sec1ProductEdit || this.sec3_edit) {
+      this.$swal
+        .fire({
+          title: '確定要捨棄編輯嗎？',
+          html: '',
+          showCancelButton: true,
+          cancelButtonText: '取消',
+          confirmButtonText: '確定',
+          reverseButtons: true,
+          showClass: {
+            popup: '',
+            backdrop: 'swal2-backdrop-show',
+            icon: 'swal2-icon-show'
+          }
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            next()
+          }
+        })
+    } else {
+      next()
+    }
+  },
   layout: 'adminLayout',
 
-  async asyncData({ params, store, redirect }) {
+  async asyncData({ params, store, redirect, $axios }) {
     const id = params.id
     if (id.length === 0) {
       redirect('/S02')
     }
-    const product = await store.dispatch('S02/fetchProductById', id)
-    if (!product) {
-      redirect('/S02')
-    }
-    console.log(product)
-    const imgUrl = `${process.env.imgUrl}/store/${store.state.userInfo.user.storeId}/products/${product.productId}/`
-    return {
-      product,
-      imgUrl,
-      introCount: product.productIntroDTOSet.length,
-      introList: product.productIntroDTOSet
-        .map((x) => {
-          return {
-            id: x.id.toString(),
-            pkId: x.id,
-            valid: false,
-            title: x.introTitle,
-            content: x.introText,
-            order: x.introOrder,
-            edit: x.introEdit,
-            type: '0'
-          }
-        })
-        .sort((a, b) => a.order - b.order)
+    try {
+      await store.dispatch('S02/fetchOrdersList')
+      const data = await $axios.$get(`S02/product/${id}`)
+      if (data.res === 'CODE0000') {
+        const imgUrl = `${process.env.imgUrl}/store/${store.state.userInfo.user.storeId}/products/${data.data.product.productId}/`
+        return {
+          product: data.data.product,
+          imgUrl,
+          introCount: data.data.product.productIntroDTOSet.length,
+          introList: data.data.product.productIntroDTOSet
+            .map((x) => {
+              return {
+                id: x.id.toString(),
+                pkId: x.id,
+                valid: false,
+                title: x.introTitle,
+                content: x.introText,
+                order: x.introOrder,
+                edit: x.introEdit,
+                type: '0'
+              }
+            })
+            .sort((a, b) => a.order - b.order)
+        }
+      } else {
+        redirect('/S02')
+      }
+    } catch (err) {
+      console.log(err)
+      redirect('/')
     }
   },
-
   data() {
     return {
       loadingStatus: false,
@@ -501,10 +1375,106 @@ export default {
       basicProductClasses: this.$store.getters['basic/getClasses'],
       sec1_edit: false,
       sec1_valid: false,
+      sec3_edit: false,
       time2: null,
       rules: {
         length: len => v => (v || '').length <= len || `長度不得超過 ${len}`,
-        required: v => !!v || '此欄位為必填'
+        required: v => !!v || '此欄位為必填',
+        buyLimit: v =>
+          (!!v && parseInt(v) >= 1 && parseInt(v) <= 20) ||
+          '單次購買上限範圍 1 ~ 20',
+        positive: v => (!!v && parseInt(v) >= 0) || '價格不能為負值',
+        integer: v => (!!v && !integerRegex.test(v.toString())) || '價格為整數'
+      },
+
+      orders: this.$store.state.S02.orders,
+      display_settings: [0, 1, 2, 3, 4, 5, 6, 7],
+      sec2TableHeader: [
+        {
+          text: '序號',
+          align: 'start',
+          value: 'd1'
+        },
+        {
+          text: '名稱',
+          align: 'start',
+          value: 'd2'
+        },
+        {
+          text: '售價',
+          align: 'start',
+          value: 'd3',
+          filterable: false
+        },
+        {
+          text: '販售數量',
+          align: 'start',
+          value: 'd4',
+          filterable: false
+        },
+        {
+          text: '售出',
+          align: 'start',
+          value: 'd5',
+          filterable: false
+        },
+        {
+          text: '顯示/隱藏',
+          align: 'start',
+          value: 'd7',
+          filterable: false
+        },
+        {
+          text: '狀態',
+          align: 'start',
+          value: 'd6',
+          filterable: false
+        },
+        {
+          text: '操作',
+          align: 'center',
+          value: 'actions',
+          filterable: false,
+          sortable: false
+        }
+      ],
+      sec2DataList: [],
+      sec2Search: '',
+      sec2TablePage: 1,
+      sec2TablePageCount: 0,
+
+      /* 新增方案 */
+      newPlanForm: {
+        valid: false,
+        item: {
+          id: util._uuid(),
+          p1: '',
+          p2: '',
+          p3: '1',
+          p3_d: null,
+          p3_t: [null, null],
+          p4: [null, null],
+          p5: null,
+          p6: null,
+          p7_sw: false,
+          p7: null,
+          p8_sw: false,
+          p8: 20
+        }
+      },
+
+      /* 詳細資料 */
+      planDetailDialog: false,
+      planDetailDialogDetail: {
+        d1: '',
+        d2: '',
+        d3: '',
+        d4: '',
+        d5: '',
+        d6: '',
+        d7: '',
+        d8: '',
+        d9: ''
       }
     }
   },
@@ -545,8 +1515,6 @@ export default {
       return (this.product.productUseType ?? '').toString()
     },
     productClass() {
-      console.log(this.product.productClass)
-      console.log(this.basicProductClasses)
       const initArr = []
       this.product.productClass.split(';').forEach((item) => {
         const obj = this.basicProductClasses.find(x => x.id === item)
@@ -558,9 +1526,32 @@ export default {
     },
     productIntroFilter() {
       return this.introList.filter(x => x.type !== '-1')
+    },
+    sec2_showHeaders() {
+      const arr = []
+      for (let i = 0; i < this.sec2TableHeader.length; i++) {
+        if (this.display_settings.includes(i)) {
+          arr.push(this.sec2TableHeader[i])
+        }
+      }
+      return arr
     }
   },
+  created() {
+    this.sec2_data_init()
+  },
   methods: {
+    touchEvt(e, direct) {
+      if (direct === 1) {
+        if (this.CurrentPageSectionIndex < 1) {
+          this.CurrentPageSectionIndex++
+        }
+      } else if (direct === 2) {
+        if (this.CurrentPageSectionIndex > 0) {
+          this.CurrentPageSectionIndex--
+        }
+      }
+    },
     loading(flag) {
       if (flag) {
         this.loadingStatus = true
@@ -582,6 +1573,25 @@ export default {
       }
       return 'teal'
     },
+    changeDate(col) {
+      if (col === 1) {
+        const sdate = this.newPlanForm.item.p3_t[0]
+        const edate = this.newPlanForm.item.p3_t[1]
+        if (sdate !== null && edate !== null) {
+          if (sdate.getTime() > edate.getTime()) {
+            this.newPlanForm.item.p3_t = [edate, sdate]
+          }
+        }
+      } else if (col === 2) {
+        const sdate = this.newPlanForm.item.p4[0]
+        const edate = this.newPlanForm.item.p4[1]
+        if (sdate !== null && edate !== null) {
+          if (sdate.getTime() > edate.getTime()) {
+            this.newPlanForm.item.p4 = [edate, sdate]
+          }
+        }
+      }
+    },
     sec1Modify() {
       if (this.sec1_edit) {
         this.sec1ModifySubmit()
@@ -593,24 +1603,42 @@ export default {
       }
     },
     sec1ModifyCancel() {
-      this.loading(true)
-      this.introCount = this.product.productIntroDTOSet.length
-      this.introList = this.product.productIntroDTOSet
-        .map((x) => {
-          return {
-            id: x.id,
-            pkId: x.id,
-            valid: false,
-            title: x.introTitle,
-            content: x.introText,
-            order: x.introOrder,
-            edit: x.introEdit,
-            type: '0'
+      this.$swal
+        .fire({
+          title: '確定要捨棄編輯嗎？',
+          html: '',
+          showCancelButton: true,
+          cancelButtonText: '取消',
+          confirmButtonText: '確定',
+          reverseButtons: true,
+          showClass: {
+            popup: '',
+            backdrop: 'swal2-backdrop-show',
+            icon: 'swal2-icon-show'
           }
         })
-        .sort((a, b) => a.order - b.order)
-      this.sec1_edit = false
-      this.loading(false)
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.loading(true)
+            this.introCount = this.product.productIntroDTOSet.length
+            this.introList = this.product.productIntroDTOSet
+              .map((x) => {
+                return {
+                  id: x.id,
+                  pkId: x.id,
+                  valid: false,
+                  title: x.introTitle,
+                  content: x.introText,
+                  order: x.introOrder,
+                  edit: x.introEdit,
+                  type: '0'
+                }
+              })
+              .sort((a, b) => a.order - b.order)
+            this.sec1_edit = false
+            this.loading(false)
+          }
+        })
     },
     sec1IntroAdd() {
       if (this.introList.length >= 6) {
@@ -715,14 +1743,8 @@ export default {
               .then((response) => {
                 const data = response.data
                 if (data.res === 'CODE0000') {
-                  this.$store
-                    .dispatch('S02/fetchProductsList')
-                    .then(() => {
-                      return this.$store.dispatch(
-                        'S02/fetchProductById',
-                        submitProductId
-                      )
-                    })
+                  this.$axios
+                    .$get(`S02/product/${submitProductId}`)
                     .then((newData) => {
                       this.product = newData
                       this.introCount = newData.productIntroDTOSet.length
@@ -760,6 +1782,414 @@ export default {
                 console.log(err)
               })
           }
+        })
+    },
+
+    sec2_data_init() {
+      const initArr = []
+      const orderDetailFlat = this.orders.map(x => x.orderDetailDTOSet).flat()
+      const planList = this.product.productPlanDTOSet
+      planList.forEach((item, index) => {
+        let saleNum = 0
+        orderDetailFlat
+          .filter(
+            detail =>
+              detail.specId ===
+              item.productSpecificationDTOSet[0].specificationId
+          )
+          .forEach((detail) => {
+            saleNum += detail.totalNum
+          })
+
+        // 目前方案綁定一規格
+        const planSalePrice = item.productSpecificationDTOSet[0].sellingPrice
+        const planSaleNum = item.productSpecificationDTOSet[0].sellingNum
+
+        let d6 = '未知'
+        if (item.useType === 1) {
+          d6 = '啟用'
+        } else if (item.useType === 0) {
+          d6 = '停用'
+        }
+        let d7 = '未知'
+        if (item.display === 1) {
+          d7 = '顯示'
+        } else if (item.display === 0) {
+          d7 = '隱藏'
+        }
+        initArr.push({
+          d0: item.planId,
+          d1: index + 1,
+          d2: item.planName,
+          d3: planSalePrice,
+          d4: planSaleNum,
+          d5: saleNum,
+          d6,
+          d7,
+          useType: item.useType,
+          display: item.display
+        })
+      })
+      this.sec2DataList = initArr
+    },
+    sec2PlanDetail(id) {
+      const planList = this.product.productPlanDTOSet
+      const detail = planList.find(x => x.planId === id)
+      if (detail) {
+        let d3 = ''
+        if (detail.useDays > 0) {
+          d3 = `依購買後起訖 ${detail.useDays}天`
+        } else if (
+          detail.useDays === -1 &&
+          detail.useStime.length === 0 &&
+          detail.useEtime.length === 0
+        ) {
+          d3 = '無期限'
+        } else {
+          const stime =
+            detail.useStime.length === 0
+              ? ''
+              : util.formatTimeMinus(detail.useStime).substring(0, 10)
+          const etime =
+            detail.useEtime.length === 0
+              ? ''
+              : util.formatTimeMinus(detail.useEtime).substring(0, 10)
+          d3 = `${stime.length > 0 ? stime : ''} ~ ${
+            etime.length > 0 ? etime : ''
+          }`
+        }
+
+        let d4 = ''
+        if (
+          detail.sellingStime.length === 0 &&
+          detail.sellingEtime.length === 0
+        ) {
+          d4 = '無期限'
+        } else {
+          const stime =
+            detail.sellingStime.length === 0
+              ? ''
+              : util.formatTimeMinus(detail.sellingStime)
+          const etime =
+            detail.sellingEtime.length === 0
+              ? ''
+              : util.formatTimeMinus(detail.sellingEtime)
+          d4 = `${stime.length > 0 ? stime : ''} ~ ${
+            etime.length > 0 ? etime : ''
+          }`
+        }
+
+        // 目前採單一規格
+        const d5 = detail.productSpecificationDTOSet[0].unitPrice
+        const d6 = detail.productSpecificationDTOSet[0].sellingPrice
+        const d7 = detail.productSpecificationDTOSet[0].sellingNum
+        const d8 = detail.productSpecificationDTOSet[0].sellingLimit
+        const d9 =
+          detail.productSpecificationDTOSet[0].useType === 1 ? '啟用' : '停用'
+
+        const initObj = {
+          d1: detail.planName,
+          d2: detail.planIntro.replace(/\n|\r\n/g, '<br>'),
+          d3,
+          d4,
+          d5,
+          d6,
+          d7,
+          d8,
+          d9
+        }
+
+        this.planDetailDialogDetail = Object.assign({}, initObj)
+        this.planDetailDialog = true
+      }
+    },
+    sec2PlanDisplay(id, type) {
+      let opt = ''
+      if (type === 1) {
+        opt = '顯示'
+      } else {
+        opt = '隱藏'
+      }
+      const title = `確定要${opt}此方案嗎`
+      const content = ''
+      this.$swal
+        .fire({
+          title,
+          html: content,
+          icon: 'warning',
+          showCancelButton: true,
+          cancelButtonText: '取消',
+          confirmButtonText: '確定',
+          reverseButtons: true,
+          showClass: {
+            popup: '',
+            backdrop: 'swal2-backdrop-show',
+            icon: 'swal2-icon-show'
+          }
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.loading(true)
+            this.$axios
+              .put(
+                `/S02/product/${this.product.productId}/plan/${id}/display/${type}`
+              )
+              .then((response) => {
+                const data = response.data
+                if (data.res === 'CODE0000') {
+                  const oldPlan = this.product.productPlanDTOSet.find(
+                    x => x.planId === id
+                  )
+
+                  if (oldPlan !== undefined) {
+                    const index =
+                      this.product.productPlanDTOSet.indexOf(oldPlan)
+                    this.$set(this.product.productPlanDTOSet, index, data.plan)
+                  }
+                  this.sec2_data_init()
+                } else {
+                  this.$swal.fire('小提示', data.msg, 'error')
+                }
+                this.loading(false)
+              })
+              .catch((err) => {
+                this.loading(false)
+                this.$notify({
+                  title: '小提示',
+                  text: '網路連線異常',
+                  type: 'error',
+                  duration: 2000
+                })
+                console.log(err)
+              })
+          }
+        })
+    },
+    planUseType(id, type) {
+      let opt = ''
+      if (type === 1) {
+        opt = '啟用'
+      } else {
+        opt = '停用'
+      }
+      const title = `確定要${opt}此方案嗎`
+      const content = ''
+      this.$swal
+        .fire({
+          title,
+          html: content,
+          icon: 'warning',
+          showCancelButton: true,
+          cancelButtonText: '取消',
+          confirmButtonText: '確定',
+          reverseButtons: true,
+          showClass: {
+            popup: '',
+            backdrop: 'swal2-backdrop-show',
+            icon: 'swal2-icon-show'
+          }
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.loading(true)
+            this.$axios
+              .put(
+                `/S02/product/${this.product.productId}/plan/${id}/use/${type}`
+              )
+              .then((response) => {
+                const data = response.data
+                if (data.res === 'CODE0000') {
+                  const oldPlan = this.product.productPlanDTOSet.find(
+                    x => x.planId === id
+                  )
+
+                  if (oldPlan !== undefined) {
+                    const index =
+                      this.product.productPlanDTOSet.indexOf(oldPlan)
+                    this.$set(this.product.productPlanDTOSet, index, data.plan)
+                  }
+                  this.sec2_data_init()
+                } else {
+                  this.$swal.fire('小提示', data.msg, 'error')
+                }
+                this.loading(false)
+              })
+              .catch((err) => {
+                this.loading(false)
+                this.$notify({
+                  title: '小提示',
+                  text: '網路連線異常',
+                  type: 'error',
+                  duration: 2000
+                })
+                console.log(err)
+              })
+          }
+        })
+    },
+    sec3ModifyInit() {
+      this.newPlanForm = {
+        valid: false,
+        item: {
+          id: util._uuid(),
+          p1: '',
+          p2: '',
+          p3: '1',
+          p3_d: null,
+          p3_t: [null, null],
+          p4: [null, null],
+          p5: null,
+          p6: null,
+          p7_sw: false,
+          p7: null,
+          p8_sw: false,
+          p8: 20
+        }
+      }
+      this.sec3_edit = true
+      this.CurrentPageSectionIndex = 2
+    },
+    sec3ModifyCancel() {
+      this.$swal
+        .fire({
+          title: '確定要捨棄編輯嗎？',
+          html: '',
+          showCancelButton: true,
+          cancelButtonText: '取消',
+          confirmButtonText: '確定',
+          reverseButtons: true,
+          showClass: {
+            popup: '',
+            backdrop: 'swal2-backdrop-show',
+            icon: 'swal2-icon-show'
+          }
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.sec3_edit = false
+            this.CurrentPageSectionIndex = 1
+          }
+        })
+    },
+    sec3NumModify(type, col) {
+      if (col === 1) {
+        if (this.newPlanForm.item.p5 === null) {
+          this.$set(this.newPlanForm.item, 'p5', 0)
+        }
+
+        const value = parseInt(this.newPlanForm.item.p5)
+        if (type === 1) {
+          this.$set(this.newPlanForm.item, 'p5', value + 1)
+        } else if (value > 0) {
+          this.$set(this.newPlanForm.item, 'p5', value - 1)
+        }
+      } else if (col === 2) {
+        if (this.newPlanForm.item.p6 === null) {
+          this.$set(this.newPlanForm.item, 'p6', 0)
+        }
+
+        const value = parseInt(this.newPlanForm.item.p6)
+        if (type === 1) {
+          this.$set(this.newPlanForm.item, 'p6', value + 1)
+        } else if (value > 0) {
+          this.$set(this.newPlanForm.item, 'p6', value - 1)
+        }
+      } else if (col === 3) {
+        if (this.newPlanForm.item.p7 === null) {
+          this.$set(this.newPlanForm.item, 'p7', 0)
+        }
+
+        const value = parseInt(this.newPlanForm.item.p7)
+        if (type === 1) {
+          this.$set(this.newPlanForm.item, 'p7', value + 1)
+        } else if (value > 0) {
+          this.$set(this.newPlanForm.item, 'p7', value - 1)
+        }
+      } else if (col === 4) {
+        if (this.newPlanForm.item.p8 === null) {
+          this.$set(this.newPlanForm.item, 'p8', 0)
+        }
+
+        const value = parseInt(this.newPlanForm.item.p8)
+        if (type === 1) {
+          this.$set(this.newPlanForm.item, 'p8', value + 1)
+        } else if (value > 0) {
+          this.$set(this.newPlanForm.item, 'p8', value - 1)
+        }
+      }
+    },
+    sec3ModifySubmit() {
+      if (!this.newPlanForm.valid) {
+        this.$swal.fire('Oops!', '部分項目填寫錯誤，請重新確認', 'info')
+        return
+      }
+
+      if (
+        parseInt(this.newPlanForm.item.p5) < parseInt(this.newPlanForm.item.p6)
+      ) {
+        this.$swal.fire('Oops!', '售價不得大於原價', 'info')
+        return
+      }
+
+      let days = this.newPlanForm.item.p3_d
+      if (this.newPlanForm.item.p3 === '1') {
+        if (days === null) {
+          days = 90
+        } else if (parseInt(days) <= 0) {
+          this.$swal.fire('小提示', '使用期限不得小於0')
+          return
+        }
+      }
+
+      const form = {}
+      form.id = this.product.productId
+      form.plan = {
+        p1: this.newPlanForm.item.p1,
+        p2: this.newPlanForm.item.p2,
+        p3: this.newPlanForm.item.p3,
+        p3_d: days.toString(),
+        p3_t: [
+          util.dateTime2String(this.newPlanForm.item.p3_t[0]),
+          util.dateTime2String(this.newPlanForm.item.p3_t[1])
+        ],
+        p4: [
+          util.dateTime2String(this.newPlanForm.item.p4[0]),
+          util.dateTime2String(this.newPlanForm.item.p4[1])
+        ],
+        p5: this.newPlanForm.item.p5.toString(),
+        p6: this.newPlanForm.item.p6.toString(),
+        p7: this.newPlanForm.item.p7_sw
+          ? this.newPlanForm.item.p7.toString()
+          : '-1',
+        p8: this.newPlanForm.item.p8_sw
+          ? this.newPlanForm.item.p8.toString()
+          : '20'
+      }
+
+      this.$axios
+        .post('/S02/product/plan', form)
+        .then((response) => {
+          const data = response.data
+          if (data.res === 'CODE0000') {
+            this.product.productPlanDTOSet.push(data.plan)
+            this.sec2_data_init()
+            this.$swal.fire('小提示', '新增方案成功', 'success')
+            this.sec3_edit = false
+            this.CurrentPageSectionIndex = 1
+          } else {
+            this.$swal.fire('小提示', data.msg, 'error')
+          }
+          this.loading(false)
+        })
+        .catch((err) => {
+          this.loading(false)
+          this.$notify({
+            title: '小提示',
+            text: '網路連線異常',
+            type: 'error',
+            duration: 2000
+          })
+          console.log(err)
         })
     }
   }
@@ -831,5 +2261,9 @@ export default {
 .border_error {
   border: thin solid #f95454;
   border-radius: 20px;
+}
+
+.font_size1-1 {
+  font-size: 1.1rem !important;
 }
 </style>

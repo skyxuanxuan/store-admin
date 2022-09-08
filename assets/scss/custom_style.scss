@@ -82,3 +82,7 @@ $animationDuration: 0.5s;
 html, body {
     overscroll-behavior-x: none;
 }
+
+.no-backgroud-hover.white::before {
+  background-color: #fff !important;
+}

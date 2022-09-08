@@ -3,60 +3,70 @@
     "name": "inspire",
     "path": "/inspire",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\inspire.vue",
-    "chunkName": "pages/inspire"
+    "chunkName": "pages/inspire",
+    "_name": "_162ea66b"
   },
   {
     "name": "login",
     "path": "/login",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\login.vue",
-    "chunkName": "pages/login"
+    "chunkName": "pages/login",
+    "_name": "_d19b248c"
   },
   {
     "name": "S01",
     "path": "/S01",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S01\\\\index.vue",
-    "chunkName": "pages/S01/index"
+    "chunkName": "pages/S01/index",
+    "_name": "_aea84f86"
   },
   {
     "name": "S02",
     "path": "/S02",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S02\\\\index.vue",
-    "chunkName": "pages/S02/index"
+    "chunkName": "pages/S02/index",
+    "_name": "_9f4504c8"
   },
   {
     "name": "S01-apply",
     "path": "/S01/apply",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S01\\\\apply\\\\index.vue",
-    "chunkName": "pages/S01/apply/index"
+    "chunkName": "pages/S01/apply/index",
+    "_name": "_46c14cee"
   },
   {
     "name": "S01-product-create",
     "path": "/S01/product/create",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S01\\\\product\\\\create.vue",
-    "chunkName": "pages/S01/product/create"
+    "chunkName": "pages/S01/product/create",
+    "_name": "_153c6cd4"
   },
   {
     "name": "S02-product-create",
     "path": "/S02/product/create",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S02\\\\product\\\\create.vue",
-    "chunkName": "pages/S02/product/create"
+    "chunkName": "pages/S02/product/create",
+    "_name": "_7be78435"
   },
   {
     "name": "S01-product-id",
     "path": "/S01/product/:id?",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S01\\\\product\\\\_id.vue",
-    "chunkName": "pages/S01/product/_id"
+    "chunkName": "pages/S01/product/_id",
+    "_name": "_7434b290"
   },
   {
     "name": "S02-product-id",
     "path": "/S02/product/:id?",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S02\\\\product\\\\_id.vue",
-    "chunkName": "pages/S02/product/_id"
+    "chunkName": "pages/S02/product/_id",
+    "_name": "_41df1451"
   },
   {
     "name": "index",
     "path": "/",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_64ea6aba"
   }
 ]

@@ -2,14 +2,16 @@ import Vue from 'vue'
 
 // 輸出格式化數字 #,###
 Vue.filter('numberWithCommas', (value) => {
-  value = value ?? ''
-  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  const parts = (value ?? '').toString().split('.')
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return parts.join('.')
 })
 
 // 輸出格式化金錢 #,###
 Vue.filter('toDollars', (value) => {
-  value = value ?? ''
-  return 'NT$ ' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  const parts = (value ?? '').toString().split('.')
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return 'NT$ ' + parts.join('.')
 })
 
 // 字串\n替換<br>

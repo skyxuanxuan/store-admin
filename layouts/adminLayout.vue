@@ -38,13 +38,12 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-      <template #append>
-        <div class="pa-2">
-          <v-btn dark block @click="userLogOut">
-            登出
-          </v-btn>
-        </div>
-      </template>
+      <div class="pa-2">
+        <v-btn dark block @click="userLogOut">
+          登出
+        </v-btn>
+      </div>
+      <template #append />
     </v-navigation-drawer>
 
     <!-- <v-app-bar :clipped-left="clipped" fixed app>
@@ -129,13 +128,6 @@ export default {
 
   mounted() {
     this.showHideSpinner = false
-  },
-
-  created() {
-    // this.items.splice(7, 1);
-    if (this.$store.state.userInfo.user === null) {
-      // this.$store.dispatch('userInfo/fetchUserInfo');
-    }
   },
 
   methods: {

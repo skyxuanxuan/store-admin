@@ -11,7 +11,11 @@
         <span>上一頁</span>
       </v-tooltip>
 
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="custom-brown1-2--text">
+        {{
+          title
+        }}
+      </v-toolbar-title>
 
       <v-spacer />
 
@@ -74,6 +78,25 @@
                               counter="100"
                               :rules="[rules.required, rules.length(100)]"
                               label="請填寫產品名稱"
+                              single-line
+                            />
+                          </v-col>
+                        </v-row>
+                        <v-row dense class="px-4 py-2">
+                          <v-col cols="12" sm="3" md="2">
+                            <div class="row_title font-weight-medium">
+                              產品簡稱
+                            </div>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <v-text-field
+                              v-model="step1_form.p6"
+                              dense
+                              outlined
+                              color="#16261f"
+                              counter="100"
+                              :rules="[rules.length(10)]"
+                              label="請填寫產品簡稱"
                               single-line
                             />
                           </v-col>
@@ -158,8 +181,16 @@
                               hide-details
                               class="mt-2"
                             >
-                              <v-radio label="商品類型" value="1" />
-                              <v-radio label="現金類型" value="2" />
+                              <v-radio
+                                color="greenS1"
+                                label="商品類型"
+                                value="1"
+                              />
+                              <v-radio
+                                color="greenS1"
+                                label="現金類型"
+                                value="2"
+                              />
                             </v-radio-group>
                           </v-col>
                         </v-row>
@@ -173,6 +204,7 @@
                             <v-select
                               v-model="step1_form.p5"
                               :items="productClasses"
+                              color="greenS1"
                               item-value="id"
                               item-text="name"
                               outlined
@@ -378,7 +410,7 @@
                   </v-tooltip>
                 </v-toolbar-title>
                 <v-spacer />
-                <v-btn outlined color="indigo" @click="step2_upload_init">
+                <v-btn outlined color="other2" @click="step2_upload_init">
                   上傳圖片
                 </v-btn>
               </v-toolbar>
@@ -532,6 +564,21 @@
                           <v-col cols="12" sm="3" md="2">
                             <div class="row_title font-weight-medium">
                               使用期限
+                              <v-tooltip bottom>
+                                <template #activator="{ on, attrs }">
+                                  <v-icon
+                                    small
+                                    v-bind="attrs"
+                                    class="pl-2"
+                                    v-on="on"
+                                  >
+                                    mdi-information-outline
+                                  </v-icon>
+                                </template>
+                                <span>
+                                  如未填寫，系統將自動設定為無期限<br>請注意，本公司提供逐筆類型產品履保時間為購買後三個月
+                                </span>
+                              </v-tooltip>
                             </div>
                           </v-col>
                           <v-col cols="12" sm="9">
@@ -557,7 +604,7 @@
                                 <v-text-field
                                   v-model="item.p3_d"
                                   color="#16261f"
-                                  label="請填寫天數，如未填寫則以90天計算"
+                                  label="請填寫天數"
                                   single-line
                                   type="number"
                                   hide-spin-buttons
@@ -623,7 +670,7 @@
                           <v-col cols="12" sm="3" md="2">
                             <div class="row_title font-weight-medium">
                               販售時間
-                              <v-tooltip bottom>
+                              <!-- <v-tooltip bottom>
                                 <template #activator="{ on, attrs }">
                                   <v-icon
                                     small
@@ -637,7 +684,7 @@
                                 <span>
                                   如未點選開始時間，系統將自動以當前時間帶入
                                 </span>
-                              </v-tooltip>
+                              </v-tooltip> -->
                             </div>
                           </v-col>
                           <v-col cols="12" sm="6">
@@ -712,7 +759,11 @@
                               type="number"
                               prefix="NT$"
                               hide-spin-buttons
-                              :rules="[rules.required, rules.positive]"
+                              :rules="[
+                                rules.required,
+                                rules.positive,
+                                rules.integer
+                              ]"
                               class="pt-0"
                             />
                           </v-col>
@@ -729,7 +780,11 @@
                               type="number"
                               hide-spin-buttons
                               prefix="NT$"
-                              :rules="[rules.required, rules.positive]"
+                              :rules="[
+                                rules.required,
+                                rules.positive,
+                                rules.integer
+                              ]"
                               class="pt-0"
                             />
                           </v-col>
@@ -853,109 +908,216 @@
               <v-card-title class="justify-center text-h4">
                 產品確認
               </v-card-title>
-              <v-simple-table>
-                <template #default>
-                  <tbody>
-                    <tr>
-                      <td>產品名稱</td>
-                      <td>
+              <v-card>
+                <v-container>
+                  <v-row dense class="border_bottom">
+                    <v-col cols="12" md="2">
+                      <span>
+                        <v-icon style="top: -3px" color="brownS1">
+                          mdi-pound
+                        </v-icon>
+                      </span>
+                      <span
+                        class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                      >產品名稱</span>
+                    </v-col>
+                    <v-col cols="12" md="10" class="text-subtitle-1">
+                      <div class="px-2">
                         {{ step1_form.p1 }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>產品簡介</td>
-                      <td>{{ step1_form.p2 }}</td>
-                    </tr>
-                    <tr>
-                      <td>是否餐與官方優惠活動</td>
-                      <td>{{ step1_form.p3 ? '參與' : '不參與' }}</td>
-                    </tr>
-                    <tr>
-                      <td>產品類型</td>
-                      <td>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row dense class="border_bottom">
+                    <v-col cols="12" md="2">
+                      <span>
+                        <v-icon style="top: -3px" color="brownS1">
+                          mdi-pound
+                        </v-icon>
+                      </span>
+                      <span
+                        class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                      >產品簡介</span>
+                    </v-col>
+                    <v-col cols="12" md="10" class="text-subtitle-1">
+                      <div class="px-2">
+                        {{ step1_form.p2 }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row dense class="border_bottom">
+                    <v-col cols="12" md="2">
+                      <span>
+                        <v-icon style="top: -3px" color="brownS1">
+                          mdi-pound
+                        </v-icon>
+                      </span>
+                      <span
+                        class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                      >
+                        是否參與官方優惠活動
+                      </span>
+                    </v-col>
+                    <v-col cols="12" md="10" class="text-subtitle-1">
+                      <div class="px-2">
+                        {{ step1_form.p3 ? '參與' : '不參與' }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row dense class="border_bottom">
+                    <v-col cols="12" md="2">
+                      <span>
+                        <v-icon style="top: -3px" color="brownS1">
+                          mdi-pound
+                        </v-icon>
+                      </span>
+                      <span
+                        class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                      >產品類型</span>
+                    </v-col>
+                    <v-col cols="12" md="10" class="text-subtitle-1">
+                      <div class="px-2">
                         {{ step1_form.p4 === '1' ? '商品票券' : '現金票券' }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>產品分類</td>
-                      <td>{{ final_class }}</td>
-                    </tr>
-                    <tr v-for="item in step1_form.infoArr" :key="item.id">
-                      <td>{{ item.title }}</td>
-                      <td>
-                        <div class="ma-2" v-html="item.content" />
-                      </td>
-                    </tr>
-                    <tr v-for="item in step1_form.infoCus" :key="item.id">
-                      <td>{{ item.title }}</td>
-                      <td>
-                        <div class="ma-2" v-html="item.content" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-              <v-divider />
-              <v-expansion-panels flat>
-                <v-expansion-panel
-                  v-for="(item, index) in step3_form.pArr"
-                  :key="item.id"
-                >
-                  <v-expansion-panel-header>
-                    方案{{ index + 1 }} - {{ item.p1 }}
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content class="pink lighten-5">
-                    <v-simple-table class="pink lighten-5">
-                      <template #default>
-                        <tbody>
-                          <tr>
-                            <td>方案名稱</td>
-                            <td>{{ item.p1 }}</td>
-                          </tr>
-                          <tr>
-                            <td>方案說明</td>
-                            <td v-html="item.p2.replace(/\n/g, '<br>')" />
-                          </tr>
-                          <tr>
-                            <td>使用期限</td>
-                            <td>{{ final_use_time(item) }}</td>
-                          </tr>
-                          <tr>
-                            <td>販售期限</td>
-                            <td>{{ final_sale_time(item) }}</td>
-                          </tr>
-                          <tr>
-                            <td>原價</td>
-                            <td>{{ item.p5 | toDollars }}</td>
-                          </tr>
-                          <tr>
-                            <td>售價</td>
-                            <td>{{ item.p6 | toDollars }}</td>
-                          </tr>
-                          <tr>
-                            <td>數量</td>
-                            <td v-if="item.p7_sw">
-                              {{ item.p7 | numberWithCommas }}
-                            </td>
-                            <td v-else>
-                              無上限
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>購買上限</td>
-                            <td v-if="item.p8_sw">
-                              {{ item.p8 | numberWithCommas }}
-                            </td>
-                            <td v-else>
-                              無上限
-                            </td>
-                          </tr>
-                        </tbody>
-                      </template>
-                    </v-simple-table>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row dense class="border_bottom">
+                    <v-col cols="12" md="2">
+                      <span>
+                        <v-icon style="top: -3px" color="brownS1">
+                          mdi-pound
+                        </v-icon>
+                      </span>
+                      <span
+                        class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                      >產品分類</span>
+                    </v-col>
+                    <v-col cols="12" md="10" class="text-subtitle-1">
+                      <div class="px-2">
+                        {{ final_class }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row
+                    v-for="(item, index) in step1_form.infoArr"
+                    :key="item.id"
+                    dense
+                    :class="{
+                      border_bottom:
+                        index !==
+                        step1_form.infoArr.length +
+                        step1_form.infoCus.length -
+                        1
+                    }"
+                  >
+                    <v-col cols="12" md="2">
+                      <span>
+                        <v-icon style="top: -3px" color="brownS1">
+                          mdi-pound
+                        </v-icon>
+                      </span>
+                      <span
+                        class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                      >{{ item.title }}</span>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="10"
+                      class="text-subtitle-1"
+                      v-html="item.content"
+                    />
+                  </v-row>
+                  <v-row
+                    v-for="(item, index) in step1_form.infoCus"
+                    :key="item.id"
+                    dense
+                    :class="{
+                      border_bottom: index !== step1_form.infoCus.length - 1
+                    }"
+                  >
+                    <v-col cols="12" md="2">
+                      <span>
+                        <v-icon style="top: -3px" color="brownS1">
+                          mdi-pound
+                        </v-icon>
+                      </span>
+                      <span
+                        class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
+                      >{{ item.title }}</span>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="10"
+                      class="text-subtitle-1"
+                      v-html="item.content"
+                    />
+                  </v-row>
+                  <v-divider />
+                </v-container>
+              </v-card>
+              <v-card class="mt-4">
+                <v-container>
+                  <v-expansion-panels flat>
+                    <v-expansion-panel
+                      v-for="(item, index) in step3_form.pArr"
+                      :key="item.id"
+                    >
+                      <v-expansion-panel-header>
+                        方案{{ index + 1 }} - {{ item.p1 }}
+                      </v-expansion-panel-header>
+                      <v-expansion-panel-content class="pink lighten-5">
+                        <v-simple-table class="pink lighten-5">
+                          <template #default>
+                            <tbody>
+                              <tr>
+                                <td>方案名稱</td>
+                                <td>{{ item.p1 }}</td>
+                              </tr>
+                              <tr>
+                                <td>方案說明</td>
+                                <td v-html="item.p2.replace(/\n/g, '<br>')" />
+                              </tr>
+                              <tr>
+                                <td>使用期限</td>
+                                <td>{{ final_use_time(item) }}</td>
+                              </tr>
+                              <tr>
+                                <td>販售期限</td>
+                                <td>{{ final_sale_time(item) }}</td>
+                              </tr>
+                              <tr>
+                                <td>原價</td>
+                                <td>{{ item.p5 | toDollars }}</td>
+                              </tr>
+                              <tr>
+                                <td>售價</td>
+                                <td>{{ item.p6 | toDollars }}</td>
+                              </tr>
+                              <tr>
+                                <td>數量</td>
+                                <td v-if="item.p7_sw">
+                                  {{ item.p7 | numberWithCommas }}
+                                </td>
+                                <td v-else>
+                                  無上限
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>購買上限</td>
+                                <td v-if="item.p8_sw">
+                                  {{ item.p8 | numberWithCommas }}
+                                </td>
+                                <td v-else>
+                                  無上限
+                                </td>
+                              </tr>
+                            </tbody>
+                          </template>
+                        </v-simple-table>
+                      </v-expansion-panel-content>
+                    </v-expansion-panel>
+                  </v-expansion-panels>
+                </v-container>
+              </v-card>
               <v-divider />
               <v-card-actions>
                 <v-btn outlined @click="e1 = 3">
@@ -993,6 +1155,7 @@ import 'vue2-datepicker/index.css'
 import util from '~/assets/js/util'
 import ToTop from '~/components/ToTop.vue'
 
+const integerRegex = /[^0-9]/
 export default {
   name: 'IndexPage',
   title: '商城票券(逐筆發行) - 新增產品',
@@ -1024,6 +1187,7 @@ export default {
         p3: false,
         p4: '1',
         p5: [],
+        p6: '',
         infoArr: [
           {
             id: util._uuid(),
@@ -1089,7 +1253,8 @@ export default {
         buyLimit: v =>
           (!!v && parseInt(v) >= 1 && parseInt(v) <= 20) ||
           '單次購買上限範圍 1 ~ 20',
-        positive: v => (!!v && parseInt(v) >= 0) || '價格不能為負值'
+        positive: v => (!!v && parseInt(v) >= 0) || '價格不能為負值',
+        integer: v => (!!v && !integerRegex.test(v.toString())) || '價格為整數'
       }
     }
   },
@@ -1196,7 +1361,25 @@ export default {
       this.e1 = 3
     },
     step3ToStep4() {
-      this.e1 = 4
+      let check = true
+      let errMsg = ''
+      this.step3_form.pArr.forEach((item) => {
+        let days = item.p3_d
+        if (item.p3 === '1') {
+          if (days === null) {
+            days = -1
+          } else if (parseInt(days) <= 0) {
+            check = false
+            errMsg = '使用天數不得小於0'
+          }
+        }
+      })
+
+      if (check) {
+        this.e1 = 4
+      } else {
+        this.$swal.fire('小提示', errMsg)
+      }
     },
 
     // step1
@@ -1415,14 +1598,14 @@ export default {
         let days = item.p3_d
         if (item.p3 === '1') {
           if (days === null || days === 0) {
-            days = 90
+            days = -1
           }
         }
         initS3Arr.push({
           p1: item.p1,
           p2: item.p2,
           p3: item.p3,
-          p3_d: days,
+          p3_d: days.toString(),
           p3_t: [
             util.dateTime2String(item.p3_t[0]),
             util.dateTime2String(item.p3_t[1])
@@ -1565,5 +1748,9 @@ export default {
   border: thin solid #f95454;
   border-radius: inherit;
   border-radius: inherit;
+}
+
+.font_size1-1 {
+  font-size: 1.1rem !important;
 }
 </style>

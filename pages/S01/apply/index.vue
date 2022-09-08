@@ -1,9 +1,20 @@
 <template>
   <div>
     <v-app-bar color="white" app>
-      <v-app-bar-nav-icon @click="$parent.$emit('eventname')" />
+      <v-tooltip bottom>
+        <template #activator="{ on, attrs }">
+          <v-app-bar-nav-icon v-bind="attrs" @click="$router.back()" v-on="on">
+            <v-icon color="brownS1">
+              mdi-arrow-left
+            </v-icon>
+          </v-app-bar-nav-icon>
+        </template>
+        <span>上一頁</span>
+      </v-tooltip>
 
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="custom-brown1-2--text">
+        {{ title }}
+      </v-toolbar-title>
 
       <v-spacer />
 
@@ -58,7 +69,7 @@
 
               <v-menu offset-y :close-on-content-click="false">
                 <template #activator="{ on, attrs }">
-                  <v-btn outlined width="80" v-bind="attrs" v-on="on">
+                  <v-btn outlined width="80" style="top: 2px" v-bind="attrs" v-on="on">
                     顯示
                   </v-btn>
                 </template>

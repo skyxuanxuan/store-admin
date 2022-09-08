@@ -1,8 +1,9 @@
 <template>
   <v-container>
-    <v-row justify="center" align="center" class="mt-8  ">
+    <v-row justify="center" align="center" class="mt-8">
       <client-only>
-        <qrcode :value="value" :options="{ margin: 2, width: 200 }" />
+        <v-card v-if="qrcodeValue.storeId.length === 0" width="200" height="200" color="white" />
+        <qrcode v-else :value="qrcodeValue.storeId" :options="{ margin: 2, width: 200 }" />
       </client-only>
     </v-row>
     <v-row justify="center" align="center" class="ma-8">
@@ -14,6 +15,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Vue from 'vue'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 
@@ -25,9 +27,12 @@ export default {
   layout: 'adminLayout',
   data() {
     return {
-      value: this.$store.state.userInfo.user.storeId
     }
   },
-  mounted() {}
+  computed: {
+    ...mapGetters({
+      qrcodeValue: 'userInfo/getUserInfo'
+    })
+  }
 }
 </script>

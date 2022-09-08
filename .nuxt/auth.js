@@ -27,12 +27,12 @@ export default function (ctx, inject) {
   "cookie": {
     "prefix": "auth.",
     "options": {
-      "path": "/",
-      "maxAge": 2592000
+      "path": "/"
     }
   },
   "localStorage": false,
-  "defaultStrategy": "local"
+  "defaultStrategy": "local",
+  "autoLogout": true
 }
 
   // Create a new Auth instance
@@ -44,7 +44,7 @@ export default function (ctx, inject) {
   "token": {
     "property": "accessToken",
     "global": true,
-    "maxAge": 1800
+    "maxAge": 60
   },
   "refreshToken": {
     "property": "refreshToken",

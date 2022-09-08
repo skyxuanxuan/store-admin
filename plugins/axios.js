@@ -9,7 +9,10 @@ export default function ({ $axios, redirect }) {
     console.log(response)
   })
 
-  $axios.onError((err) => {
-    console.log(err)
+  $axios.onError((error) => {
+    console.log(error)
+    if (error.response.status === 401 || error.response.status === 403) {
+      redirect('/login')
+    }
   })
 }

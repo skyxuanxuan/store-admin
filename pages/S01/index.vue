@@ -1,9 +1,11 @@
 <template>
   <div>
     <v-app-bar color="white" app>
-      <v-app-bar-nav-icon @click="$parent.$emit('eventname')" />
+      <v-app-bar-nav-icon color="brownS1" @click="$parent.$emit('eventname')" />
 
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="custom-brown1-2--text">
+        {{ title }}
+      </v-toolbar-title>
 
       <v-spacer />
 
@@ -38,7 +40,19 @@
         </v-list>
       </v-menu>
 
-      <v-btn class="d-none d-sm-flex" color="#666666" width="140" dark>
+      <v-btn
+        class="d-none d-sm-flex right-10"
+        color="brownS1"
+        width="140"
+        rounded
+        dark
+        nuxt
+        to="/S01/apply"
+      >
+        票券庫
+      </v-btn>
+
+      <v-btn class="d-none d-sm-flex" color="brownS1" width="140" rounded dark>
         發送票券
       </v-btn>
     </v-app-bar>
@@ -65,6 +79,7 @@
                     class="left-10"
                     outlined
                     width="80"
+                    style="top: 2px"
                     v-bind="attrs"
                     v-on="on"
                   >
@@ -95,23 +110,13 @@
 
               <v-btn
                 class="right-10 d-none d-sm-flex"
-                color="#666666"
+                color="brownS1"
                 width="160"
                 dark
                 nuxt
                 to="/S01/product/create"
               >
                 建立產品
-              </v-btn>
-              <v-btn
-                class="d-none d-sm-flex"
-                color="#666666"
-                width="160"
-                dark
-                nuxt
-                to="/S01/apply"
-              >
-                申請空白票券
               </v-btn>
             </v-toolbar>
             <div>
@@ -229,12 +234,12 @@ export default {
       /* Table1 */
       sec1_table_header: [
         {
-          text: '代碼',
+          text: '產品編號',
           align: 'start',
           value: 'd1'
         },
         {
-          text: '產品/規格',
+          text: '產品',
           align: 'start',
           value: 'd2'
         },

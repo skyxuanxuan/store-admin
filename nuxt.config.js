@@ -77,7 +77,7 @@ export default {
         token: {
           property: 'accessToken',
           global: true,
-          maxAge: 60 * 30
+          maxAge: 60
         },
         refreshToken: {
           property: 'refreshToken',
@@ -102,11 +102,7 @@ export default {
       callback: '/login',
       home: '/'
     },
-    cookie: {
-      options: {
-        maxAge: 60 * 60 * 24 * 30
-      }
-    },
+    autoLogout: true,
     localStorage: false
   },
 
@@ -155,8 +151,6 @@ export default {
           success: colors.green.accent3
         },
         light: {
-          primary: '#986E57',
-          secondary: '#AA998F',
           brownS1: '#986E57',
           brownS1P: '#754933',
           brownS1M: '#D6BEB2',

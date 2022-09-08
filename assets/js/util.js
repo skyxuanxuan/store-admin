@@ -17,7 +17,9 @@ const util = {
     )
   },
   numberWithCommas(value) {
-    return (value ?? '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    const parts = (value ?? '').toString().split('.')
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    return parts.join('.')
   },
 
   toDollars(value) {
@@ -63,6 +65,43 @@ const util = {
     } else if ((str ?? '').lenght > 0) {
       reStr = str.replace(/[-/\s:]/g, '')
     }
+    return reStr
+  },
+  formatTimeMinus(str) {
+    let reStr = ''
+    if (str instanceof Date) {
+      reStr =
+        this.paddingLeft(str.getFullYear().toString(), 4) +
+        '-' +
+        this.paddingLeft((str.getMonth() + 1).toString(), 2) +
+        '-' +
+        this.paddingLeft(str.getDate().toString(), 2) +
+        ' ' +
+        this.paddingLeft(str.getHours().toString(), 2) +
+        ':' +
+        this.paddingLeft(str.getMinutes().toString(), 2) +
+        ':' +
+        this.paddingLeft(str.getSeconds().toString(), 2)
+    } else if ((str ?? '').toString().length === 14) {
+      reStr = `${str.substring(0, 4)}-${str.substring(4, 6)}-${str.substring(
+        6,
+        8
+      )} ${str.substring(8, 10)}:${str.substring(10, 12)}:${str.substring(
+        12,
+        14
+      )}`
+    } else if ((str ?? '').toString().length === 12) {
+      reStr = `${str.substring(0, 4)}-${str.substring(4, 6)}-${str.substring(
+        6,
+        8
+      )} ${str.substring(8, 10)}:${str.substring(10, 12)}`
+    } else if ((str ?? '').toString().length === 8) {
+      reStr = `${str.substring(0, 4)}-${str.substring(4, 6)}-${str.substring(
+        6,
+        8
+      )}`
+    }
+
     return reStr
   }
 }
