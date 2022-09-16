@@ -8,6 +8,7 @@ const _162ea66b = () => interopDefault(import('..\\pages\\inspire.vue' /* webpac
 const _d19b248c = () => interopDefault(import('..\\pages\\login.vue' /* webpackChunkName: "pages/login" */))
 const _aea84f86 = () => interopDefault(import('..\\pages\\S01\\index.vue' /* webpackChunkName: "pages/S01/index" */))
 const _9f4504c8 = () => interopDefault(import('..\\pages\\S02\\index.vue' /* webpackChunkName: "pages/S02/index" */))
+const _8fe1ba0a = () => interopDefault(import('..\\pages\\S03\\index.vue' /* webpackChunkName: "pages/S03/index" */))
 const _46c14cee = () => interopDefault(import('..\\pages\\S01\\apply\\index.vue' /* webpackChunkName: "pages/S01/apply/index" */))
 const _153c6cd4 = () => interopDefault(import('..\\pages\\S01\\product\\create.vue' /* webpackChunkName: "pages/S01/product/create" */))
 const _7be78435 = () => interopDefault(import('..\\pages\\S02\\product\\create.vue' /* webpackChunkName: "pages/S02/product/create" */))
@@ -42,6 +43,10 @@ export const routerOptions = {
     path: "/S02",
     component: _9f4504c8,
     name: "S02"
+  }, {
+    path: "/S03",
+    component: _8fe1ba0a,
+    name: "S03"
   }, {
     path: "/S01/apply",
     component: _46c14cee,

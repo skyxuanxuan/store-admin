@@ -1,20 +1,25 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div>
-    <v-app-bar color="white" app>
+    <v-app-bar app>
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-app-bar-nav-icon v-bind="attrs" @click="$router.back()" v-on="on">
-            <v-icon>mdi-arrow-left</v-icon>
+            <v-icon color="brownS1">
+              mdi-arrow-left
+            </v-icon>
           </v-app-bar-nav-icon>
         </template>
         <span>上一頁</span>
       </v-tooltip>
 
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="custom-brown1-2--text">
+        {{ title }}
+      </v-toolbar-title>
 
       <v-spacer />
 
-      <v-menu bottom left>
+      <v-menu v-if="product.productEdit === 1" bottom left>
         <template #activator="{ on, attrs }">
           <v-btn class="d-flex d-sm-none" icon v-bind="attrs" v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
@@ -23,719 +28,792 @@
 
         <v-list>
           <v-list-item-group>
-            <v-list-item>
+            <v-list-item
+              v-if="CurrentPageSectionIndex === 0 && sec1ProductEdit"
+              color="other1"
+              @click="sec1ModifyCancel"
+            >
               <v-list-item-icon>
-                <v-icon>mdi-send</v-icon>
+                <v-icon color="other1">
+                  mdi-close
+                </v-icon>
               </v-list-item-icon>
-              <v-list-item-title>發送票券</v-list-item-title>
+              <v-list-item-title class="custom-other-1--text">
+                取消
+              </v-list-item-title>
             </v-list-item>
-            <v-list-item>
+            <v-list-item
+              v-if="CurrentPageSectionIndex === 0 && sec1ProductEdit"
+              color="other2"
+              @click="sec1Modify"
+            >
               <v-list-item-icon>
-                <v-icon>mdi-file-plus</v-icon>
+                <v-icon color="other2">
+                  mdi-pencil
+                </v-icon>
               </v-list-item-icon>
-              <v-list-item-title>申請空白票券</v-list-item-title>
+              <v-list-item-title class="custom-other-2--text">
+                儲存
+              </v-list-item-title>
             </v-list-item>
-            <v-list-item @click="step2_check_bulk = true">
+            <v-list-item
+              v-if="CurrentPageSectionIndex === 0 && !sec1ProductEdit"
+              color="other2"
+              @click="sec1Modify"
+            >
               <v-list-item-icon>
-                <v-icon>mdi-magnify</v-icon>
+                <v-icon color="other2">
+                  mdi-pencil
+                </v-icon>
               </v-list-item-icon>
-              <v-list-item-title>查看現存票券</v-list-item-title>
+              <v-list-item-title class="custom-other-2--text">
+                編輯
+              </v-list-item-title>
             </v-list-item>
           </v-list-item-group>
         </v-list>
       </v-menu>
 
       <v-btn
+        v-if="
+          CurrentPageSectionIndex === 0 &&
+            sec1ProductEdit &&
+            product.productEdit === 1
+        "
         class="d-none d-sm-flex right-10"
-        color="#666666"
+        color="brownS1"
+        width="140"
+        outlined
+        rounded
+        @click="sec1ModifyCancel"
+      >
+        取消
+      </v-btn>
+      <v-btn
+        v-if="
+          CurrentPageSectionIndex === 0 &&
+            sec1ProductEdit &&
+            product.productEdit === 1
+        "
+        class="d-none d-sm-flex"
+        color="brownS1"
+        width="140"
+        rounded
+        :dark="sec1_valid"
+        :disabled="!sec1_valid"
+        @click="sec1Modify"
+      >
+        儲存
+      </v-btn>
+      <v-btn
+        v-if="
+          CurrentPageSectionIndex === 0 &&
+            !sec1ProductEdit &&
+            product.productEdit === 1
+        "
+        class="d-none d-sm-flex"
+        color="brownS1"
         width="140"
         dark
-        @click="step2_check_bulk = true"
+        rounded
+        @click="sec1Modify"
       >
-        查看現存票券
-      </v-btn>
-      <v-btn class="d-none d-sm-flex" color="#666666" width="140" dark>
-        發送票券
+        編輯
       </v-btn>
     </v-app-bar>
-    <div class="pa-4">
-      <v-tabs-items
-        v-model="CurrentPageSectionIndex"
-        :class="{ none: loadingStatus }"
-      >
-        <v-tab-item class="background-color">
-          <v-stepper v-model="e1" class="background-color">
-            <v-stepper-header class="white">
-              <v-stepper-step :complete="e1 > 1" step="1">
-                填寫方案
-              </v-stepper-step>
+    <div class="ma-4 mt-8">
+      <v-card flat color="transparent" style="margin-bottom: 64px">
+        <v-card class="mt-2" flat color="transparent">
+          <v-container>
+            <v-row class="">
+              <v-col>
+                <v-card class="pa-4" rounded="xl">
+                  <v-subheader class="base-color--text border_title">
+                    <v-chip color="brown lighten-3" dark>
+                      產品基本資料
+                    </v-chip>
+                  </v-subheader>
+                  <v-row dense class="px-4">
+                    <v-col cols="12" sm="3" md="2">
+                      <div class="row_title">
+                        <span>
+                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
+                        </span>
+                        <span
+                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                        >
+                          產品名稱
+                        </span>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="row_title font-weight-light">
+                        {{ product.productName }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row dense class="px-4">
+                    <v-col cols="12" sm="3" md="2">
+                      <div class="row_title">
+                        <span>
+                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
+                        </span>
+                        <span
+                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                        >
+                          產品簡介
+                        </span>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="row_content font-weight-light">
+                        <ul>
+                          <li
+                            v-for="(item, index) in productSimpleIntro"
+                            :key="`simpleIntro${index}`"
+                          >
+                            {{ item }}
+                          </li>
+                        </ul>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row dense class="px-4">
+                    <v-col cols="12" sm="3" md="2" class="align-self-center">
+                      <div class="row_title">
+                        <span>
+                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
+                        </span>
+                        <span
+                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                        >
+                          產品類型
+                        </span>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="9">
+                      <v-radio-group
+                        :value="productUseType"
+                        row
+                        hide-details
+                        disabled
+                        class="mt-2"
+                      >
+                        <v-radio label="商品類型" color="greenS1" value="1" />
+                        <v-radio label="現金類型" color="greenS1" value="2" />
+                      </v-radio-group>
+                    </v-col>
+                  </v-row>
+                  <v-row dense class="px-4">
+                    <v-col cols="12" sm="3" md="2">
+                      <div class="row_title">
+                        <span>
+                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
+                        </span>
+                        <span
+                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                        >
+                          產品分類
+                        </span>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="9">
+                      <div>
+                        <v-chip
+                          v-for="item in productClass"
+                          :key="item.id"
+                          :color="colors(item.color)"
+                          dark
+                          class="mx-1 my-2"
+                        >
+                          {{ item.name }}
+                        </v-chip>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row dense class="px-4">
+                    <v-col cols="12" sm="3" md="2">
+                      <div class="row_title">
+                        <span>
+                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
+                        </span>
+                        <span
+                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                        >
+                          使用期限
+                        </span>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="row_title font-weight-light">
+                        {{ productUseTime }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row dense class="px-4">
+                    <v-col cols="12" sm="3" md="2">
+                      <div class="row_title">
+                        <span>
+                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
+                        </span>
+                        <span
+                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                        >
+                          面額
+                        </span>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="row_title font-weight-light">
+                        {{ productReimburse | toDollars }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row dense class="px-4">
+                    <v-col cols="12" sm="3" md="2">
+                      <div class="row_title">
+                        <span>
+                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
+                        </span>
+                        <span
+                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                        >
+                          售價
+                        </span>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="row_title font-weight-light">
+                        {{ productPrice | toDollars }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row dense class="px-4">
+                    <v-col cols="12" sm="3" md="2">
+                      <div class="row_title">
+                        <span>
+                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
+                        </span>
+                        <span
+                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                        >
+                          販售數量
+                        </span>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="row_title font-weight-light">
+                        {{ productNum | numberWithCommas }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row class="mt-8">
+              <v-col>
+                <v-form ref="sec1Form1" v-model="sec1_valid">
+                  <v-card class="pa-4" rounded="xl">
+                    <v-tooltip bottom>
+                      <template #activator="{ on, attrs }">
+                        <v-btn
+                          v-show="sec1ProductEdit && product.productEdit === 1"
+                          color="pink"
+                          dark
+                          fab
+                          small
+                          absolute
+                          right
+                          top
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="sec1IntroAdd"
+                        >
+                          <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>新增說明</span>
+                    </v-tooltip>
 
-              <v-divider />
-
-              <v-stepper-step :complete="e1 > 2" step="2">
-                填寫規格
-              </v-stepper-step>
-
-              <v-divider />
-
-              <v-stepper-step step="3">
-                確認產品
-              </v-stepper-step>
-            </v-stepper-header>
-
-            <v-stepper-items class="mt-6 white">
-              <v-stepper-content step="1">
-                <v-card class="mb-12" flat>
-                  <v-card-title>填寫方案</v-card-title>
-                  <v-form ref="step1form" v-model="step1_form.valid">
-                    <v-container>
-                      <v-row dense>
-                        <v-col>
-                          <v-card outlined class="pa-4">
-                            <v-subheader class="base-color--text">
-                              ✱方案名稱
-                            </v-subheader>
-                            <v-text-field
-                              v-model="step1_form.plan_name"
-                              color="#16261f"
-                              counter="200"
-                              :rules="[rules.required, rules.length(200)]"
-                              label="請填寫方案名稱"
-                              single-line
-                            />
-                          </v-card>
-                        </v-col>
-                      </v-row>
-                      <v-row dense>
-                        <v-col>
-                          <v-card outlined class="pa-4">
-                            <v-subheader class="base-color--text">
-                              ✱使用期限
-                            </v-subheader>
-                            <v-radio-group
-                              v-model="step1_form.plan_use_radio"
-                              row
+                    <v-subheader class="base-color--text border_title">
+                      <v-chip color="brown lighten-3" dark>
+                        產品說明
+                      </v-chip>
+                    </v-subheader>
+                    <transition-group name="fadeLeft" tag="div" class="mt-4">
+                      <v-row
+                        v-for="(item, index) in productIntroFilter"
+                        :key="item.id"
+                        class="px-4 py-4"
+                        :class="{
+                          border_error: item.valid,
+                          border_bottom: introList.length - 1 !== index
+                        }"
+                      >
+                        <v-col
+                          cols="12"
+                          sm="3"
+                          md="2"
+                          class="align-self-start pb-0"
+                        >
+                          <div
+                            v-if="!sec1ProductEdit || item.edit === 0"
+                            class="row_title"
+                            :class="{ need: sec1_edit }"
+                          >
+                            <span>
+                              <v-icon color="brownS1">
+                                mdi-circle-small
+                              </v-icon>
+                            </span>
+                            <span
+                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
                             >
-                              <v-radio label="依購買日起計" value="1" />
-                              <v-radio label="固定到期日" value="2" />
-                            </v-radio-group>
-                            <v-expand-transition>
-                              <v-card
-                                v-if="step1_form.plan_use_radio === '1'"
-                                flat
-                              >
-                                <v-text-field
-                                  v-model="step1_form.plan_use_day"
-                                  color="#16261f"
-                                  label="請填寫天數，如未填寫則以90天計算"
-                                  single-line
-                                  type="number"
-                                  hide-spin-buttons
-                                />
-                              </v-card>
-                            </v-expand-transition>
-                            <v-expand-transition>
-                              <v-card
-                                v-if="step1_form.plan_use_radio === '2'"
-                                flat
-                              >
-                                <v-card
-                                  class="justify-start d-none d-sm-flex"
-                                  flat
-                                  tile
-                                >
-                                  <v-card class="pa-2" flat tile>
-                                    <date-picker
-                                      v-model="step1_form.plan_use_time[0]"
-                                      type="datetime"
-                                      placeholder="請選擇開始時間"
-                                      :editable="false"
-                                    />
-                                  </v-card>
-                                  <v-card class="pa-2" flat tile>
-                                    <v-icon> mdi-tilde </v-icon>
-                                  </v-card>
-                                  <v-card class="pa-2" flat tile>
-                                    <date-picker
-                                      v-model="step1_form.plan_use_time[1]"
-                                      type="datetime"
-                                      placeholder="請選擇結束時間"
-                                      :editable="false"
-                                    />
-                                  </v-card>
-                                </v-card>
-                                <v-card
-                                  flat
-                                  tile
-                                  class="d-flex d-sm-none flex-column"
-                                >
-                                  <v-card flat>
-                                    <date-picker
-                                      v-model="step1_form.plan_use_time[0]"
-                                      type="datetime"
-                                      placeholder="請選擇開始時間"
-                                      :editable="false"
-                                    />
-                                  </v-card>
-                                  <v-card class="pa-2" flat tile>
-                                    <date-picker
-                                      v-model="step1_form.plan_use_time[1]"
-                                      type="datetime"
-                                      placeholder="請選擇結束時間"
-                                      :editable="false"
-                                    />
-                                  </v-card>
-                                </v-card>
-                              </v-card>
-                            </v-expand-transition>
-                          </v-card>
-                        </v-col>
-                      </v-row>
-
-                      <v-row dense>
-                        <v-col>
-                          <v-card outlined class="pa-4">
-                            <v-subheader class="base-color--text">
-                              ✱販售時間
-                            </v-subheader>
-
-                            <v-card flat>
-                              <v-card
-                                class="justify-start d-none d-sm-flex"
-                                flat
-                                tile
-                              >
-                                <v-card class="pa-2" flat tile>
-                                  <v-card flat>
-                                    <date-picker
-                                      v-model="step1_form.plan_sale_time[0]"
-                                      type="datetime"
-                                      placeholder="請選擇開始時間"
-                                      :editable="false"
-                                    />
-                                  </v-card>
-                                </v-card>
-                                <v-card class="pa-2" flat tile>
-                                  <v-icon> mdi-tilde </v-icon>
-                                </v-card>
-                                <v-card class="pa-2" flat tile>
-                                  <date-picker
-                                    v-model="step1_form.plan_sale_time[1]"
-                                    type="datetime"
-                                    placeholder="請選擇開始時間"
-                                    :editable="false"
-                                  />
-                                </v-card>
-                              </v-card>
-                              <v-card
-                                flat
-                                tile
-                                class="d-flex d-sm-none flex-column"
-                              >
-                                <v-card flat>
-                                  <date-picker
-                                    v-model="step1_form.plan_sale_time[0]"
-                                    type="datetime"
-                                    placeholder="請選擇開始時間"
-                                    :editable="false"
-                                  />
-                                </v-card>
-                                <v-card flat>
-                                  <date-picker
-                                    v-model="step1_form.plan_sale_time[1]"
-                                    type="datetime"
-                                    placeholder="請選擇開始時間"
-                                    :editable="false"
-                                  />
-                                </v-card>
-                              </v-card>
-                            </v-card>
-                          </v-card>
-                        </v-col>
-                      </v-row>
-                      <v-row dense>
-                        <v-col>
-                          <v-card outlined class="pa-4">
-                            <v-subheader class="base-color--text">
-                              ✱方案簡介
-                            </v-subheader>
-                            <v-textarea
-                              v-model="step1_form.plan_intro"
-                              auto-grow
+                              {{ item.title }}
+                            </span>
+                          </div>
+                          <div v-else>
+                            <v-text-field
+                              v-model="item.title"
+                              dense
                               outlined
                               color="#16261f"
-                              label="請輸入方案簡介"
-                              rows="4"
-                              counter="500"
-                              :rules="[rules.required, rules.length(500)]"
+                              counter="20"
+                              placeholder="請輸入標題"
+                              :rules="[rules.required, rules.length(20)]"
+                              label="請填寫標題"
                               single-line
                             />
-                          </v-card>
+                          </div>
+                          <v-scroll-y-transition>
+                            <div
+                              v-show="item.valid"
+                              class="v-text-field__details"
+                            >
+                              <div
+                                class="v-messages theme--light error--text"
+                                role="alert"
+                              >
+                                <div class="v-messages__wrapper">
+                                  <div class="v-messages__message">
+                                    此欄位為必填
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </v-scroll-y-transition>
                         </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-form>
-                  <v-divider />
-                  <v-card-actions>
-                    <v-btn text outlined @click="$refs.step1form.reset()">
-                      清除資料
-                    </v-btn>
-                    <v-spacer />
-                    <v-btn
-                      color="primary"
-                      :disabled="!step1_form.valid"
-                      @click="e1 = 2"
-                    >
-                      下一步
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-stepper-content>
-
-              <!-- step2 -->
-              <v-stepper-content step="2">
-                <v-card class="mb-12" flat>
-                  <v-form ref="step2form" v-model="step2_form.valid">
-                    <transition-group name="fadeLeft">
-                      <v-row
-                        v-for="(item, index) in step2_form.spec_arr"
-                        :key="item.d0"
-                        dense
-                      >
-                        <v-col cols="12">
-                          <v-card class="ma-2" flat rounded="false">
-                            <v-card-title>填寫規格</v-card-title>
-                            <v-toolbar dense flat class="mb-2">
-                              <v-toolbar-title>
-                                規格 {{ index + 1 }}
-                              </v-toolbar-title>
-                              <v-spacer />
+                        <v-col cols="12" sm="9" style="position: relative">
+                          <v-tooltip bottom>
+                            <template #activator="{ on, attrs }">
                               <v-btn
-                                v-if="index !== 0"
-                                class="right-10"
-                                text
+                                v-show="
+                                  sec1ProductEdit &&
+                                    product.productEdit === 1 &&
+                                    item.edit === 1
+                                "
+                                class="mx-2"
+                                fab
+                                x-small
+                                color="#CCCCCC"
+                                depressed
                                 outlined
-                                width="80"
-                                @click="step2_remove(index)"
+                                v-bind="attrs"
+                                style="
+                                  position: absolute;
+                                  top: -0.5rem;
+                                  right: -0.8rem;
+                                  background-color: white;
+                                "
+                                v-on="on"
+                                @click="sec1IntroRemove(index)"
                               >
-                                刪除
-                              </v-btn>
-
-                              <v-btn
-                                v-if="index === 0"
-                                color="#16261f"
-                                width="160"
-                                dark
-                                @click="step2_new"
-                              >
-                                新增規格
-                              </v-btn>
-                            </v-toolbar>
-
-                            <v-card outlined class="pa-4">
-                              <v-subheader class="base-color--text">
-                                ✱規格名稱
-                              </v-subheader>
-                              <v-text-field
-                                v-model="item.d1"
-                                color="#16261f"
-                                counter="200"
-                                label="請填寫規格名稱"
-                                single-line
-                                :rules="[rules.required, rules.length(200)]"
-                              />
-                              <v-subheader class="base-color--text">
-                                ✱規格說明
-                              </v-subheader>
-                              <v-text-field
-                                v-model="item.d2"
-                                color="#16261f"
-                                counter="20"
-                                label="請填寫規格說明名稱"
-                                single-line
-                                :rules="[rules.required, rules.length(20)]"
-                              />
-                              <v-subheader class="base-color--text">
-                                ✱票券面額選擇
-                              </v-subheader>
-
-                              <v-select
-                                v-model="item.d3"
-                                :items="bulk_arr"
-                                label="請選擇票券面額"
-                                item-text="bulk_type"
-                                item-value="bulk_num"
-                                return-object
-                                single-line
-                                hide-details
-                                menu-props="auto"
-                                :rules="[rules.required]"
-                              />
-                              <v-subheader class="base-color--text">
-                                ✱販售價格
-                              </v-subheader>
-                              <v-text-field
-                                v-model="item.d4"
-                                type="number"
-                                hide-spin-buttons
-                                prefix="NT$"
-                                :rules="[rules.required, rules.price(item.d3)]"
-                              />
-                              <v-subheader class="base-color--text">
-                                ✱販售數量
-                              </v-subheader>
-                              <v-text-field
-                                v-model="item.d5"
-                                type="number"
-                                hide-spin-buttons
-                                :rules="[rules.required, rules.number(item.d3)]"
-                              >
-                                <v-icon
-                                  slot="append-outer"
-                                  color="red"
-                                  @click="step2_num_modify(1, index)"
-                                >
-                                  mdi-plus
+                                <v-icon dark>
+                                  mdi-window-close
                                 </v-icon>
-                                <v-icon
-                                  slot="prepend"
-                                  color="green"
-                                  @click="step2_num_modify(2, index)"
-                                >
-                                  mdi-minus
-                                </v-icon>
-                              </v-text-field>
-                            </v-card>
-                            <v-divider class="mt-8" />
-                          </v-card>
+                              </v-btn>
+                            </template>
+                            <span>刪除</span>
+                          </v-tooltip>
+                          <client-only>
+                            <VueEditor
+                              v-if="
+                                sec1ProductEdit && product.productEdit === 1
+                              "
+                              v-model="item.content"
+                              placeholder="請輸入內文"
+                            />
+                            <div v-else v-html="item.content" />
+                          </client-only>
                         </v-col>
                       </v-row>
                     </transition-group>
-                  </v-form>
-                  <v-card-actions>
-                    <v-btn color="primary" @click="e1 = 1">
-                      上一步
-                    </v-btn>
-                    <v-spacer />
-                    <v-btn
-                      color="primary"
-                      :disabled="!step2_form.valid"
-                      @click="e1 = 3"
-                    >
-                      下一步
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-stepper-content>
-
-              <!-- step3 -->
-              <v-stepper-content step="3">
-                <v-card class="mb-12" flat>
-                  <v-card-title>確認產品</v-card-title>
-                  <v-simple-table>
-                    <template #default>
-                      <tbody>
-                        <tr>
-                          <td>方案名稱</td>
-                          <td>
-                            {{ step1_form.plan_name }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>使用期限</td>
-                          <td>{{ step3_use_time }}</td>
-                        </tr>
-                        <tr>
-                          <td>販售時間</td>
-                          <td>{{ step3_sale_time }}</td>
-                        </tr>
-                        <tr>
-                          <td>方案簡介</td>
-                          <td>
-                            <v-textarea
-                              v-model="step1_form.plan_intro"
-                              outlined
-                              color="#16261f"
-                              disabled
-                              class="top-15"
-                            />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </template>
-                  </v-simple-table>
-                  <v-divider />
-                  <v-expansion-panels flat>
-                    <v-expansion-panel
-                      v-for="(item, index) in step2_form.spec_arr"
-                      :key="item.d0"
-                    >
-                      <v-expansion-panel-header>
-                        規格{{ index + 1 }} - {{ item.d1 }}
-                      </v-expansion-panel-header>
-                      <v-expansion-panel-content>
-                        <v-simple-table>
-                          <template #default>
-                            <tbody>
-                              <tr>
-                                <td>規格名稱</td>
-                                <td>{{ item.d1 }}</td>
-                              </tr>
-                              <tr>
-                                <td>規格說明</td>
-                                <td>{{ item.d2 }}</td>
-                              </tr>
-                              <tr>
-                                <td>面額</td>
-                                <td>{{ item.d3.bulk_type }}</td>
-                              </tr>
-                              <tr>
-                                <td>售價</td>
-                                <td>{{ item.d4 | toDollars }}</td>
-                              </tr>
-                              <tr>
-                                <td>數量</td>
-                                <td>
-                                  {{ item.d5 | numberWithCommas }}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </template>
-                        </v-simple-table>
-                      </v-expansion-panel-content>
-                    </v-expansion-panel>
-                  </v-expansion-panels>
-                  <v-divider />
-                  <v-card-actions>
-                    <v-btn color="primary" @click="e1 = 2">
-                      上一步
-                    </v-btn>
-                    <v-spacer />
-                    <v-btn color="primary" @click="final_submit">
-                      送出
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-stepper-content>
-            </v-stepper-items>
-          </v-stepper>
-        </v-tab-item>
-      </v-tabs-items>
-    </div>
-    <v-dialog v-model="step2_check_bulk" max-width="580">
-      <v-card>
-        <v-card-title class="text-h5">
-          各面額剩餘票券
-        </v-card-title>
-        <v-card-text>
-          <v-simple-table>
-            <template #default>
-              <thead>
-                <tr>
-                  <th class="text-left">
-                    面額
-                  </th>
-                  <th class="text-left">
-                    剩餘數量
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in bulk_arr" :key="item.name">
-                  <td>面額「{{ item.bulk_type }}」</td>
-                  <td>{{ item.bulk_num | numberWithCommas }} 張</td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="green darken-1" text @click="step2_check_bulk = false">
-            確定
-          </v-btn>
-        </v-card-actions>
+                  </v-card>
+                </v-form>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
       </v-card>
-    </v-dialog>
+    </div>
     <to-top />
+    <my-waiting :loading="loadingStatus" />
   </div>
 </template>
 
 <script>
-import DatePicker from 'vue2-datepicker'
-import moment from 'moment'
-import 'vue2-datepicker/index.css'
-import { set } from 'vue'
 import util from '~/assets/js/util'
 
+const integerRegex = /[^0-9]/
 export default {
   name: 'IndexPage',
-  title: '門市票券(整批發行) - 新增產品',
-  components: { DatePicker },
+  title: '商城票券(逐筆發行) - 編輯產品',
+  beforeRouteLeave(to, from, next) {
+    if (
+      (this.sec1ProductEdit || this.sec3_edit) &&
+      this.product.productEdit === 1
+    ) {
+      this.$swal
+        .fire({
+          title: '確定要捨棄編輯嗎？',
+          html: '',
+          showCancelButton: true,
+          cancelButtonText: '取消',
+          confirmButtonText: '確定',
+          reverseButtons: true,
+          showClass: {
+            popup: '',
+            backdrop: 'swal2-backdrop-show',
+            icon: 'swal2-icon-show'
+          }
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            next()
+          }
+        })
+    } else {
+      next()
+    }
+  },
   layout: 'adminLayout',
 
-  asyncData({ params }) {
-    console.log(params)
+  async asyncData({ params, store, redirect, $axios }) {
+    const id = params.id
+    if (id.length === 0) {
+      redirect('/S01')
+    }
+    try {
+      await store.dispatch('S01/fetchOrdersList')
+      const data = await $axios.$get(`S01/product/${id}`)
+      if (data.res === 'CODE0000') {
+        if (data.data.product.productType === 1) {
+          return {
+            product: data.data.product,
+            introCount: data.data.product.productIntroDTOSet.length,
+            introList: data.data.product.productIntroDTOSet
+              .map((x) => {
+                return {
+                  id: x.id.toString(),
+                  pkId: x.id,
+                  valid: false,
+                  title: x.introTitle,
+                  content: x.introText,
+                  order: x.introOrder,
+                  edit: x.introEdit,
+                  type: '0'
+                }
+              })
+              .sort((a, b) => a.order - b.order)
+          }
+        } else {
+          redirect('/S01')
+        }
+      } else {
+        redirect('/S01')
+      }
+    } catch (err) {
+      console.log(err)
+      redirect('/')
+    }
   },
-
   data() {
     return {
-      loadingStatus: true,
+      loadingStatus: false,
       CurrentPageSectionIndex: 0,
-      title: '門市票券(整批發行) - ㄟ黑產品',
-      time2: null,
-      e1: 1,
-      bulk_arr: [
-        {
-          bulk_type: 500,
-          bulk_num: 100
-        },
-        {
-          bulk_type: 1000,
-          bulk_num: 1000
-        }
-      ],
-      bulk_selection: null,
-      step2_check_bulk: false,
 
-      step1_form: {
-        valid: false,
-        plan_name: '',
-        plan_intro: '',
-        plan_use_radio: '1',
-        plan_use_day: null,
-        plan_use_time: [null, null],
-        plan_sale_time: [null, null]
-      },
-      step2_form: {
-        valid: false,
-        spec_arr: [
-          {
-            d0: util._uuid(),
-            d1: '',
-            d2: '',
-            d3: null,
-            d4: null,
-            d5: null
-          }
-        ]
-      },
+      basicProductClasses: this.$store.getters['basic/getClasses'],
+      sec1_edit: false,
+      sec1_valid: false,
+      time2: null,
       rules: {
         length: len => v => (v || '').length <= len || `長度不得超過 ${len}`,
         required: v => !!v || '此欄位為必填',
-        number: num => (v) => {
-          if (num === null) {
-            return '請先選擇面額'
-          }
-          let total = 0
-          this.step2_form.spec_arr
-            .filter(x => x.d3 !== null && x.d3.bulk_type === num.bulk_type)
-            .forEach((item) => {
-              total += parseInt(item.d5.toString().length > 0 ? item.d5 : '0')
-            })
-          if (!(!!v && total <= num.bulk_num)) {
-            return `販售數量不得超過 ${num.bulk_num}`
-          }
-          return true
-        },
-        price: num => v =>
-          (!!v &&
-            num !== null &&
-            parseInt(v) >= 0 &&
-            parseInt(v) <= num.bulk_type) ||
-          (num !== null ? `販售價格介於 0 ~ ${num.bulk_type}` : '請先選擇面額')
-      }
+        buyLimit: v =>
+          (!!v && parseInt(v) >= 1 && parseInt(v) <= 20) ||
+          '單次購買上限範圍 1 ~ 20',
+        positive: v => (!!v && parseInt(v) >= 0) || '價格不能為負值',
+        integer: v => (!!v && !integerRegex.test(v.toString())) || '價格為整數'
+      },
+
+      orders: this.$store.state.S02.orders
     }
   },
   computed: {
-    step3_use_time() {
-      if (this.step1_form.plan_use_radio === '1') {
-        const day = this.step1_form.plan_use_day ?? 90
-        return ' ~ ' + moment().add(day, 'day').format('YYYY-MM-DD hh:mm')
-      } else {
-        const sdate = this.step1_form.plan_use_time[0]
-        const edate = this.step1_form.plan_use_time[1]
-        if (sdate === null && edate === null) {
-          return '無使用期限'
+    title() {
+      return `商城票券(逐筆發行) - ${this.product.productName}`
+    },
+    slidesPaddingCarousel() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return '0px'
+        case 'sm':
+          return '0px'
+        case 'md':
+          return '200px'
+        case 'lg':
+          return '300px'
+        case 'xl':
+          return '500px'
+      }
+
+      return '0px'
+    },
+    sec1ProductEdit() {
+      return this.sec1_edit
+    },
+
+    productFiles() {
+      return this.product.productFileDTOSet
+    },
+    productSimpleIntro() {
+      return this.product.productIntro.split('\n')
+    },
+    productCoupon() {
+      return this.product.productCoupon === 1
+    },
+    productUseType() {
+      return (this.product.productUseType ?? '').toString()
+    },
+    productClass() {
+      const initArr = []
+      this.product.productClass.split(';').forEach((item) => {
+        const obj = this.basicProductClasses.find(x => x.id === item)
+        if (obj) {
+          initArr.push(obj)
+        }
+      })
+      return initArr
+    },
+    productIntroFilter() {
+      return this.introList.filter(x => x.type !== '-1')
+    },
+
+    productUseTime() {
+      let time = ''
+      const plan = this.product.productPlanDTOSet[0]
+      if (plan) {
+        if (plan.useDays !== -1) {
+          time = `依購買後起訖 ${plan.useDays}天`
         } else {
-          return (
-            (sdate === null ? '' : moment(sdate).format('YYYY-MM-DD hh:mm')) +
-            ' ~ ' +
-            (edate === null ? '' : moment(edate).format('YYYY-MM-DD hh:mm'))
+          const stime =
+            plan.useStime.length > 0 ? util.formatTimeMinus(plan.useStime) : ''
+          const etime =
+            plan.useEtime.length > 0 ? util.formatTimeMinus(plan.useEtime) : ''
+          time = `${stime} ~ ${etime}`
+        }
+      }
+      return time
+    },
+
+    productReimburse() {
+      let reimburse = 0
+      const plan = this.product.productPlanDTOSet[0]
+      if (plan) {
+        const spec =
+          this.product.productPlanDTOSet[0].productSpecificationDTOSet[0]
+        if (spec) {
+          reimburse = spec.unitPrice
+        }
+      }
+      return reimburse
+    },
+
+    productPrice() {
+      let price = 0
+      const plan = this.product.productPlanDTOSet[0]
+      if (plan) {
+        const spec =
+          this.product.productPlanDTOSet[0].productSpecificationDTOSet[0]
+        if (spec) {
+          price = spec.sellingPrice
+        }
+      }
+      return price
+    },
+
+    productNum() {
+      let num = 0
+      const plan = this.product.productPlanDTOSet[0]
+      if (plan) {
+        const spec =
+          this.product.productPlanDTOSet[0].productSpecificationDTOSet[0]
+        if (spec) {
+          num = spec.sellingNum
+        }
+      }
+      return num
+    }
+  },
+  created() {},
+  methods: {
+    loading(flag) {
+      if (flag) {
+        this.loadingStatus = true
+      } else {
+        setTimeout(() => {
+          this.loadingStatus = false
+        }, 500)
+      }
+    },
+    colors(index) {
+      if (index === 0) {
+        return 'primary'
+      } else if (index === 1) {
+        return 'red'
+      } else if (index === 2) {
+        return 'deep-purple'
+      } else if (index === 3) {
+        return 'cyan'
+      }
+      return 'teal'
+    },
+    changeDate(col) {
+      if (col === 1) {
+        const sdate = this.newPlanForm.item.p3_t[0]
+        const edate = this.newPlanForm.item.p3_t[1]
+        if (sdate !== null && edate !== null) {
+          if (sdate.getTime() > edate.getTime()) {
+            this.newPlanForm.item.p3_t = [edate, sdate]
+          }
+        }
+      } else if (col === 2) {
+        const sdate = this.newPlanForm.item.p4[0]
+        const edate = this.newPlanForm.item.p4[1]
+        if (sdate !== null && edate !== null) {
+          if (sdate.getTime() > edate.getTime()) {
+            this.newPlanForm.item.p4 = [edate, sdate]
+          }
+        }
+      }
+    },
+    sec1Modify() {
+      if (this.sec1_edit) {
+        this.sec1ModifySubmit()
+      } else {
+        this.loading(true)
+        this.sec1_edit = true
+        this.$refs.sec1Form1.validate()
+        this.loading(false)
+      }
+    },
+    sec1ModifyCancel() {
+      this.$swal
+        .fire({
+          title: '確定要捨棄編輯嗎？',
+          html: '',
+          showCancelButton: true,
+          cancelButtonText: '取消',
+          confirmButtonText: '確定',
+          reverseButtons: true,
+          showClass: {
+            popup: '',
+            backdrop: 'swal2-backdrop-show',
+            icon: 'swal2-icon-show'
+          }
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.loading(true)
+            this.introCount = this.product.productIntroDTOSet.length
+            this.introList = this.product.productIntroDTOSet
+              .map((x) => {
+                return {
+                  id: x.id,
+                  pkId: x.id,
+                  valid: false,
+                  title: x.introTitle,
+                  content: x.introText,
+                  order: x.introOrder,
+                  edit: x.introEdit,
+                  type: '0'
+                }
+              })
+              .sort((a, b) => a.order - b.order)
+            this.sec1_edit = false
+            this.loading(false)
+          }
+        })
+    },
+    sec1IntroAdd() {
+      if (this.introList.length >= 6) {
+        this.$notify({
+          title: '小提示',
+          text: '產品說明新增上限為2個',
+          type: 'warning',
+          duration: 5000
+        })
+        return
+      }
+
+      this.introList.push({
+        id: util._uuid(),
+        pkId: -1,
+        valid: false,
+        title: '',
+        content: '',
+        order: this.introCount++,
+        edit: 1,
+        type: '1'
+      })
+    },
+    sec1IntroRemove(index) {
+      if (this.introList[index].edit === 1) {
+        if (this.introList[index].type === '1') {
+          this.introList.splice(index, 1)
+        } else if (this.introList[index].type === '0') {
+          this.introList[index].type = this.$set(
+            this.introList[index],
+            'type',
+            '-1'
           )
         }
       }
     },
-    step3_sale_time() {
-      const sdate = this.step1_form.plan_sale_time[0]
-      const edate = this.step1_form.plan_sale_time[1]
-      if (sdate === null && edate === null) {
-        return '無販售期限'
-      } else {
-        return (
-          (sdate === null ? '' : moment(sdate).format('YYYY-MM-DD hh:mm')) +
-          ' ~ ' +
-          (edate === null ? '' : moment(edate).format('YYYY-MM-DD hh:mm'))
-        )
-      }
-    }
-  },
-  methods: {
-    step2_new() {
-      this.step2_form.spec_arr.push({
-        d0: util._uuid(),
-        d1: '',
-        d2: '',
-        d3: null,
-        d4: null,
-        d5: null
+    sec1ModifySubmit() {
+      let check = true
+      let checkMsg = ''
+
+      this.introList.forEach((item) => {
+        this.$set(item, 'valid', false)
+        if (item.title.length === 0) {
+          this.$set(item, 'valid', true)
+          checkMsg = '請填寫產品說明標題'
+          check = false
+        }
+        if (item.content.length === 0) {
+          this.$set(item, 'valid', true)
+          checkMsg = `請填寫「${item.title}」`
+          check = false
+        }
       })
 
-      this.$notify({
-        title: '新增規格',
-        type: 'info'
-      })
-    },
-    step2_remove(index) {
-      this.step2_form.spec_arr.splice(index, 1)
-      this.$refs.step2form.validate()
-      this.$notify({
-        title: `'刪除規格${index + 1}`,
-        type: 'info'
-      })
-    },
-    step2_num_modify(type, val) {
-      if (this.step2_form.spec_arr[val].d5 === null) {
-        set(this.step2_form.spec_arr[val], 'd5', 0)
-      }
-
-      const value = parseInt(this.step2_form.spec_arr[val].d5)
-      if (type === 1) {
-        set(this.step2_form.spec_arr[val], 'd5', value + 1)
-      } else if (value > 0) {
-        set(this.step2_form.spec_arr[val], 'd5', value - 1)
-      }
-    },
-
-    final_submit() {
-      console.log(this.step1_form)
-      console.log(this.step2_form)
-      if (!this.step1_form.valid) {
-        this.$swal.fire('Oops!', '步驟一部分項目錯誤，請重新確認', 'error')
+      if (!check) {
+        this.$swal.fire('小提示', checkMsg)
         return
       }
 
-      if (!this.step2_form.valid) {
-        this.$swal.fire('Oops!', '步驟二部分項目錯誤，請重新確認', 'error')
-        return
-      }
-
-      const form = {}
-      form.type = 'I'
-      form.step1 = this.step1_form
-      form.step2 = this.step2_form
-
-      const title = '確定要新增產品嗎'
+      const title = '確定要修改產品資訊嗎'
       const content = ''
       this.$swal
         .fire({
@@ -754,19 +832,71 @@ export default {
         })
         .then((result) => {
           if (result.isConfirmed) {
-            this.$router.push({
-              name: 'S01'
-            })
-            /*
+            this.loading(true)
+
+            const initArr = []
+            this.introList
+              .sort((a, b) => a.order - b.order)
+              .forEach((item, index) => {
+                initArr.push({
+                  id: item.id.toString(),
+                  pkId: item.pkId,
+                  title: item.title,
+                  content: item.content,
+                  order: index,
+                  edit: item.edit.toString(),
+                  type: item.type.toString()
+                })
+              })
+
+            const form = {
+              introList: initArr
+            }
+            const submitProductId = this.product.productId
             this.$axios
-              .post('/S01/product', form)
+              .put(`/S01/product/${submitProductId}`, form)
               .then((response) => {
-                this.$swal.fire('小提示', '產品新增成功', 'success')
+                const data = response.data
+                if (data.res === 'CODE0000') {
+                  this.$axios
+                    .$get(`S01/product/${submitProductId}`)
+                    .then((newData) => {
+                      this.product = newData.data.product
+                      this.introCount =
+                        newData.data.product.productIntroDTOSet.length
+                      this.introList = newData.data.product.productIntroDTOSet
+                        .map((x) => {
+                          return {
+                            id: x.id.toString(),
+                            pkId: x.id,
+                            valid: false,
+                            title: x.introTitle,
+                            content: x.introText,
+                            order: x.introOrder,
+                            edit: x.introEdit,
+                            type: '0'
+                          }
+                        })
+                        .sort((a, b) => a.order - b.order)
+                    })
+
+                  this.sec1_edit = false
+                  this.$swal.fire('小提示', '修改成功', 'success')
+                } else {
+                  this.$swal.fire('小提示', data.msg, 'error')
+                }
+                this.loading(false)
               })
               .catch((err) => {
+                this.loading(false)
+                this.$notify({
+                  title: '小提示',
+                  text: '網路連線異常',
+                  type: 'error',
+                  duration: 2000
+                })
                 console.log(err)
               })
-              */
           }
         })
     }
@@ -774,10 +904,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.background-color {
-  background-color: $store_admin_background_color !important;
-}
-
 .right-10 {
   right: 10px;
 }
@@ -797,5 +923,42 @@ export default {
 .searchInput.v-text-field {
   max-width: 250px;
   width: 250px;
+}
+
+:deep(.slick-slide) {
+  padding: 0 6px !important;
+}
+
+.border_title {
+  background-color: transparent !important;
+  position: absolute;
+  top: -25px;
+  background-color: white;
+}
+
+.row_title {
+  align-items: center;
+  display: flex;
+  height: 48px;
+  font-size: 1rem;
+  padding: 0 16px 0 16px;
+}
+
+.row_content {
+  padding-top: 0.5rem !important;
+  align-items: center;
+  display: flex;
+  font-size: 1rem;
+  padding: 0 16px 0 16px;
+}
+
+.border_bottom {
+  transition: border 0.6s linear;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.border_error {
+  border: thin solid #f95454;
+  border-radius: 20px;
 }
 </style>

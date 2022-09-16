@@ -1,13 +1,13 @@
-$store_admin_background_color: #e8ecf5;
+$store_admin_background_color: #f4f6f9;
 $store_admin_brown_s1_l1: #D6BEB2;
-$store_admin_brown_s1_l2: #9B6E57;
-$store_admin_brown_s1_l3: #754933;
+$store_admin_brown_s1_l2: rgb(155, 110, 87);
+$store_admin_brown_s1_l3: rgb(117, 73, 51);
 $store_admin_brown_s2_l1: #EBE6E3;
 $store_admin_brown_s2_l2: #D4CCC7;
 $store_admin_brown_s2_l3: #AA998F;
 $store_admin_brown_s2_l4: #7B6465;
 $store_admin_brown_s3_l1: #D1BE9C;
-$store_admin_green_l1: #628275;
+$store_admin_green_l1: rgb(98, 130, 117);
 $store_admin_green_l2: #4C6158;
 $store_admin_green_l3: #1F3B2F;
 $store_admin_green_l4: #16261F;
@@ -85,4 +85,27 @@ html, body {
 
 .no-backgroud-hover.white::before {
   background-color: #fff !important;
+}
+
+.theme--light.v-application {
+  background: $store_admin_background_color;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.background-color {
+  background-color: $store_admin_background_color !important;
+}
+
+.need:after {
+  content: '*';
+  color: #f95454;
+  padding-left: 0.2rem;
+}
+
+.font_size1-1 {
+  font-size: 1.1rem !important;
+}
+
+.font_size1-5 {
+  font-size: 1.5rem !important;
 }

@@ -10,8 +10,6 @@ import '..\\node_modules\\@mdi\\font\\css\\materialdesignicons.min.css'
 
 import '..\\assets\\transition.css'
 
-import '..\\node_modules\\vuetify\\dist\\vuetify.css'
-
 import _501d71a3 from '..\\layouts\\adminLayout.vue'
 import _6f6c098b from '..\\layouts\\default.vue'
 import _89033b86 from '..\\layouts\\loginLayout.vue'

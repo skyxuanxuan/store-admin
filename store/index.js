@@ -9,6 +9,7 @@ export const actions = {
     try {
       await dispatch('userInfo/fetchUserInfo')
       await dispatch('basic/fetchBasic')
+      await dispatch('S03/fetchStore')
     } catch (err) {}
   }
 }

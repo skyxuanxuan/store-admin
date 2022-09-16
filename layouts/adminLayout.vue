@@ -147,9 +147,4 @@ export default {
   color: #2196f3 !important;
   caret-color: #2196f3 !important;
 }
-
-.theme--light.v-application {
-  background: #e8ecf5;
-  color: rgba(0, 0, 0, 0.87);
-}
 </style>

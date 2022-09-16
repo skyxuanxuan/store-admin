@@ -28,6 +28,13 @@
     "_name": "_9f4504c8"
   },
   {
+    "name": "S03",
+    "path": "/S03",
+    "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S03\\\\index.vue",
+    "chunkName": "pages/S03/index",
+    "_name": "_8fe1ba0a"
+  },
+  {
     "name": "S01-apply",
     "path": "/S01/apply",
     "component": "C:\\\\Users\\\\colds\\\\Desktop\\\\Sunpay\\\\20220411\\\\store-admin\\\\pages\\\\S01\\\\apply\\\\index.vue",

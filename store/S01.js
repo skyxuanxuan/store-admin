@@ -1,8 +1,12 @@
 import moment from 'moment'
+import util from '~/assets/js/util'
 
 export const state = () => ({
   bulkList: [],
-  amount: 0
+  amount: 0,
+  productsList: [],
+  orders: [],
+  bulkTickets: []
 })
 
 export const getters = {
@@ -56,6 +60,55 @@ export const getters = {
       })
     })
     return initArray
+  },
+  getBulkTickets: (state) => {
+    const groupList = state.bulkTickets.reduce((group, ticket) => {
+      const { denomination } = ticket
+      group[denomination] = group[denomination] ?? []
+      group[denomination].push(ticket)
+      return group
+    }, {})
+
+    const initArr = []
+    for (const key in groupList) {
+      initArr.push({
+        bulk_type: key,
+        bulk_num: groupList[key].length
+      })
+    }
+    return initArr
+  },
+  getProductsNum: (state) => {
+    return state.productsList.length
+  },
+  getBulkTicketsNum: (state) => {
+    return state.bulkTickets.length
+  },
+  getSaleNum: (state) => {
+    let saleNum = 0
+    const nDate = new Date()
+    state.orders.filter(x => x.status === '1').forEach((item) => {
+      if (item.payTime.length > 0) {
+        const payDate = new Date(util.formatTimeMinus(item.payTime))
+        if (nDate.getFullYear() === payDate.getFullYear() && nDate.getMonth() === payDate.getMonth()) {
+          saleNum += item.totalNum
+        }
+      }
+    })
+    return saleNum
+  },
+  getSaleAmt: (state) => {
+    let saleAmt = 0
+    const nDate = new Date()
+    state.orders.filter(x => x.status === '1').forEach((item) => {
+      if (item.payTime.length > 0) {
+        const payDate = new Date(util.formatTimeMinus(item.payTime))
+        if (nDate.getFullYear() === payDate.getFullYear() && nDate.getMonth() === payDate.getMonth()) {
+          saleAmt += item.totalAmt
+        }
+      }
+    })
+    return saleAmt
   }
 }
 
@@ -66,13 +119,48 @@ export const mutations = {
 
   initAmount(state, amount) {
     state.amount = amount
+  },
+
+  initProductList(state, products) {
+    state.productsList = products
+  },
+
+  initOrderList(state, orders) {
+    state.orders = orders
+  },
+
+  initBulkTicketsList(state, bulkTickets) {
+    state.bulkTickets = bulkTickets
   }
 }
 
 export const actions = {
   async fetchBulkList({ commit }) {
-    const data = await this.$axios.$get('S01/apply')
-    commit('initbulkList', data.data.resultList)
-    commit('initAmount', data.data.amount)
+    try {
+      const data = await this.$axios.$get('S01/apply')
+      commit('initbulkList', data.data.resultList)
+      commit('initAmount', data.data.amount)
+    } catch (err) {}
+  },
+
+  async fetchProductList({ commit }) {
+    try {
+      const data = await this.$axios.$get('S01/products')
+      commit('initProductList', data.data.products)
+    } catch (err) {}
+  },
+
+  async fetchOrdersList({ commit }) {
+    try {
+      const data = await this.$axios.$get('S01/orders')
+      commit('initOrderList', data.data.orders)
+    } catch (err) {}
+  },
+
+  async fetchBulkTicketsList({ commit }) {
+    try {
+      const data = await this.$axios.$get('S01/bulk-tickets')
+      commit('initBulkTicketsList', data.data.bulkTickets)
+    } catch (err) {}
   }
 }

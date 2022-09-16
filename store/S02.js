@@ -1,3 +1,6 @@
+import moment from 'moment'
+import util from '~/assets/js/util'
+
 export const state = () => ({
   productsList: [],
   orders: []
@@ -15,16 +18,30 @@ export const getters = {
     return num
   },
   getSaleNum: (state) => {
-    return state.orders
-      .filter(x => x.status === '1')
-      .map(x => x.totalNum)
-      .reduce((a, b) => a + b, 0)
+    let saleNum = 0
+    const nDate = moment().toDate()
+    state.orders.filter(x => x.status === '1').forEach((item) => {
+      if (item.payTime.length > 0) {
+        const payDate = new Date(util.formatTimeMinus(item.payTime))
+        if (nDate.getFullYear() === payDate.getFullYear() && nDate.getMonth() === payDate.getMonth()) {
+          saleNum += item.totalNum
+        }
+      }
+    })
+    return saleNum
   },
   getSaleAmt: (state) => {
-    return state.orders
-      .filter(x => x.status === '1')
-      .map(x => x.totalAmt)
-      .reduce((a, b) => a + b, 0)
+    let saleAmt = 0
+    const nDate = new Date()
+    state.orders.filter(x => x.status === '1').forEach((item) => {
+      if (item.payTime.length > 0) {
+        const payDate = new Date(util.formatTimeMinus(item.payTime))
+        if (nDate.getFullYear() === payDate.getFullYear() && nDate.getMonth() === payDate.getMonth()) {
+          saleAmt += item.totalAmt
+        }
+      }
+    })
+    return saleAmt
   }
 }
 

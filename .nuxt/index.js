@@ -27,6 +27,7 @@ import nuxt_plugin_axios_3566aa80 from 'nuxt_plugin_axios_3566aa80' // Source: .
 import nuxt_plugin_filters_98405076 from 'nuxt_plugin_filters_98405076' // Source: ..\\plugins\\filters (mode: 'all')
 import nuxt_plugin_notificationsssr_c12eda12 from 'nuxt_plugin_notificationsssr_c12eda12' // Source: ..\\plugins\\notifications-ssr (mode: 'all')
 import nuxt_plugin_notificationsclient_6eb3b8c6 from 'nuxt_plugin_notificationsclient_6eb3b8c6' // Source: ..\\plugins\\notifications-client (mode: 'client')
+import nuxt_plugin_leaflet_02f645f1 from 'nuxt_plugin_leaflet_02f645f1' // Source: ..\\plugins\\leaflet.js (mode: 'client')
 import nuxt_plugin_auth_78bfc561 from 'nuxt_plugin_auth_78bfc561' // Source: .\\auth.js (mode: 'all')
 
 // Component: <ClientOnly>
@@ -95,7 +96,7 @@ async function createApp(ssrContext, config = {}) {
   // here we inject the router and store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
-    head: {"titleTemplate":"紅陽優惠券店家後台 - %s","title":"店家後臺","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""},{"name":"format-detection","content":"telephone=no"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"}],"style":[],"script":[]},
+    head: {"titleTemplate":"紅陽優惠券店家後台 - %s","title":"店家後臺","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""},{"name":"format-detection","content":"telephone=no"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"},{"rel":"stylesheet","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss?family=Noto+Sans+TC:100,300,400,500,700&display=swap"}],"style":[],"script":[]},
 
     store,
     router,
@@ -278,6 +279,10 @@ async function createApp(ssrContext, config = {}) {
 
   if (process.client && typeof nuxt_plugin_notificationsclient_6eb3b8c6 === 'function') {
     await nuxt_plugin_notificationsclient_6eb3b8c6(app.context, inject)
+  }
+
+  if (process.client && typeof nuxt_plugin_leaflet_02f645f1 === 'function') {
+    await nuxt_plugin_leaflet_02f645f1(app.context, inject)
   }
 
   if (typeof nuxt_plugin_auth_78bfc561 === 'function') {

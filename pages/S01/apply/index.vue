@@ -39,9 +39,10 @@
 
       <v-btn
         class="d-none d-sm-flex"
-        color="#666666"
+        color="brownS1"
         width="140"
-        dark
+        rounded
+        outlined
         @click="applyInit"
       >
         申請
@@ -55,189 +56,202 @@
         <v-tab-item class="background-color">
           <PageStatisticCard :items="pageStatisticCardItems" />
 
-          <v-container class="white mt-8">
-            <v-toolbar dense flat>
-              <v-toolbar-title>申請歷史紀錄</v-toolbar-title>
-              <v-spacer />
-              <v-text-field
-                v-model="sec1_search"
-                class="searchInput top-15 right-10"
-                label="Search"
-                outlined
-                dense
-              />
+          <v-container class="mt-2 pa-3">
+            <v-card flat class="pa-2">
+              <v-toolbar dense flat>
+                <v-toolbar-title>申請歷史紀錄</v-toolbar-title>
+                <v-spacer />
+                <v-text-field
+                  v-model="sec1_search"
+                  class="searchInput top-15 right-10"
+                  label="Search"
+                  outlined
+                  dense
+                />
 
-              <v-menu offset-y :close-on-content-click="false">
-                <template #activator="{ on, attrs }">
-                  <v-btn outlined width="80" style="top: 2px" v-bind="attrs" v-on="on">
-                    顯示
-                  </v-btn>
-                </template>
-                <v-list flat>
-                  <v-list-item-group v-model="display_settings" multiple>
-                    <v-list-item
-                      v-for="item in sec1_table_header"
-                      :key="item.text"
+                <v-menu offset-y :close-on-content-click="false">
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      outlined
+                      width="80"
+                      style="top: 2px"
+                      v-bind="attrs"
+                      v-on="on"
                     >
-                      <template #default="{ active }">
-                        <v-list-item-action>
-                          <v-checkbox :input-value="active" color="primary" />
-                        </v-list-item-action>
+                      顯示
+                    </v-btn>
+                  </template>
+                  <v-list flat>
+                    <v-list-item-group v-model="display_settings" multiple>
+                      <v-list-item
+                        v-for="item in sec1_table_header"
+                        :key="item.text"
+                      >
+                        <template #default="{ active }">
+                          <v-list-item-action>
+                            <v-checkbox :input-value="active" color="primary" />
+                          </v-list-item-action>
 
-                        <v-list-item-content>
-                          <v-list-item-title>{{ item.text }}</v-list-item-title>
-                        </v-list-item-content>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{
+                                item.text
+                              }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
+                </v-menu>
+              </v-toolbar>
+              <div>
+                <v-data-table
+                  ref="vDataTable"
+                  mobile-breakpoint="770"
+                  :headers="sec1_showHeaders"
+                  :items="sec1_data_list"
+                  :items-per-page="10"
+                  :search="sec1_search"
+                  single-expand
+                  :expanded.sync="sec1_data_expanded"
+                  show-expand
+                  item-key="d0"
+                  calculate-widths
+                  class="vue-custom-fadeIn"
+                  :page.sync="sec1_table_page"
+                  :footer-props="{
+                    'disable-pagination': true,
+                    'next-icon': '',
+                    'prev-icon': ''
+                  }"
+                  @page-count="sec1_table_page_count = $event"
+                >
+                  <template #item.data-table-expand="props">
+                    <v-icon
+                      :class="{
+                        'v-data-table__expand-icon': true,
+                        'v-data-table__expand-icon--active':
+                          props.isExpanded &&
+                          transitioned[getItemId(props.item)]
+                      }"
+                      @click="toggleExpand(props)"
+                    >
+                      mdi-chevron-down
+                    </v-icon>
+                  </template>
+
+                  <template #item.d2="{ item }">
+                    {{ item.d2 | numberWithCommas }}
+                  </template>
+                  <template #item.d3="{ item }">
+                    {{ item.d3 | toDollars }}
+                  </template>
+
+                  <template #item.actions="{ item }">
+                    <v-tooltip v-if="item.status === 0" bottom>
+                      <template #activator="{ on, attrs }">
+                        <v-btn
+                          class="white"
+                          elevation="0"
+                          color="primary"
+                          fab
+                          icon
+                          x-small
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="uploadInit(item.d0)"
+                        >
+                          <v-icon> mdi-upload </v-icon>
+                        </v-btn>
                       </template>
-                    </v-list-item>
-                  </v-list-item-group>
-                </v-list>
-              </v-menu>
-            </v-toolbar>
-            <div>
-              <v-data-table
-                ref="vDataTable"
-                mobile-breakpoint="770"
-                :headers="sec1_showHeaders"
-                :items="sec1_data_list"
-                :items-per-page="10"
-                :search="sec1_search"
-                single-expand
-                :expanded.sync="sec1_data_expanded"
-                show-expand
-                item-key="d0"
-                calculate-widths
-                class="vue-custom-fadeIn"
-                :page.sync="sec1_table_page"
-                :footer-props="{
-                  'disable-pagination': true,
-                  'next-icon': '',
-                  'prev-icon': ''
-                }"
-                @page-count="sec1_table_page_count = $event"
-              >
-                <template #item.data-table-expand="props">
-                  <v-icon
-                    :class="{
-                      'v-data-table__expand-icon': true,
-                      'v-data-table__expand-icon--active':
-                        props.isExpanded && transitioned[getItemId(props.item)]
-                    }"
-                    @click="toggleExpand(props)"
-                  >
-                    mdi-chevron-down
-                  </v-icon>
-                </template>
+                      <span>上傳收據</span>
+                    </v-tooltip>
+                    <v-tooltip v-if="item.status === 2" bottom>
+                      <template #activator="{ on, attrs }">
+                        <v-btn
+                          class="white"
+                          elevation="0"
+                          color="primary"
+                          fab
+                          icon
+                          x-small
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="checkImg(item.img)"
+                        >
+                          <v-icon> mdi-eye </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>查看收據</span>
+                    </v-tooltip>
+                    <v-tooltip
+                      v-if="item.status === 0 || item.status === 2"
+                      bottom
+                    >
+                      <template #activator="{ on, attrs }">
+                        <v-btn
+                          class="white"
+                          elevation="0"
+                          color="error"
+                          fab
+                          icon
+                          x-small
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="applyCancel(item.d0)"
+                        >
+                          <v-icon> mdi-close </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>取消申請</span>
+                    </v-tooltip>
+                  </template>
 
-                <template #item.d2="{ item }">
-                  {{ item.d2 | numberWithCommas }}
-                </template>
-                <template #item.d3="{ item }">
-                  {{ item.d3 | toDollars }}
-                </template>
-
-                <template #item.actions="{ item }">
-                  <v-tooltip v-if="item.status === 0" bottom>
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        class="white"
-                        elevation="0"
-                        color="primary"
-                        fab
-                        icon
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="uploadInit(item.d0)"
-                      >
-                        <v-icon> mdi-upload </v-icon>
-                      </v-btn>
-                    </template>
-                    <span>上傳收據</span>
-                  </v-tooltip>
-                  <v-tooltip v-if="item.status === 2" bottom>
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        class="white"
-                        elevation="0"
-                        color="primary"
-                        fab
-                        icon
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="checkImg(item.img)"
-                      >
-                        <v-icon> mdi-eye </v-icon>
-                      </v-btn>
-                    </template>
-                    <span>查看收據</span>
-                  </v-tooltip>
-                  <v-tooltip
-                    v-if="item.status === 0 || item.status === 2"
-                    bottom
-                  >
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        class="white"
-                        elevation="0"
-                        color="error"
-                        fab
-                        icon
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="applyCancel(item.d0)"
-                      >
-                        <v-icon> mdi-close </v-icon>
-                      </v-btn>
-                    </template>
-                    <span>取消申請</span>
-                  </v-tooltip>
-                </template>
-
-                <template #expanded-item="{ headers, item }">
-                  <td
-                    :colspan="headers.length"
-                    :class="{
-                      'ma-0 pa-0': true,
-                      'expanded-closing': !transitioned[getItemId(item)],
-                      'expanded-display': isMobile
-                    }"
-                    style="height: auto"
-                  >
-                    <v-expand-transition>
-                      <div v-show="transitioned[getItemId(item)]">
-                        <!-- container for content. replace with whatever you want -->
-                        <v-container>
-                          <v-row
-                            v-for="detail in item.detail"
-                            :key="detail.dl0"
-                            v-resize="onResize"
-                            style="
-                              border-bottom: thin solid rgba(0, 0, 0, 0.12);
-                            "
-                          >
-                            <v-col md="4" cols="6">
-                              面額「{{ detail.dl1 }}」
-                            </v-col>
-                            <v-col md="3" cols="6">
-                              {{ detail.dl2 | numberWithCommas }} 張
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </div>
-                    </v-expand-transition>
-                  </td>
-                </template>
-              </v-data-table>
-            </div>
-            <div class="text-center pt-2">
-              <v-pagination
-                v-model="sec1_table_page"
-                :length="sec1_table_page_count"
-                :total-visible="7"
-              />
-            </div>
+                  <template #expanded-item="{ headers, item }">
+                    <td
+                      :colspan="headers.length"
+                      :class="{
+                        'ma-0 pa-0': true,
+                        'expanded-closing': !transitioned[getItemId(item)],
+                        'expanded-display': isMobile
+                      }"
+                      style="height: auto"
+                    >
+                      <v-expand-transition>
+                        <div v-show="transitioned[getItemId(item)]">
+                          <!-- container for content. replace with whatever you want -->
+                          <v-container>
+                            <v-row
+                              v-for="detail in item.detail"
+                              :key="detail.dl0"
+                              v-resize="onResize"
+                              style="
+                                border-bottom: thin solid rgba(0, 0, 0, 0.12);
+                              "
+                            >
+                              <v-col md="4" cols="6">
+                                面額「{{ detail.dl1 }}」
+                              </v-col>
+                              <v-col md="3" cols="6">
+                                {{ detail.dl2 | numberWithCommas }} 張
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </div>
+                      </v-expand-transition>
+                    </td>
+                  </template>
+                </v-data-table>
+              </div>
+              <div class="text-center pt-2">
+                <v-pagination
+                  v-model="sec1_table_page"
+                  :length="sec1_table_page_count"
+                  :total-visible="7"
+                />
+              </div>
+            </v-card>
           </v-container>
         </v-tab-item>
       </v-tabs-items>
@@ -545,14 +559,16 @@ export default {
           value: this.$store.state.S01.bulkList.filter(
             x => x.reviewStatus === 0
           ).length,
-          type: 1
+          type: 1,
+          icon: 'mdi-credit-card-remove-outline'
         },
         {
           title: '待審核',
           value: this.$store.state.S01.bulkList.filter(
             x => x.reviewStatus === 2
           ).length,
-          type: 1
+          type: 1,
+          icon: 'mdi-file-search-outline'
         },
         {
           title: '通過',
@@ -560,7 +576,8 @@ export default {
             x => x.reviewStatus === 1
           ).length,
           type: 1,
-          color: 'success--text'
+          color: 'success',
+          icon: 'mdi-check'
         },
         {
           title: '退件/取消',
@@ -568,7 +585,8 @@ export default {
             x => x.reviewStatus === 9 || x.reviewStatus === 8
           ).length,
           type: 1,
-          color: 'error--text'
+          color: 'error',
+          icon: 'mdi-cancel'
         }
       ]
     },

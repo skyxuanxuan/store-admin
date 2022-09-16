@@ -15,6 +15,23 @@ export const getters = {
       })
     })
     return initArr
+  },
+  getCitiesArr: (state) => {
+    return state.cities.map((x) => {
+      return {
+        id: x.cityId,
+        name: x.cityChName
+      }
+    })
+  },
+  getTownsArr: (state) => {
+    return state.towns.map((x) => {
+      return {
+        id: x.townId,
+        name: x.townChName,
+        cityId: x.cityId
+      }
+    })
   }
 }
 

@@ -37,310 +37,254 @@
         <v-tab-item class="background-color">
           <PageStatisticCard :items="pageStatisticCardItems" />
 
-          <v-container class="white mt-8">
-            <v-toolbar dense flat>
-              <v-text-field
-                v-model="sec1_search"
-                class="searchInput top-15"
-                label="Search"
-                outlined
-                dense
-              />
+          <v-container class="mt-2 pa-3">
+            <v-card flat class="pa-2">
+              <v-toolbar dense flat>
+                <v-text-field
+                  v-model="sec1_search"
+                  class="searchInput top-15"
+                  label="Search"
+                  outlined
+                  dense
+                />
 
-              <v-menu offset-y :close-on-content-click="false">
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    class="left-10"
-                    outlined
-                    width="80"
-                    v-bind="attrs"
-                    style="top: 2px"
-                    v-on="on"
-                  >
-                    顯示
-                  </v-btn>
-                </template>
-                <v-list flat>
-                  <v-list-item-group v-model="display_settings" multiple>
-                    <v-list-item
-                      v-for="item in sec1_table_header"
-                      :key="item.text"
+                <v-menu offset-y :close-on-content-click="false">
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      class="left-10"
+                      outlined
+                      width="80"
+                      v-bind="attrs"
+                      style="top: 2px"
+                      v-on="on"
                     >
-                      <template #default="{ active }">
-                        <v-list-item-action>
-                          <v-checkbox :input-value="active" color="greenS1" />
-                        </v-list-item-action>
-
-                        <v-list-item-content>
-                          <v-list-item-title>{{ item.text }}</v-list-item-title>
-                        </v-list-item-content>
-                      </template>
-                    </v-list-item>
-                  </v-list-item-group>
-                </v-list>
-              </v-menu>
-
-              <v-spacer />
-
-              <v-btn
-                class="right-10 d-none d-sm-flex"
-                width="160"
-                dark
-                color="brownS1"
-                rounded
-                nuxt
-                to="/S02/product/create"
-              >
-                建立產品
-              </v-btn>
-            </v-toolbar>
-            <div>
-              <v-data-table
-                ref="vDataTable"
-                mobile-breakpoint="770"
-                :headers="sec1_showHeaders"
-                :items="sec1_data_list"
-                :items-per-page="10"
-                :search="sec1_search"
-                item-key="d0"
-                :expanded.sync="sec1_data_expanded"
-                show-expand
-                single-expand
-                calculate-widths
-                :page.sync="sec1_table_page"
-                :footer-props="{
-                  'disable-pagination': true,
-                  'next-icon': '',
-                  'prev-icon': ''
-                }"
-                @page-count="sec1_table_page_count = $event"
-              >
-                <template #item.data-table-expand="props">
-                  <v-icon
-                    :class="{
-                      'v-data-table__expand-icon': true,
-                      'v-data-table__expand-icon--active':
-                        props.isExpanded && transitioned[getItemId(props.item)]
-                    }"
-                    @click="toggleExpand(props)"
-                  >
-                    mdi-chevron-down
-                  </v-icon>
-                </template>
-
-                <template #item.actions="{ item }">
-                  <v-tooltip bottom>
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        class="no-backgroud-hover white"
-                        elevation="0"
-                        color="white"
-                        fab
-                        x-small
-                        nuxt
-                        :to="'/S02/product/' + item.d0"
-                        v-bind="attrs"
-                        v-on="on"
+                      顯示
+                    </v-btn>
+                  </template>
+                  <v-list flat>
+                    <v-list-item-group v-model="display_settings" multiple>
+                      <v-list-item
+                        v-for="item in sec1_table_header"
+                        :key="item.text"
                       >
-                        <v-icon color="other2">
-                          mdi-pencil
-                        </v-icon>
-                      </v-btn>
-                    </template>
-                    <span>編輯</span>
-                  </v-tooltip>
-                  <v-tooltip bottom>
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        v-if="item.statusCode === '11'"
-                        class="no-backgroud-hover white"
-                        elevation="0"
-                        color="white"
-                        fab
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        <v-icon color="other1">
-                          mdi-close
-                        </v-icon>
-                      </v-btn>
-                    </template>
-                    <span>停用</span>
-                  </v-tooltip>
+                        <template #default="{ active }">
+                          <v-list-item-action>
+                            <v-checkbox :input-value="active" color="greenS1" />
+                          </v-list-item-action>
 
-                  <v-tooltip bottom>
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        v-if="item.statusCode === '10'"
-                        class="no-backgroud-hover white"
-                        elevation="0"
-                        color="white"
-                        fab
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        <v-icon color="other1">
-                          mdi-restart
-                        </v-icon>
-                      </v-btn>
-                    </template>
-                    <span>啟用</span>
-                  </v-tooltip>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{
+                                item.text
+                              }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
+                </v-menu>
 
-                  <!-- <v-menu
-                    v-if="item.statusCode !== '-1'"
-                    open-on-hover
-                    :close-on-content-click="false"
-                    transition="slide-x-transition"
-                    bottom
-                    right
-                    offset-y
-                  >
-                    <template #activator="{ on, attrs }">
-                      <v-icon class="mr-2" v-bind="attrs" v-on="on">
-                        mdi-dots-vertical
-                      </v-icon>
-                    </template>
-                    <v-list dense class="py-0">
-                      <v-list-item-group no-action>
-                        <v-list-item
-                          color="other2"
+                <v-spacer />
+
+                <v-btn
+                  class="right-10 d-none d-sm-flex"
+                  width="160"
+                  dark
+                  color="brownS1"
+                  rounded
+                  nuxt
+                  to="/S02/product/create"
+                >
+                  建立產品
+                </v-btn>
+              </v-toolbar>
+              <div>
+                <v-data-table
+                  ref="vDataTable"
+                  mobile-breakpoint="770"
+                  :headers="sec1_showHeaders"
+                  :items="sec1_data_list"
+                  :items-per-page="10"
+                  :search="sec1_search"
+                  item-key="d0"
+                  :expanded.sync="sec1_data_expanded"
+                  show-expand
+                  single-expand
+                  calculate-widths
+                  :page.sync="sec1_table_page"
+                  :footer-props="{
+                    'disable-pagination': true,
+                    'next-icon': '',
+                    'prev-icon': ''
+                  }"
+                  @page-count="sec1_table_page_count = $event"
+                >
+                  <template #item.data-table-expand="props">
+                    <v-icon
+                      :class="{
+                        'v-data-table__expand-icon': true,
+                        'v-data-table__expand-icon--active':
+                          props.isExpanded &&
+                          transitioned[getItemId(props.item)]
+                      }"
+                      @click="toggleExpand(props)"
+                    >
+                      mdi-chevron-down
+                    </v-icon>
+                  </template>
+
+                  <template #item.actions="{ item }">
+                    <v-tooltip bottom>
+                      <template #activator="{ on, attrs }">
+                        <v-btn
+                          class="no-backgroud-hover white"
+                          elevation="0"
+                          color="white"
+                          fab
+                          x-small
                           nuxt
                           :to="'/S02/product/' + item.d0"
+                          v-bind="attrs"
+                          v-on="on"
                         >
-                          <v-list-item-icon>
-                            <v-icon color="other2" small>
-                              mdi-pencil
-                            </v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-content>
-                            <v-list-item-title>編輯</v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                        <v-divider />
-                        <v-list-item
+                          <v-icon color="other2">
+                            mdi-pencil
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>編輯</span>
+                    </v-tooltip>
+                    <v-tooltip bottom>
+                      <template #activator="{ on, attrs }">
+                        <v-btn
                           v-if="item.statusCode === '11'"
-                          color="other1"
+                          class="no-backgroud-hover white"
+                          elevation="0"
+                          color="white"
+                          fab
+                          x-small
+                          v-bind="attrs"
+                          v-on="on"
                         >
-                          <v-list-item-icon>
-                            <v-icon color="other1">
-                              mdi-close
-                            </v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-content>
-                            <v-list-item-title>停用</v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                        <v-divider v-if="item.statusCode === '11'" />
-                        <v-list-item
-                          v-if="item.statusCode === '10'"
-                          color="other1"
-                        >
-                          <v-list-item-icon>
-                            <v-icon color="other1">
-                              mdi-restart
-                            </v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-content>
-                            <v-list-item-title>啟用</v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                        <v-divider v-if="item.statusCode === '10'" />
-                      </v-list-item-group>
-                    </v-list>
-                  </v-menu> -->
-                </template>
+                          <v-icon color="other1">
+                            mdi-close
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>停用</span>
+                    </v-tooltip>
 
-                <template #expanded-item="{ headers, item }">
-                  <td
-                    :colspan="headers.length"
-                    :class="{
-                      'ma-0 pa-0': true,
-                      'expanded-closing': !transitioned[getItemId(item)],
-                      'expanded-display': isMobile
-                    }"
-                    style="height: auto"
-                  >
-                    <v-expand-transition>
-                      <div
-                        v-show="transitioned[getItemId(item)]"
-                        v-resize="onResize"
-                      >
-                        <v-container class="d-none d-sm-flex flex-column">
-                          <v-row>
-                            <v-col>方案</v-col>
-                            <v-col>價格</v-col>
-                            <v-col>剩餘</v-col>
-                          </v-row>
-                          <v-row v-for="plan in item.planSet" :key="plan.dl0">
-                            <v-col>{{ plan.dl1 }}</v-col>
-                            <v-col>{{ plan.dl2 | toDollars }}</v-col>
-                            <v-col v-if="plan.dlSaleNum !== -1">
-                              {{ plan.dl3 | numberWithCommas }}
-                            </v-col>
-                            <v-col v-else>
-                              <v-icon>mdi-infinity</v-icon>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                        <v-card
-                          v-for="plan in item.planSet"
-                          :key="plan.dl0"
-                          flat
-                          color="transparent"
-                          class="d-flex d-sm-none flex-column"
+                    <v-tooltip bottom>
+                      <template #activator="{ on, attrs }">
+                        <v-btn
+                          v-if="item.statusCode === '10'"
+                          class="no-backgroud-hover white"
+                          elevation="0"
+                          color="white"
+                          fab
+                          x-small
+                          v-bind="attrs"
+                          v-on="on"
                         >
+                          <v-icon color="other1">
+                            mdi-restart
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>啟用</span>
+                    </v-tooltip>
+                  </template>
+
+                  <template #expanded-item="{ headers, item }">
+                    <td
+                      :colspan="headers.length"
+                      :class="{
+                        'ma-0 pa-0': true,
+                        'expanded-closing': !transitioned[getItemId(item)],
+                        'expanded-display': isMobile
+                      }"
+                      style="height: auto"
+                    >
+                      <v-expand-transition>
+                        <div
+                          v-show="transitioned[getItemId(item)]"
+                          v-resize="onResize"
+                        >
+                          <v-container class="d-none d-sm-flex flex-column">
+                            <v-row>
+                              <v-col>方案</v-col>
+                              <v-col>價格</v-col>
+                              <v-col>剩餘</v-col>
+                            </v-row>
+                            <v-row v-for="plan in item.planSet" :key="plan.dl0">
+                              <v-col>{{ plan.dl1 }}</v-col>
+                              <v-col>{{ plan.dl2 | toDollars }}</v-col>
+                              <v-col v-if="plan.dlSaleNum !== -1">
+                                {{ plan.dl3 | numberWithCommas }}
+                              </v-col>
+                              <v-col v-else>
+                                <v-icon>mdi-infinity</v-icon>
+                              </v-col>
+                            </v-row>
+                          </v-container>
                           <v-card
+                            v-for="plan in item.planSet"
+                            :key="plan.dl0"
                             flat
                             color="transparent"
-                            class="expanded-mobil-card"
+                            class="d-flex d-sm-none flex-column"
                           >
-                            <div>方案「{{ plan.dl1 }}」</div>
-                          </v-card>
-                          <v-card flat class="expanded-mobil-card">
-                            <div class="text-body-2">
-                              價格
-                            </div>
-                            <div
-                              class="text-body-2 expanded-mobil-card-content"
+                            <v-card
+                              flat
+                              color="transparent"
+                              class="expanded-mobil-card"
                             >
-                              {{ plan.dl2 | toDollars }}
-                            </div>
+                              <div>方案「{{ plan.dl1 }}」</div>
+                            </v-card>
+                            <v-card flat class="expanded-mobil-card">
+                              <div class="text-body-2">
+                                價格
+                              </div>
+                              <div
+                                class="text-body-2 expanded-mobil-card-content"
+                              >
+                                {{ plan.dl2 | toDollars }}
+                              </div>
+                            </v-card>
+                            <v-card flat class="expanded-mobil-card">
+                              <div class="text-body-2">
+                                剩餘
+                              </div>
+                              <div
+                                v-if="plan.dlSaleNum !== -1"
+                                class="text-body-2 expanded-mobil-card-content"
+                              >
+                                {{ plan.dl3 | numberWithCommas }}
+                              </div>
+                              <div
+                                v-else
+                                class="text-body-2 expanded-mobil-card-content"
+                              >
+                                <v-icon>mdi-infinity</v-icon>
+                              </div>
+                            </v-card>
+                            <v-divider />
                           </v-card>
-                          <v-card flat class="expanded-mobil-card">
-                            <div class="text-body-2">
-                              剩餘
-                            </div>
-                            <div
-                              v-if="plan.dlSaleNum !== -1"
-                              class="text-body-2 expanded-mobil-card-content"
-                            >
-                              {{ plan.dl3 | numberWithCommas }}
-                            </div>
-                            <div
-                              v-else
-                              class="text-body-2 expanded-mobil-card-content"
-                            >
-                              <v-icon>mdi-infinity</v-icon>
-                            </div>
-                          </v-card>
-                          <v-divider />
-                        </v-card>
-                      </div>
-                    </v-expand-transition>
-                  </td>
-                </template>
-              </v-data-table>
-            </div>
-            <div class="text-center pt-2">
-              <v-pagination
-                v-model="sec1_table_page"
-                :length="sec1_table_page_count"
-                :total-visible="7"
-              />
-            </div>
+                        </div>
+                      </v-expand-transition>
+                    </td>
+                  </template>
+                </v-data-table>
+              </div>
+              <div class="text-center pt-2">
+                <v-pagination
+                  v-model="sec1_table_page"
+                  :length="sec1_table_page_count"
+                  :total-visible="7"
+                />
+              </div>
+            </v-card>
           </v-container>
         </v-tab-item>
       </v-tabs-items>
@@ -435,22 +379,26 @@ export default {
         {
           title: '商城架上產品 (個)',
           value: this.$store.getters['S02/getProductsNum'],
-          type: 1
+          type: 1,
+          icon: 'mdi-store-outline'
         },
         {
           title: '商城架上方案 (個)',
           value: this.$store.getters['S02/getPlansNum'],
-          type: 1
+          type: 1,
+          icon: 'mdi-format-list-text'
         },
         {
           title: '本月銷售票券 (張)',
           value: this.$store.getters['S02/getSaleNum'],
-          type: 1
+          type: 1,
+          icon: 'mdi-ticket-confirmation-outline'
         },
         {
           title: '本月銷售金額 (元)',
           value: this.$store.getters['S02/getSaleAmt'],
-          type: 2
+          type: 2,
+          icon: 'mdi-cash-multiple'
         }
       ]
     },

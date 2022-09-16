@@ -11,7 +11,13 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css?family=Noto+Sans+TC:100,300,400,500,700&display=swap'
+      }
+    ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -34,7 +40,8 @@ export default {
     '~/plugins/axios',
     '~/plugins/filters', // 全局過濾器
     { src: '~/plugins/notifications-ssr', ssr: true },
-    { src: '~/plugins/notifications-client', ssr: false }
+    { src: '~/plugins/notifications-client', ssr: false },
+    { src: '~plugins/leaflet.js', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -69,6 +76,10 @@ export default {
     'vue-sweetalert2/nuxt',
     'vue2-editor/nuxt'
   ],
+  sweetalert: {
+    confirmButtonColor: '#587FFF',
+    cancelButtonColor: '#EF6969'
+  },
 
   auth: {
     strategies: {
@@ -137,6 +148,7 @@ export default {
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
     defaultAssets: false,
     theme: {
       dark: false,
@@ -167,10 +179,6 @@ export default {
           other2: '#587FFF'
         }
       }
-    },
-    sweetalert: {
-      confirmButtonColor: '#ffffff',
-      cancelButtonColor: '#ff7674'
     }
   },
 

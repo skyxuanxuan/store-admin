@@ -19,7 +19,7 @@
 
       <v-spacer />
 
-      <v-menu bottom left>
+      <v-menu v-if="product.productEdit === 1" bottom left>
         <template #activator="{ on, attrs }">
           <v-btn class="d-flex d-sm-none" icon v-bind="attrs" v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
@@ -100,7 +100,11 @@
       </v-menu>
 
       <v-btn
-        v-if="CurrentPageSectionIndex === 0 && sec1ProductEdit"
+        v-if="
+          CurrentPageSectionIndex === 0 &&
+            sec1ProductEdit &&
+            product.productEdit === 1
+        "
         class="d-none d-sm-flex right-10"
         color="brownS1"
         width="140"
@@ -111,7 +115,11 @@
         取消
       </v-btn>
       <v-btn
-        v-if="CurrentPageSectionIndex === 0 && sec1ProductEdit"
+        v-if="
+          CurrentPageSectionIndex === 0 &&
+            sec1ProductEdit &&
+            product.productEdit === 1
+        "
         class="d-none d-sm-flex"
         color="brownS1"
         width="140"
@@ -123,7 +131,11 @@
         儲存
       </v-btn>
       <v-btn
-        v-if="CurrentPageSectionIndex === 0 && !sec1ProductEdit"
+        v-if="
+          CurrentPageSectionIndex === 0 &&
+            !sec1ProductEdit &&
+            product.productEdit === 1
+        "
         class="d-none d-sm-flex"
         color="brownS1"
         width="140"
@@ -135,7 +147,7 @@
       </v-btn>
 
       <v-btn
-        v-if="CurrentPageSectionIndex === 1"
+        v-if="CurrentPageSectionIndex === 1 && product.productEdit === 1"
         class="d-none d-sm-flex"
         color="brownS1"
         width="140"
@@ -147,7 +159,7 @@
       </v-btn>
 
       <v-btn
-        v-if="CurrentPageSectionIndex === 2"
+        v-if="CurrentPageSectionIndex === 2 && product.productEdit === 1"
         class="d-none d-sm-flex right-10"
         color="brownS1"
         width="140"
@@ -158,7 +170,7 @@
         取消
       </v-btn>
       <v-btn
-        v-if="CurrentPageSectionIndex === 2"
+        v-if="CurrentPageSectionIndex === 2 && product.productEdit === 1"
         class="d-none d-sm-flex"
         color="brownS1"
         width="140"
@@ -270,10 +282,19 @@
                           產品基本資料
                         </v-chip>
                       </v-subheader>
-                      <v-row dense class="px-4 py-2">
+                      <v-row dense class="px-4">
                         <v-col cols="12" sm="3" md="2">
-                          <div class="row_title font-weight-medium">
-                            產品名稱
+                          <div class="row_title">
+                            <span>
+                              <v-icon color="brownS1">
+                                mdi-circle-small
+                              </v-icon>
+                            </span>
+                            <span
+                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                            >
+                              產品名稱
+                            </span>
                           </div>
                         </v-col>
                         <v-col cols="12" sm="6">
@@ -282,10 +303,19 @@
                           </div>
                         </v-col>
                       </v-row>
-                      <v-row dense class="px-4 py-2">
+                      <v-row dense class="px-4">
                         <v-col cols="12" sm="3" md="2">
-                          <div class="row_title font-weight-medium">
-                            產品簡介
+                          <div class="row_title">
+                            <span>
+                              <v-icon color="brownS1">
+                                mdi-circle-small
+                              </v-icon>
+                            </span>
+                            <span
+                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                            >
+                              產品簡介
+                            </span>
                           </div>
                         </v-col>
                         <v-col cols="12" sm="6">
@@ -308,21 +338,30 @@
                           md="3"
                           class="align-self-center"
                         >
-                          <div class="row_title font-weight-medium">
-                            是否參與官方優惠活動
-                            <v-tooltip bottom>
-                              <template #activator="{ on, attrs }">
-                                <v-icon
-                                  small
-                                  v-bind="attrs"
-                                  class="pl-2"
-                                  v-on="on"
-                                >
-                                  mdi-information-outline
-                                </v-icon>
-                              </template>
-                              <span> 說明 </span>
-                            </v-tooltip>
+                          <div class="row_title">
+                            <span>
+                              <v-icon color="brownS1">
+                                mdi-circle-small
+                              </v-icon>
+                            </span>
+                            <span
+                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                            >
+                              是否參與官方優惠活動
+                              <v-tooltip bottom>
+                                <template #activator="{ on, attrs }">
+                                  <v-icon
+                                    small
+                                    v-bind="attrs"
+                                    class="pl-2"
+                                    v-on="on"
+                                  >
+                                    mdi-information-outline
+                                  </v-icon>
+                                </template>
+                                <span> 說明 </span>
+                              </v-tooltip>
+                            </span>
                           </div>
                         </v-col>
                         <v-col cols="12" sm="6">
@@ -338,8 +377,17 @@
                       </v-row>
                       <v-row dense class="px-4">
                         <v-col cols="12" sm="3" class="align-self-center">
-                          <div class="row_title font-weight-medium">
-                            產品類型
+                          <div class="row_title">
+                            <span>
+                              <v-icon color="brownS1">
+                                mdi-circle-small
+                              </v-icon>
+                            </span>
+                            <span
+                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                            >
+                              產品類型
+                            </span>
                           </div>
                         </v-col>
                         <v-col cols="12" sm="9">
@@ -365,8 +413,17 @@
                       </v-row>
                       <v-row dense class="px-4">
                         <v-col cols="12" sm="3" md="2">
-                          <div class="row_title font-weight-medium">
-                            產品分類
+                          <div class="row_title">
+                            <span>
+                              <v-icon color="brownS1">
+                                mdi-circle-small
+                              </v-icon>
+                            </span>
+                            <span
+                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                            >
+                              產品分類
+                            </span>
                           </div>
                         </v-col>
                         <v-col cols="12" sm="9">
@@ -393,7 +450,9 @@
                         <v-tooltip bottom>
                           <template #activator="{ on, attrs }">
                             <v-btn
-                              v-show="sec1ProductEdit"
+                              v-show="
+                                sec1ProductEdit && product.productEdit === 1
+                              "
                               color="pink"
                               dark
                               fab
@@ -439,8 +498,18 @@
                               <div
                                 v-if="!sec1ProductEdit || item.edit === 0"
                                 :class="{ need: sec1_edit }"
+                                class="row_title"
                               >
-                                {{ item.title }}
+                                <span>
+                                  <v-icon color="brownS1">
+                                    mdi-circle-small
+                                  </v-icon>
+                                </span>
+                                <span
+                                  class="font-weight-bold font_size1-1 custom-brown1-2--text"
+                                >
+                                  {{ item.title }}
+                                </span>
                               </div>
                               <div v-else>
                                 <v-text-field
@@ -477,7 +546,11 @@
                               <v-tooltip bottom>
                                 <template #activator="{ on, attrs }">
                                   <v-btn
-                                    v-show="sec1ProductEdit && item.edit === 1"
+                                    v-show="
+                                      sec1ProductEdit &&
+                                        product.productEdit === 1 &&
+                                        item.edit === 1
+                                    "
                                     class="mx-2"
                                     fab
                                     x-small
@@ -503,7 +576,9 @@
                               </v-tooltip>
                               <client-only>
                                 <VueEditor
-                                  v-if="sec1ProductEdit"
+                                  v-if="
+                                    sec1ProductEdit && product.productEdit === 1
+                                  "
                                   v-model="item.content"
                                   placeholder="請輸入內文"
                                 />
@@ -1304,7 +1379,10 @@ export default {
   title: '商城票券(逐筆發行) - 編輯產品',
   components: { VueSlickCarousel, DatePicker },
   beforeRouteLeave(to, from, next) {
-    if (this.sec1ProductEdit || this.sec3_edit) {
+    if (
+      (this.sec1ProductEdit || this.sec3_edit) &&
+      this.product.productEdit === 1
+    ) {
       this.$swal
         .fire({
           title: '確定要捨棄編輯嗎？',
@@ -1339,25 +1417,29 @@ export default {
       await store.dispatch('S02/fetchOrdersList')
       const data = await $axios.$get(`S02/product/${id}`)
       if (data.res === 'CODE0000') {
-        const imgUrl = `${process.env.imgUrl}/store/${store.state.userInfo.user.storeId}/products/${data.data.product.productId}/`
-        return {
-          product: data.data.product,
-          imgUrl,
-          introCount: data.data.product.productIntroDTOSet.length,
-          introList: data.data.product.productIntroDTOSet
-            .map((x) => {
-              return {
-                id: x.id.toString(),
-                pkId: x.id,
-                valid: false,
-                title: x.introTitle,
-                content: x.introText,
-                order: x.introOrder,
-                edit: x.introEdit,
-                type: '0'
-              }
-            })
-            .sort((a, b) => a.order - b.order)
+        if (data.data.product.productType === 2) {
+          const imgUrl = `${process.env.imgUrl}/store/${store.state.userInfo.user.storeId}/products/${data.data.product.productId}/`
+          return {
+            product: data.data.product,
+            imgUrl,
+            introCount: data.data.product.productIntroDTOSet.length,
+            introList: data.data.product.productIntroDTOSet
+              .map((x) => {
+                return {
+                  id: x.id.toString(),
+                  pkId: x.id,
+                  valid: false,
+                  title: x.introTitle,
+                  content: x.introText,
+                  order: x.introOrder,
+                  edit: x.introEdit,
+                  type: '0'
+                }
+              })
+              .sort((a, b) => a.order - b.order)
+          }
+        } else {
+          redirect('/S02')
         }
       } else {
         redirect('/S02')
@@ -1499,7 +1581,7 @@ export default {
       return '0px'
     },
     sec1ProductEdit() {
-      return this.sec1_edit && this.product.productEdit === 1
+      return this.sec1_edit
     },
 
     productFiles() {
@@ -1746,9 +1828,10 @@ export default {
                   this.$axios
                     .$get(`S02/product/${submitProductId}`)
                     .then((newData) => {
-                      this.product = newData
-                      this.introCount = newData.productIntroDTOSet.length
-                      this.introList = newData.productIntroDTOSet
+                      this.product = newData.data.product
+                      this.introCount =
+                        newData.data.product.productIntroDTOSet.length
+                      this.introList = newData.data.product.productIntroDTOSet
                         .map((x) => {
                           return {
                             id: x.id.toString(),
@@ -2133,8 +2216,8 @@ export default {
 
       let days = this.newPlanForm.item.p3_d
       if (this.newPlanForm.item.p3 === '1') {
-        if (days === null) {
-          days = 90
+        if (days === null || days.toString() === '0') {
+          days = '-1'
         } else if (parseInt(days) <= 0) {
           this.$swal.fire('小提示', '使用期限不得小於0')
           return
@@ -2147,7 +2230,7 @@ export default {
         p1: this.newPlanForm.item.p1,
         p2: this.newPlanForm.item.p2,
         p3: this.newPlanForm.item.p3,
-        p3_d: days.toString(),
+        p3_d: (days ?? '-1').toString(),
         p3_t: [
           util.dateTime2String(this.newPlanForm.item.p3_t[0]),
           util.dateTime2String(this.newPlanForm.item.p3_t[1])
@@ -2231,10 +2314,7 @@ export default {
   top: -25px;
   background-color: white;
 }
-.need:after {
-  content: '*';
-  color: #f95454;
-}
+
 .row_title {
   align-items: center;
   display: flex;

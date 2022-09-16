@@ -5,16 +5,16 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-app-bar-nav-icon v-bind="attrs" @click="$router.back()" v-on="on">
-            <v-icon>mdi-arrow-left</v-icon>
+            <v-icon color="brownS1">
+              mdi-arrow-left
+            </v-icon>
           </v-app-bar-nav-icon>
         </template>
         <span>上一頁</span>
       </v-tooltip>
 
       <v-toolbar-title class="custom-brown1-2--text">
-        {{
-          title
-        }}
+        {{ title }}
       </v-toolbar-title>
 
       <v-spacer />
@@ -1269,8 +1269,12 @@ export default {
   methods: {
     final_use_time(item) {
       if (item.p3 === '1') {
-        const day = item.p3_d ?? 90
-        return `依購買日起迄 ${day}天`
+        if ((item.p3_d ?? '').toString().length > 0 && (item.p3_d ?? '').toString() !== '0') {
+          const day = item.p3_d
+          return `依購買日起迄 ${day}天`
+        } else {
+          return '無使用期限'
+        }
       } else {
         const sdate = item.p3_t[0]
         const edate = item.p3_t[1]
@@ -1592,20 +1596,23 @@ export default {
         }
       })
 
+      let checkS3 = true
       const s3 = {}
       const initS3Arr = []
       this.step3_form.pArr.forEach((item) => {
         let days = item.p3_d
         if (item.p3 === '1') {
-          if (days === null || days === 0) {
-            days = -1
+          if (days === null || days.toString() === '0') {
+            days = '-1'
+          } else if (parseInt(days) <= 0) {
+            checkS3 = false
           }
         }
         initS3Arr.push({
           p1: item.p1,
           p2: item.p2,
           p3: item.p3,
-          p3_d: days.toString(),
+          p3_d: (days ?? '-1').toString(),
           p3_t: [
             util.dateTime2String(item.p3_t[0]),
             util.dateTime2String(item.p3_t[1])
@@ -1620,6 +1627,11 @@ export default {
           p8: item.p8_sw ? item.p8.toString() : '20'
         })
       })
+      if (!checkS3) {
+        this.$swal.fire('小提示', '使用期限不得小於0')
+        return
+      }
+
       s3.pArr = initS3Arr
 
       const form = {}
@@ -1726,10 +1738,7 @@ export default {
   top: -25px;
   background-color: white;
 }
-.need:after {
-  content: '*';
-  color: #f95454;
-}
+
 .row_title {
   align-items: center;
   display: flex;
@@ -1746,8 +1755,7 @@ export default {
 
 .border_error {
   border: thin solid #f95454;
-  border-radius: inherit;
-  border-radius: inherit;
+  border-radius: 20px;
 }
 
 .font_size1-1 {
