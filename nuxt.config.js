@@ -28,10 +28,10 @@ export default {
     imgUrl: process.env.IMAGE_URL || 'http://localhost:8080/resources'
   },
 
-  server: {
-    host: '0.0.0.0',
-    port: '3000'
-  },
+  // server: {
+  //   host: '0.0.0.0',
+  //   port: '3000'
+  // },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -39,6 +39,7 @@ export default {
     '~/plugins/md5.js',
     '~/plugins/axios',
     '~/plugins/filters', // 全局過濾器
+    // { src: '~/plugins/firebase', ssr: false }, // firebase
     { src: '~/plugins/notifications-ssr', ssr: true },
     { src: '~/plugins/notifications-client', ssr: false },
     { src: '~plugins/leaflet.js', ssr: false }
@@ -74,8 +75,28 @@ export default {
     '@nuxtjs/proxy',
     '@nuxtjs/auth-next',
     'vue-sweetalert2/nuxt',
-    'vue2-editor/nuxt'
+    'vue2-editor/nuxt',
+    [
+      '@nuxtjs/firebase',
+      {
+        config: {
+          apiKey: 'AIzaSyA4Xumu_yNdH13ZAX4PjS2tc3nGiJ7Ww14',
+          authDomain: 'spc-test-b345a.firebaseapp.com',
+          projectId: 'spc-test-b345a',
+          storageBucket: 'spc-test-b345a.appspot.com',
+          messagingSenderId: '407295619258',
+          appId: '1:407295619258:web:8eda3f05d6bc8b27351283',
+          measurementId: 'G-TLQNQ2ZLBM'
+        },
+        services: {
+          messaging: {
+            createServiceWorker: false
+          }
+        }
+      }
+    ]
   ],
+
   sweetalert: {
     confirmButtonColor: '#587FFF',
     cancelButtonColor: '#EF6969'
@@ -83,7 +104,7 @@ export default {
 
   auth: {
     strategies: {
-      local: {
+      localRefresh: {
         scheme: 'refresh',
         token: {
           property: 'accessToken',
@@ -131,7 +152,7 @@ export default {
 
   proxy: {
     '/api/store': {
-      target: 'http://localhost:8080',
+      target: process.env.BACKAND,
       pathRewrite: {
         '^/api/store': '/api/store'
       }

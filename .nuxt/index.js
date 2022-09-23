@@ -15,6 +15,7 @@ import { createStore } from './store.js'
 
 import nuxt_plugin_plugin_32dcb868 from 'nuxt_plugin_plugin_32dcb868' // Source: .\\components\\plugin.js (mode: 'all')
 import nuxt_plugin_plugin_387ce8b0 from 'nuxt_plugin_plugin_387ce8b0' // Source: .\\vuetify\\plugin.js (mode: 'all')
+import nuxt_plugin_index_79f7e4a8 from 'nuxt_plugin_index_79f7e4a8' // Source: .\\firebase\\index.js (mode: 'all')
 import nuxt_plugin_vue2editor_3eb49412 from 'nuxt_plugin_vue2editor_3eb49412' // Source: .\\vue2-editor.js (mode: 'client')
 import nuxt_plugin_vuesweetalert2_654b2cc6 from 'nuxt_plugin_vuesweetalert2_654b2cc6' // Source: .\\vue-sweetalert2.js (mode: 'client')
 import nuxt_plugin_workbox_61451f4b from 'nuxt_plugin_workbox_61451f4b' // Source: .\\workbox.js (mode: 'client')
@@ -231,6 +232,10 @@ async function createApp(ssrContext, config = {}) {
 
   if (typeof nuxt_plugin_plugin_387ce8b0 === 'function') {
     await nuxt_plugin_plugin_387ce8b0(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_index_79f7e4a8 === 'function') {
+    await nuxt_plugin_index_79f7e4a8(app.context, inject)
   }
 
   if (process.client && typeof nuxt_plugin_vue2editor_3eb49412 === 'function') {

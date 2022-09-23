@@ -74,9 +74,7 @@
 
                           <v-list-item-content>
                             <v-list-item-title>
-                              {{
-                                item.text
-                              }}
+                              {{ item.text }}
                             </v-list-item-title>
                           </v-list-item-content>
                         </template>
@@ -412,7 +410,10 @@ export default {
       return arr
     },
     sec1_data_list() {
-      const orderDetailFlat = this.orders.map(x => x.orderDetailDTOSet).flat()
+      const orderDetailFlat = this.orders
+        .filter(x => x.status === '1')
+        .map(x => x.orderDetailDTOSet)
+        .flat()
       const initArr = []
       this.products.forEach((item) => {
         const planSet = []

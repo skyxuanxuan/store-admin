@@ -128,11 +128,12 @@
             <v-row class="">
               <v-col>
                 <v-card class="pa-4" rounded="xl">
-                  <v-subheader class="base-color--text border_title">
-                    <v-chip color="brown lighten-3" dark>
-                      產品基本資料
-                    </v-chip>
-                  </v-subheader>
+                  <v-card-title class="custom-brown1-3--text pt-0">
+                    <span
+                      class="title_dash_front"
+                      :class="{ ori: !mobile }"
+                    >產品基本資料</span>
+                  </v-card-title>
                   <v-row dense class="px-4">
                     <v-col cols="12" sm="3" md="2">
                       <div class="row_title">
@@ -335,11 +336,12 @@
                       <span>新增說明</span>
                     </v-tooltip>
 
-                    <v-subheader class="base-color--text border_title">
-                      <v-chip color="brown lighten-3" dark>
-                        產品說明
-                      </v-chip>
-                    </v-subheader>
+                    <v-card-title class="custom-brown1-3--text pt-0">
+                      <span
+                        class="title_dash_front"
+                        :class="{ ori: !mobile }"
+                      >產品說明</span>
+                    </v-card-title>
                     <transition-group name="fadeLeft" tag="div" class="mt-4">
                       <v-row
                         v-for="(item, index) in productIntroFilter"

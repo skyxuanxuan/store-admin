@@ -31,7 +31,7 @@ export default function (ctx, inject) {
     }
   },
   "localStorage": false,
-  "defaultStrategy": "local",
+  "defaultStrategy": "localRefresh",
   "autoLogout": true
 }
 
@@ -39,8 +39,8 @@ export default function (ctx, inject) {
   const $auth = new Auth(ctx, options)
 
   // Register strategies
-  // local
-  $auth.registerStrategy('local', new RefreshScheme($auth, {
+  // localRefresh
+  $auth.registerStrategy('localRefresh', new RefreshScheme($auth, {
   "token": {
     "property": "accessToken",
     "global": true,
@@ -70,7 +70,7 @@ export default function (ctx, inject) {
     },
     "user": false
   },
-  "name": "local"
+  "name": "localRefresh"
 }))
 
   // Inject it to nuxt context as $auth

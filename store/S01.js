@@ -10,6 +10,9 @@ export const state = () => ({
 })
 
 export const getters = {
+  getOrders: (state) => {
+    return state.orders
+  },
   getBulkList: (state) => {
     const initArray = []
     state.bulkList.forEach((item, index) => {
@@ -140,6 +143,15 @@ export const actions = {
       const data = await this.$axios.$get('S01/apply')
       commit('initbulkList', data.data.resultList)
       commit('initAmount', data.data.amount)
+    } catch (err) {}
+  },
+
+  async fetchS01({ commit }) {
+    try {
+      const data = await this.$axios.$get('S01/load')
+      commit('initProductList', data.data.products)
+      commit('initOrderList', data.data.orders)
+      commit('initBulkTicketsList', data.data.bulkTickets)
     } catch (err) {}
   },
 

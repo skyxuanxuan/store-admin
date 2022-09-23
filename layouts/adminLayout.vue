@@ -99,26 +99,13 @@ export default {
       drawer: true,
 
       selectedItem: 0,
-      items: [
-        { text: '首頁', icon: 'mdi-home-outline', to: '/' },
-        {
-          text: '門市票券(整批發行)',
-          icon: 'mdi-storefront-outline',
-          to: '/S01'
-        },
-        { text: '商城票券(逐筆發行)', icon: 'mdi-cloud-outline', to: '/S02' },
-        { text: '店家資訊', icon: 'mdi-book-open-variant', to: '/S03' },
-        { text: '訂單', icon: 'mdi-sticker-text-outline', to: '/S04' },
-        { text: '報告', icon: 'mdi-poll', to: '/S05' },
-        { text: '通知中心', icon: 'mdi-bell-outline', to: '/S06' },
-        { text: '操作權限', icon: 'mdi-account-multiple', to: '/S07' }
-      ],
       miniVariant: false
     }
   },
   computed: {
     ...mapGetters({
-      userInfo: 'userInfo/getUserInfo'
+      userInfo: 'userInfo/getUserInfo',
+      items: 'userInfo/getFuncs'
     })
   },
 
@@ -128,6 +115,28 @@ export default {
 
   mounted() {
     this.showHideSpinner = false
+
+    const pToken = this.userInfo.pToken
+    this.$fire.messaging.getToken().then((token) => {
+      if (pToken !== token) {
+        const form = new FormData()
+        form.append('token', token)
+        this.$axios.put('/auth/p-token', form)
+        this.$store.dispatch('userInfo/updatePToken', token)
+      }
+    })
+
+    this.$fire.messaging.onMessage((payload) => {
+      const title = payload.notification.title ?? '小提示'
+      const text = payload.notification.body ?? ''
+      const type = payload.data.type ?? 'success'
+      this.$notify({
+        title,
+        text,
+        type,
+        duration: 5000
+      })
+    })
   },
 
   methods: {

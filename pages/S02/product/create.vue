@@ -58,11 +58,12 @@
                   <v-row class="">
                     <v-col>
                       <v-card class="pa-4" rounded="xl">
-                        <v-subheader class="base-color--text border_title">
-                          <v-chip color="brown lighten-3" dark>
-                            產品基本資料
-                          </v-chip>
-                        </v-subheader>
+                        <v-card-title class="custom-brown1-3--text pt-0">
+                          <span
+                            class="title_dash_front"
+                            :class="{ ori: !mobile }"
+                          >產品基本資料</span>
+                        </v-card-title>
                         <v-row dense class="px-4 py-2">
                           <v-col cols="12" sm="3" md="2">
                             <div class="row_title font-weight-medium need">
@@ -260,11 +261,12 @@
                           <span>新增說明</span>
                         </v-tooltip>
 
-                        <v-subheader class="base-color--text border_title">
-                          <v-chip color="brown lighten-3" dark>
-                            產品說明
-                          </v-chip>
-                        </v-subheader>
+                        <v-card-title class="custom-brown1-3--text pt-0">
+                          <span
+                            class="title_dash_front"
+                            :class="{ ori: !mobile }"
+                          >產品說明</span>
+                        </v-card-title>
                         <v-row
                           v-for="item in step1_form.infoArr"
                           :key="item.id"
@@ -275,9 +277,8 @@
                             cols="12"
                             sm="3"
                             md="2"
-                            class="align-self-start pb-0"
                           >
-                            <div class="need">
+                            <div class="row_title font-weight-medium need">
                               {{ item.title }}
                             </div>
                             <v-scroll-y-transition>
@@ -505,11 +506,12 @@
                           </template>
                           <span>刪除</span>
                         </v-tooltip>
-                        <v-subheader class="base-color--text border_title">
-                          <v-chip color="brown lighten-3" dark>
-                            方案 {{ index + 1 }}
-                          </v-chip>
-                        </v-subheader>
+                        <v-card-title class="custom-brown1-3--text pt-0">
+                          <span
+                            class="title_dash_front"
+                            :class="{ ori: !mobile }"
+                          >方案 {{ index + 1 }}</span>
+                        </v-card-title>
                         <v-row dense class="px-4 py-2">
                           <v-col cols="12" sm="3" md="2">
                             <div class="row_title font-weight-medium need">
@@ -945,17 +947,17 @@
                     </v-col>
                   </v-row>
                   <v-row dense class="border_bottom">
-                    <v-col cols="12" md="2">
-                      <span>
+                    <v-col cols="12" md="2" style="display: flex;">
+                      <div>
                         <v-icon style="top: -3px" color="brownS1">
                           mdi-pound
                         </v-icon>
-                      </span>
-                      <span
+                      </div>
+                      <div
                         class="text-subtitle-1 font-weight-bold font_size1-1 custom-brown1-2--text"
                       >
                         是否參與官方優惠活動
-                      </span>
+                      </div>
                     </v-col>
                     <v-col cols="12" md="10" class="text-subtitle-1">
                       <div class="px-2">
@@ -1269,7 +1271,10 @@ export default {
   methods: {
     final_use_time(item) {
       if (item.p3 === '1') {
-        if ((item.p3_d ?? '').toString().length > 0 && (item.p3_d ?? '').toString() !== '0') {
+        if (
+          (item.p3_d ?? '').toString().length > 0 &&
+          (item.p3_d ?? '').toString() !== '0'
+        ) {
           const day = item.p3_d
           return `依購買日起迄 ${day}天`
         } else {

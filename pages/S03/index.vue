@@ -28,30 +28,45 @@
         rounded
         :dark="storeValid"
         :disabled="!storeValid"
-        @click="sec1Modify"
+        @click="sec1ModifySubmit"
       >
         儲存
       </v-btn>
     </v-app-bar>
-    <div class="ma-4 mt-8">
+    <div class="ma-4">
       <v-card
         max-width="1150"
         flat
         color="transparent"
         style="margin: 0 auto; margin-bottom: 64px"
       >
-        <v-card class="mt-2" flat color="transparent">
-          <v-container>
+        <v-card :class="{ 'mt-2': !mobile }" flat color="transparent">
+          <v-container :class="{ 'pa-0': mobile }">
             <v-form ref="modifyForm" v-model="storeValid">
               <v-row class="">
                 <v-col>
-                  <v-card class="pa-4" rounded="xl">
-                    <v-subheader class="base-color--text border_title">
+                  <v-card
+                    class="cus_ui_card py-4"
+                    :class="{'mt-4': !mobile}"
+                    :flat="mobile"
+                    :rounded="!mobile ? 'xl' : ''"
+                  >
+                    <v-subheader
+                      v-if="!mobile"
+                      class="base-color--text border_title"
+                    >
                       <v-chip color="brown lighten-3" dark>
-                        店家基本資料
+                        產品基本資料
                       </v-chip>
                     </v-subheader>
-                    <v-card v-if="mobile" flat class="cus_mobile_card">
+
+                    <v-card-title
+                      v-if="mobile"
+                      class="custom-brown1-3--text pt-0"
+                    >
+                      <span class="master_title">產品基本資料</span>
+                    </v-card-title>
+                    <v-card v-if="mobile" flat class="cus_mobile_card" :class="{'mobile': mobile}">
                       <v-card flat class="mx-auto">
                         <v-img
                           max-height="60"
@@ -74,7 +89,7 @@
                           </template>
                         </v-img>
                         <v-card-title
-                          class="justify-center text-h6 custom-brown2-3--text"
+                          class="justify-center text-h6 custom-brown2-3--text py-2"
                         >
                           Logo
                         </v-card-title>
@@ -428,14 +443,28 @@
               </v-row>
               <v-row class="mt-8">
                 <v-col>
-                  <v-card class="pa-4" rounded="xl">
-                    <v-subheader class="base-color--text border_title">
+                  <v-card
+                    class="cus_ui_card py-4"
+                    :flat="mobile"
+                    :rounded="!mobile ? 'xl' : ''"
+                  >
+                    <v-subheader
+                      v-if="!mobile"
+                      class="base-color--text border_title"
+                    >
                       <v-chip color="brown lighten-3" dark>
                         店家位置
                       </v-chip>
                     </v-subheader>
+
+                    <v-card-title
+                      v-if="mobile"
+                      class="custom-brown1-3--text pt-0"
+                    >
+                      <span class="master_title">店家位置</span>
+                    </v-card-title>
                     <!-- Mobile -->
-                    <v-card v-if="mobile" flat class="cus_mobile_card">
+                    <v-card v-if="mobile" flat class="cus_mobile_card" :class="{'mobile': mobile}">
                       <div class="cus_mobile_card_row">
                         <div class="cus_mobile_card_header">
                           縣市
@@ -816,7 +845,7 @@
 
                     <v-card
                       v-if="businessGPS !== null && !storeEdit"
-                      class="mt-8"
+                      class="ma-2 mt-8"
                       :class="{ 'px-12': !mobile }"
                       flat
                     >
@@ -1046,7 +1075,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.storeInfo)
     // 等地圖創建後執行
     this.$nextTick(() => {})
   },
@@ -1121,6 +1149,78 @@ export default {
             this.storeEdit = false
           }
         })
+    },
+    sec1ModifySubmit() {
+      const title = '確定要修改嗎'
+      const content = ''
+      this.$swal
+        .fire({
+          title,
+          html: content,
+          icon: 'warning',
+          showCancelButton: true,
+          cancelButtonText: '取消',
+          confirmButtonText: '確定',
+          reverseButtons: true,
+          showClass: {
+            popup: '',
+            backdrop: 'swal2-backdrop-show',
+            icon: 'swal2-icon-show'
+          }
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.loading(true)
+
+            let d9 = ''
+            if (
+              (this.modifyObj.d9[0] ?? '').length > 0 ||
+              (this.modifyObj.d9[1] ?? '').length > 0
+            ) {
+              d9 = this.modifyObj.d9.join(';')
+            }
+
+            const form = {}
+            form.d1 = this.modifyObj.d1
+            form.d2 = this.modifyObj.d2
+            form.d3 = this.modifyObj.d3
+            form.d4 = this.modifyObj.d4
+            form.d5 = this.modifyObj.d5.id
+            form.d6 = this.modifyObj.d6.id
+            form.d7 = this.modifyObj.d7
+            form.d8 = this.modifyObj.d8
+            form.d9 = d9
+            form.d10 = this.modifyObj.d10
+
+            this.$axios
+              .put('/S03/store', form)
+              .then((response) => {
+                const data = response.data
+                if (data.res === 'CODE0000') {
+                  this.$swal.fire('小提示', '修改成功', 'success')
+                  this.$store.dispatch('S03/fetchStore').then(() => {
+                    this.storeInfo = this.$store.state.S03.storeInfo
+                    this.storeEdit = false
+                  })
+                } else {
+                  this.$swal.fire('小提示', data.msg, 'error')
+                }
+                this.$nextTick(() => {
+                  this.loading(false)
+                })
+              })
+              .catch((err) => {
+                this.loading(false)
+                this.$notify({
+                  title: '小提示',
+                  text: '網路連線異常',
+                  type: 'error',
+                  duration: 2000
+                })
+                console.log(err)
+              })
+          }
+        })
     }
   }
 }
@@ -1187,45 +1287,6 @@ export default {
 
 .col_min_long_width {
   min-width: 250px;
-}
-
-.cus_mobile_card {
-  margin: 0.25rem;
-  margin-top: 1rem;
-
-  .cus_mobile_card_row {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    word-break: break-all;
-
-    .cus_mobile_card_header {
-      min-width: 95px;
-      font-size: 1rem;
-      font-weight: bold !important;
-      padding-right: 16px;
-      color: $store_admin_brown_s1_l2 !important;
-      caret-color: $store_admin_brown_s1_l2 !important;
-    }
-
-    .cus_mobile_card_cell {
-      text-align: right;
-      font-weight: 300;
-    }
-  }
-
-  .flex_col {
-    flex-direction: column;
-
-    div {
-      margin-top: 5px;
-    }
-  }
-}
-
-.cus_mobile_card_row + .cus_mobile_card_row {
-  margin-top: 15px;
 }
 
 .cus_map_mobile {

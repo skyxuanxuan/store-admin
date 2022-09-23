@@ -1,7 +1,8 @@
 export const state = () => ({
   classes: [],
   cities: [],
-  towns: []
+  towns: [],
+  payKind: null
 })
 
 export const getters = {
@@ -44,6 +45,9 @@ export const mutations = {
   },
   inittowns(state, value) {
     state.towns = value
+  },
+  initPayKind(state, value) {
+    state.payKind = value
   }
 }
 
@@ -54,6 +58,7 @@ export const actions = {
       commit('initClasses', data.classes)
       commit('initcities', data.cities)
       commit('inittowns', data.towns)
+      commit('initPayKind', data.payKind)
     } catch (err) {}
   }
 }

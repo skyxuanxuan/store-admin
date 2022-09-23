@@ -9,55 +9,27 @@
 
       <v-spacer />
 
-      <v-menu bottom left>
-        <template #activator="{ on, attrs }">
-          <v-btn class="d-flex d-sm-none" icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item-group>
-            <v-list-item nuxt to="/S01/product/create">
-              <v-list-item-icon>
-                <v-icon>mdi-plus</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>建立產品</v-list-item-title>
-            </v-list-item>
-            <v-list-item nuxt to="/S01/apply">
-              <v-list-item-icon>
-                <v-icon>mdi-file-plus</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>申請空白票券</v-list-item-title>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-menu>
-
-      <v-btn
-        class="d-none d-sm-flex right-10"
-        color="brownS1"
-        width="140"
-        rounded
-        dark
-        nuxt
-        to="/S01/apply"
-      >
-        票券庫
-      </v-btn>
+      <template #extension>
+        <v-tabs
+          v-model="CurrentPageSectionIndex"
+          color="brownS1"
+          align-with-title
+        >
+          <v-tabs-slider color="greenS1" />
+          <v-tab class="custom-green-1--text">
+            產品列表
+          </v-tab>
+        </v-tabs>
+      </template>
     </v-app-bar>
     <div class="pa-4">
-      <v-tabs-items
-        v-model="CurrentPageSectionIndex"
-        :class="{ none: loadingStatus }"
-      >
+      <v-tabs-items v-model="CurrentPageSectionIndex">
         <v-tab-item class="background-color">
-          <PageStatisticCard :items="pageStatisticCardItems" />
-
           <v-container class="mt-2 pa-3">
             <v-card flat class="pa-2">
               <v-toolbar dense flat>
                 <v-text-field
+                  v-model="sec1_search"
                   class="searchInput top-15"
                   label="Search"
                   outlined
@@ -70,8 +42,8 @@
                       class="left-10"
                       outlined
                       width="80"
-                      style="top: 2px"
                       v-bind="attrs"
+                      style="top: 2px"
                       v-on="on"
                     >
                       顯示
@@ -85,7 +57,7 @@
                       >
                         <template #default="{ active }">
                           <v-list-item-action>
-                            <v-checkbox :input-value="active" color="primary" />
+                            <v-checkbox :input-value="active" color="greenS1" />
                           </v-list-item-action>
 
                           <v-list-item-content>
@@ -100,22 +72,9 @@
                 </v-menu>
 
                 <v-spacer />
-
-                <v-btn
-                  class="right-10 d-none d-sm-flex"
-                  width="160"
-                  dark
-                  color="brownS1"
-                  rounded
-                  nuxt
-                  to="/S01/product/create"
-                >
-                  建立產品
-                </v-btn>
               </v-toolbar>
               <div>
                 <v-data-table
-                  mobile-breakpoint="770"
                   :headers="sec1_showHeaders"
                   :items="sec1_data_list"
                   :items-per-page="10"
@@ -141,15 +100,15 @@
                           x-small
                           v-bind="attrs"
                           nuxt
-                          :to="'/S01/product/' + item.d0"
+                          :to="'/S00/send/' + item.d0"
                           v-on="on"
                         >
-                          <v-icon color="brownS1">
-                            mdi-open-in-new
+                          <v-icon color="other2">
+                            mdi-send
                           </v-icon>
                         </v-btn>
                       </template>
-                      <span>詳細資料</span>
+                      <span>發送票券</span>
                     </v-tooltip>
                   </template>
                 </v-data-table>
@@ -174,28 +133,34 @@
 <script>
 // import util from '~/assets/js/util'
 import MyWaiting from '~/components/MyWaiting.vue'
-import PageStatisticCard from '~/components/PageStatisticCard.vue'
 import ToTop from '~/components/ToTop.vue'
 
 export default {
   name: 'IndexPage',
-  title: '門市票券(整批發行)',
-  components: { PageStatisticCard, ToTop, MyWaiting },
+  title: '發送票券',
+  components: { ToTop, MyWaiting },
   layout: 'adminLayout',
-  async asyncData({ store }) {
-    await store.dispatch('S01/fetchS01')
+  async asyncData({ store, redirect }) {
+    const permission = await store.dispatch('userInfo/fetchPermission', 'S00')
+    if (permission >= 2) {
+      await store.dispatch('S01/fetchS01')
+    } else {
+      console.log('Permission deny')
+      redirect('/')
+    }
   },
   data() {
     return {
       loadingStatus: false,
       CurrentPageSectionIndex: 0,
-      title: '門市票券(整批發行)',
-
-      display_settings: [0, 1, 2, 3, 4, 5, 6],
+      title: '發送票券',
+      xxs: false,
 
       productClasses: this.$store.getters['basic/getClasses'],
       products: this.$store.state.S01.productsList,
       orders: this.$store.state.S01.orders,
+
+      display_settings: [0, 1, 2, 3, 4, 5, 6],
 
       /* Table1 */
       sec1_table_header: [
@@ -242,37 +207,22 @@ export default {
       ],
       sec1_search: '',
       sec1_table_page: 1,
-      sec1_table_page_count: 0
+      sec1_table_page_count: 0,
+
+      rules: {
+        length: len => v => (v || '').length <= len || `長度不得超過 ${len}`,
+        required: v => !!v || '此欄位為必填'
+      }
     }
   },
   computed: {
-    pageStatisticCardItems() {
-      return [
-        {
-          title: '門市架上產品 (個)',
-          value: this.$store.getters['S01/getProductsNum'],
-          type: 1,
-          icon: 'mdi-store-outline'
-        },
-        {
-          title: '本月銷售票券 (張)',
-          value: this.$store.getters['S01/getSaleNum'],
-          type: 1,
-          icon: 'mdi-ticket-confirmation-outline'
-        },
-        {
-          title: '本月銷售金額 (元)',
-          value: this.$store.getters['S01/getSaleAmt'],
-          type: 2,
-          icon: 'mdi-cash-multiple'
-        },
-        {
-          title: '庫存空白票券 (張)',
-          value: this.$store.getters['S01/getBulkTicketsNum'],
-          type: 1,
-          icon: 'mdi-weather-cloudy'
-        }
-      ]
+    mobile() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return true
+      }
+
+      return false
     },
     sec1_showHeaders() {
       const arr = []
@@ -284,10 +234,7 @@ export default {
       return arr
     },
     sec1_data_list() {
-      const orderDetailFlat = this.orders
-        .filter(x => x.status === 1 || x.status === 9)
-        .map(x => x.orderDetailDTOSet)
-        .flat()
+      const orderDetailFlat = this.orders.map(x => x.orderDetailDTOSet).flat()
 
       const initArr = []
       this.products.forEach((item) => {
@@ -330,10 +277,36 @@ export default {
       return initArr
     }
   },
-  methods: {}
+  mounted() {},
+  methods: {
+    onResize() {
+      if (window.innerWidth < 350) {
+        this.xxs = true
+      } else {
+        this.xxs = false
+      }
+    },
+    loading(flag) {
+      if (flag) {
+        this.loadingStatus = true
+      } else {
+        setTimeout(() => {
+          this.loadingStatus = false
+        }, 500)
+      }
+    },
+
+    sendInit(id) {
+      this.CurrentPageSectionIndex = 1
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
+.background-color {
+  background-color: $store_admin_background_color !important;
+}
+
 .right-10 {
   right: 10px;
 }
@@ -353,5 +326,9 @@ export default {
 .searchInput.v-text-field {
   max-width: 250px;
   width: 250px;
+}
+
+:deep(.dialog-overflow-y) {
+  overflow-y: visible !important;
 }
 </style>

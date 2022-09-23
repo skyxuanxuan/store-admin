@@ -92,18 +92,22 @@ export default {
   computed: {},
   created() {},
   methods: {
-    async userLogin() {
+    userLogin() {
       try {
-        const data = await this.$auth.loginWith('local', {
-          data: this.login
-        })
-        if (data.data.res === 'CODE0000') {
-          await this.$store.dispatch('userInfo/fetchUserInfo')
-          await this.$store.dispatch('basic/fetchBasic')
-        } else {
-          this.$swal.fire('小提示', data.data.msg, 'error')
-        }
+        this.$auth
+          .loginWith('localRefresh', {
+            data: this.login
+          })
+          .then(async (data) => {
+            if (data.data.res === 'CODE0000') {
+              await this.$store.dispatch('userInfo/fetchUserInfo')
+              await this.$store.dispatch('basic/fetchBasic')
+            } else {
+              this.$swal.fire('小提示', data.data.msg, 'error')
+            }
+          })
       } catch (err) {
+        this.$swal.fire('小提示', '網路連線異常', 'error')
       }
     }
   }
