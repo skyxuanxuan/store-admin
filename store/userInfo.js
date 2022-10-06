@@ -7,7 +7,17 @@ export const getters = {
     if (state.user !== null) {
       return state.user
     }
-    return { name: '無', storeId: '', storeNo: '', series: '', pToken: '', storeName: '' }
+    return {
+      name: '無',
+      storeId: '',
+      storeNo: '',
+      series: '',
+      pToken: '',
+      storeName: '',
+      userName: '',
+      userEmail: '',
+      userGroup: ''
+    }
   },
   getFuncs: (state) => {
     const funcArr = [{ text: '首頁', icon: 'mdi-home-outline', to: '/' }]
@@ -21,11 +31,6 @@ export const getters = {
 export const mutations = {
   initInfo(state, info) {
     state.user = info
-  },
-  updateUserPToken(state, token) {
-    state.user = Object.assign(state.user, {
-      pToken: token
-    })
   }
 }
 
@@ -33,13 +38,10 @@ export const actions = {
   async fetchUserInfo({ commit }) {
     try {
       const data = await this.$axios.$get('auth/info')
-      commit('initInfo', data)
+      if (data.res === 'CODE0000') {
+        commit('initInfo', data.data)
+      }
     } catch (err) {}
-  },
-
-  updatePToken({ commit }, token) {
-    console.log(token)
-    commit('updateUserPToken', token)
   },
 
   fetchPermission({ state }, id) {

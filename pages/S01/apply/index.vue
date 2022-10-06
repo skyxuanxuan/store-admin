@@ -439,7 +439,7 @@ const FilePond = vueFilePond(
 )
 
 export default {
-  name: 'IndexPage',
+  name: 'S01Apply',
   title: '門市票券(整批發行) - 申請歷史紀錄',
   components: { ToTop, FilePond },
   layout: 'adminLayout',

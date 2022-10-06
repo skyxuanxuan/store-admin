@@ -44,6 +44,11 @@ $animationDuration: 0.5s;
   caret-color: $store_admin_brown_s1_l3 !important;
 }
 
+.custom-brown2-1 {
+  background-color: $store_admin_brown_s2_l1 !important;
+  border-color: $store_admin_brown_s2_l1 !important;
+}
+
 .custom-brown2-1--text {
   color: $store_admin_brown_s2_l1 !important;
   caret-color: $store_admin_brown_s2_l1 !important;
@@ -187,7 +192,6 @@ body {
       word-break: break-all;
 
       .cus_mobile_card_header {
-        min-width: 95px;
         font-size: 1rem;
         font-weight: bold !important;
         padding-right: 16px;

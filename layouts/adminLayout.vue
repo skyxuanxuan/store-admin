@@ -38,31 +38,25 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-      <div class="pa-2">
-        <v-btn dark block @click="userLogOut">
-          登出
-        </v-btn>
-      </div>
-      <template #append />
+      <template #append>
+        <div class="pa-2">
+          <v-btn v-show="!miniVariant" outlined block nuxt to="/change-password">
+            修改密碼
+          </v-btn>
+          <v-btn v-show="miniVariant" icon block @click="userLogOut">
+            <v-icon>mdi-account-edit</v-icon>
+          </v-btn>
+        </div>
+        <div class="pa-2">
+          <v-btn v-show="!miniVariant" outlined block @click="userLogOut">
+            登出
+          </v-btn>
+          <v-btn v-show="miniVariant" icon block @click="userLogOut">
+            <v-icon>mdi-logout</v-icon>
+          </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
-
-    <!-- <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-    </v-app-bar> -->
 
     <v-main>
       <Nuxt @eventname="drawerChange()" />
@@ -70,22 +64,6 @@
 
     <CustomNotify />
     <!-- Custom template example -->
-
-    <!-- <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer> -->
-    <!-- <v-footer :absolute="!fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer> -->
   </v-app>
 </template>
 
@@ -122,7 +100,6 @@ export default {
         const form = new FormData()
         form.append('token', token)
         this.$axios.put('/auth/p-token', form)
-        this.$store.dispatch('userInfo/updatePToken', token)
       }
     })
 
@@ -156,4 +133,5 @@ export default {
   color: #2196f3 !important;
   caret-color: #2196f3 !important;
 }
+
 </style>

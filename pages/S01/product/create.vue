@@ -842,7 +842,7 @@ import util from '~/assets/js/util'
 import ToTop from '~/components/ToTop.vue'
 
 export default {
-  name: 'IndexPage',
+  name: 'S01ProductCreate',
   title: '門市票券(整批發行) - 新增產品',
   components: { ToTop, DatePicker },
   layout: 'adminLayout',
@@ -1225,8 +1225,8 @@ export default {
                 const data = response.data
                 if (data.res === 'CODE0000') {
                   this.$swal.fire('小提示', data.msg, 'success').then(() => {
-                    this.$router.push({
-                      name: 'S01'
+                    this.$router.replace({
+                      path: '/S01'
                     })
                   })
                 } else {

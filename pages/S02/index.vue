@@ -84,18 +84,6 @@
                 </v-menu>
 
                 <v-spacer />
-
-                <v-btn
-                  class="right-10 d-none d-sm-flex"
-                  width="160"
-                  dark
-                  color="brownS1"
-                  rounded
-                  nuxt
-                  to="/S02/product/create"
-                >
-                  建立產品
-                </v-btn>
               </v-toolbar>
               <div>
                 <v-data-table
@@ -287,6 +275,27 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
+    <v-tooltip top>
+      <template #activator="{ on, attrs }">
+        <v-btn
+          v-scroll="onScroll"
+          fab
+          dark
+          fixed
+          right
+          color="rgb(117, 73, 51, 0.8)"
+          style="transition: bottom 0.5s"
+          :style="{ bottom: (scoller_fab ? 88 : 16) + 'px' }"
+          v-bind="attrs"
+          nuxt
+          to="/S02/product/create"
+          v-on="on"
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </template>
+      <span>新增產品</span>
+    </v-tooltip>
     <to-top />
     <my-waiting :loading="loadingStatus" />
   </div>
@@ -299,7 +308,7 @@ import PageStatisticCard from '~/components/PageStatisticCard.vue'
 import ToTop from '~/components/ToTop.vue'
 
 export default {
-  name: 'IndexPage',
+  name: 'S02',
   title: '商城票券(逐筆發行)',
   components: { PageStatisticCard, ToTop, MyWaiting },
   layout: 'adminLayout',
@@ -312,6 +321,7 @@ export default {
       loadingStatus: false,
       CurrentPageSectionIndex: 0,
       title: '網路票券(逐筆發行)',
+      scoller_fab: false,
 
       display_settings: [0, 1, 2, 3, 4, 5, 6],
 
@@ -414,6 +424,7 @@ export default {
         .filter(x => x.status === '1')
         .map(x => x.orderDetailDTOSet)
         .flat()
+      console.log(orderDetailFlat)
       const initArr = []
       this.products.forEach((item) => {
         const planSet = []
@@ -503,6 +514,13 @@ export default {
       } else {
         this.isMobile = false
       }
+    },
+    onScroll(e) {
+      if (typeof window === 'undefined') {
+        return
+      }
+      const top = window.pageYOffset || e.target.scrollTop || 0
+      this.scoller_fab = top > 20
     },
     getItemId(item) {
       return item.d0 // Must be uid of record (would be nice if v-data-table exposed a "getItemKey" method)

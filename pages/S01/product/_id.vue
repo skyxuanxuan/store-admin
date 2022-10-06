@@ -468,7 +468,7 @@ import util from '~/assets/js/util'
 
 const integerRegex = /[^0-9]/
 export default {
-  name: 'IndexPage',
+  name: 'S01ProductID',
   title: '商城票券(逐筆發行) - 編輯產品',
   beforeRouteLeave(to, from, next) {
     if (

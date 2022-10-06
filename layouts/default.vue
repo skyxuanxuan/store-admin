@@ -1,5 +1,8 @@
 <template>
   <v-app>
+    <v-fade-transition>
+      <MyLoading v-if="showHideSpinner" />
+    </v-fade-transition>
     <v-main>
       <Nuxt />
     </v-main>
@@ -10,12 +13,19 @@
 export default {
   name: 'DefaultLayout',
   data() {
-    return {}
+    return {
+      showHideSpinner: true
+    }
   },
   computed: {},
+  beforeCreate() {
+    this.showHideSpinner = true
+  },
   created() {},
 
-  mounted() {},
+  mounted() {
+    this.showHideSpinner = false
+  },
   methods: {}
 }
 </script>

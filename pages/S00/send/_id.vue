@@ -144,7 +144,7 @@
                         >
                           <template #append-outer>
                             <v-btn
-                              color="#7B6456"
+                              color="#aa998f"
                               dark
                               fab
                               x-small
@@ -156,7 +156,7 @@
 
                           <template #prepend>
                             <v-btn
-                              color="#7B6456"
+                              color="#aa998f"
                               dark
                               fab
                               x-small
@@ -264,7 +264,7 @@
 
 <script>
 export default {
-  name: 'IndexPage',
+  name: 'S00Send',
   title: '門市票券(發送票券)',
   layout: 'adminLayout',
 
@@ -462,29 +462,31 @@ export default {
 
       const title = '確定要發送票券嗎'
       const content = `
-      <div style="align-items: flex-start;
-                  display: flex;
-                  justify-content: space-between;
-                  word-break: break-all;">
-        <div style="padding-right: 20px; min-width: 110px; text-align: right;">產品名稱</div>
-        <div style="padding-top: 2px; width: 100%; text-align: left;">${this.productDetail.name}</div>
+      <div style="margin: 0 10%;">
+        <div style="align-items: flex-start;
+                    display: flex;
+                    justify-content: space-between;
+                    word-break: break-all;">
+          <div style="padding-right: 20px; min-width: 110px; text-align: left;">產品名稱</div>
+          <div style="padding-top: 2px; text-align: left;">${this.productDetail.name}</div>
+        </div>
+        <div style="align-items: flex-start;
+                    display: flex;
+                    justify-content: space-between;
+                    word-break: break-all;">
+          <div style="padding-right: 20px; min-width: 110px; text-align: left;">手機號碼</div>
+          <div style="padding-top: 2px; text-align: left;">${this.send_order_tel}</div>
+        </div>
+        <div style="align-items: flex-start;
+                    display: flex;
+                    justify-content: space-between;
+                    word-break: break-all;">
+          <div style="padding-right: 20px; min-width: 110px; text-align: left;">數量</div>
+          <div style="padding-top: 2px; text-align: left;">${this.send_order_num}</div>
+        </div>
+        <br>
+        <div>確定要發送嗎？</div>
       </div>
-      <div style="align-items: flex-start;
-                  display: flex;
-                  justify-content: space-between;
-                  word-break: break-all;">
-        <div style="padding-right: 20px; min-width: 110px; text-align: right;">手機號碼</div>
-        <div style="padding-top: 2px; width: 100%; text-align: left;">${this.send_order_tel}</div>
-      </div>
-      <div style="align-items: flex-start;
-                  display: flex;
-                  justify-content: space-between;
-                  word-break: break-all;">
-        <div style="padding-right: 20px; min-width: 110px; text-align: right;">數量</div>
-        <div style="padding-top: 2px; width: 100%; text-align: left;">${this.send_order_num}</div>
-      </div>
-      <br>
-      <div>確定要發送嗎？</div>
       `
       this.$swal
         .fire({
@@ -525,7 +527,7 @@ export default {
                     )
                     .then(() => {
                       this.$router.push({
-                        name: 'S00'
+                        name: 'S04'
                       })
                     })
                 } else {

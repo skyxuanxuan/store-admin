@@ -2,7 +2,8 @@ export const state = () => ({
   classes: [],
   cities: [],
   towns: [],
-  payKind: null
+  payKind: null,
+  orderLog: null
 })
 
 export const getters = {
@@ -48,6 +49,9 @@ export const mutations = {
   },
   initPayKind(state, value) {
     state.payKind = value
+  },
+  initOrderLog(state, value) {
+    state.orderLog = value
   }
 }
 
@@ -59,6 +63,7 @@ export const actions = {
       commit('initcities', data.cities)
       commit('inittowns', data.towns)
       commit('initPayKind', data.payKind)
+      commit('initOrderLog', data.param.orderlog)
     } catch (err) {}
   }
 }

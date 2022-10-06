@@ -90,9 +90,9 @@ export const getters = {
   getSaleNum: (state) => {
     let saleNum = 0
     const nDate = new Date()
-    state.orders.filter(x => x.status === '1').forEach((item) => {
-      if (item.payTime.length > 0) {
-        const payDate = new Date(util.formatTimeMinus(item.payTime))
+    state.orders.filter(x => x.status === '1' || x.status === '9' || x.status === 'A').forEach((item) => {
+      if (item.createTime.length > 0) {
+        const payDate = new Date(util.formatTimeMinus(item.createTime))
         if (nDate.getFullYear() === payDate.getFullYear() && nDate.getMonth() === payDate.getMonth()) {
           saleNum += item.totalNum
         }
@@ -103,9 +103,9 @@ export const getters = {
   getSaleAmt: (state) => {
     let saleAmt = 0
     const nDate = new Date()
-    state.orders.filter(x => x.status === '1').forEach((item) => {
-      if (item.payTime.length > 0) {
-        const payDate = new Date(util.formatTimeMinus(item.payTime))
+    state.orders.filter(x => x.status === '1' || x.status === '9' || x.status === 'A').forEach((item) => {
+      if (item.createTime.length > 0) {
+        const payDate = new Date(util.formatTimeMinus(item.createTime))
         if (nDate.getFullYear() === payDate.getFullYear() && nDate.getMonth() === payDate.getMonth()) {
           saleAmt += item.totalAmt
         }

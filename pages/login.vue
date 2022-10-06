@@ -52,6 +52,12 @@
               @click:append="showPwd = !showPwd"
             />
           </v-col>
+          <!-- <v-col class="py-0 text-right">
+            <v-spacer />
+            <nuxt-link to="/change-pw" class="modify-pass">
+              修改密碼
+            </nuxt-link>
+          </v-col> -->
           <v-col>
             <v-btn
               type="submit"
@@ -101,10 +107,12 @@ export default {
           .then(async (data) => {
             if (data.data.res === 'CODE0000') {
               await this.$store.dispatch('userInfo/fetchUserInfo')
-              await this.$store.dispatch('basic/fetchBasic')
             } else {
               this.$swal.fire('小提示', data.data.msg, 'error')
             }
+          })
+          .catch(() => {
+            this.$swal.fire('小提示', '網路連線異常', 'error')
           })
       } catch (err) {
         this.$swal.fire('小提示', '網路連線異常', 'error')
@@ -113,3 +121,23 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.glass-effect {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(13.2px);
+  -webkit-backdrop-filter: blur(13.2px);
+}
+
+.modify-pass {
+  transition: color 0.5s;
+  text-decoration: none;
+  color: #bdbdbd;
+  font-size: 0.75rem;
+}
+
+.modify-pass:hover {
+  color: #212121 !important;
+}
+</style>

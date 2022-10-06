@@ -273,11 +273,7 @@
                           class="px-4 py-2 border_bottom"
                           :class="{ border_error: item.valid }"
                         >
-                          <v-col
-                            cols="12"
-                            sm="3"
-                            md="2"
-                          >
+                          <v-col cols="12" sm="3" md="2">
                             <div class="row_title font-weight-medium need">
                               {{ item.title }}
                             </div>
@@ -947,7 +943,7 @@
                     </v-col>
                   </v-row>
                   <v-row dense class="border_bottom">
-                    <v-col cols="12" md="2" style="display: flex;">
+                    <v-col cols="12" md="2" style="display: flex">
                       <div>
                         <v-icon style="top: -3px" color="brownS1">
                           mdi-pound
@@ -1159,7 +1155,7 @@ import ToTop from '~/components/ToTop.vue'
 
 const integerRegex = /[^0-9]/
 export default {
-  name: 'IndexPage',
+  name: 'S02ProductCreate',
   title: '商城票券(逐筆發行) - 新增產品',
   components: { ToTop, DatePicker },
   layout: 'adminLayout',
@@ -1687,8 +1683,8 @@ export default {
                   this.$swal
                     .fire('小提示', '產品新增成功', 'success')
                     .then((result) => {
-                      this.$router.push({
-                        name: 'S02'
+                      this.$router.replace({
+                        path: '/S02'
                       })
                     })
                 } else {

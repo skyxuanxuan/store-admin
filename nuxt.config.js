@@ -103,6 +103,7 @@ export default {
   },
 
   auth: {
+    plugins: [{ src: '~/plugins/axios', ssr: true }, '~/plugins/auth.js'],
     strategies: {
       localRefresh: {
         scheme: 'refresh',

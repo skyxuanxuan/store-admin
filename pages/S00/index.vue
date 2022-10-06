@@ -136,7 +136,7 @@ import MyWaiting from '~/components/MyWaiting.vue'
 import ToTop from '~/components/ToTop.vue'
 
 export default {
-  name: 'IndexPage',
+  name: 'S00',
   title: '發送票券',
   components: { ToTop, MyWaiting },
   layout: 'adminLayout',

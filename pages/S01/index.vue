@@ -18,17 +18,11 @@
 
         <v-list>
           <v-list-item-group>
-            <v-list-item nuxt to="/S01/product/create">
-              <v-list-item-icon>
-                <v-icon>mdi-plus</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>建立產品</v-list-item-title>
-            </v-list-item>
             <v-list-item nuxt to="/S01/apply">
               <v-list-item-icon>
                 <v-icon>mdi-file-plus</v-icon>
               </v-list-item-icon>
-              <v-list-item-title>申請空白票券</v-list-item-title>
+              <v-list-item-title>票券庫</v-list-item-title>
             </v-list-item>
           </v-list-item-group>
         </v-list>
@@ -100,18 +94,6 @@
                 </v-menu>
 
                 <v-spacer />
-
-                <v-btn
-                  class="right-10 d-none d-sm-flex"
-                  width="160"
-                  dark
-                  color="brownS1"
-                  rounded
-                  nuxt
-                  to="/S01/product/create"
-                >
-                  建立產品
-                </v-btn>
               </v-toolbar>
               <div>
                 <v-data-table
@@ -166,6 +148,27 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
+    <v-tooltip top>
+      <template #activator="{ on, attrs }">
+        <v-btn
+          v-scroll="onScroll"
+          fab
+          dark
+          fixed
+          right
+          color="rgb(117, 73, 51, 0.8)"
+          style="transition: bottom 0.5s"
+          :style="{ bottom: (scoller_fab ? 88 : 16) + 'px' }"
+          v-bind="attrs"
+          nuxt
+          to="/S01/product/create"
+          v-on="on"
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </template>
+      <span>新增產品</span>
+    </v-tooltip>
     <to-top />
     <my-waiting :loading="loadingStatus" />
   </div>
@@ -178,7 +181,7 @@ import PageStatisticCard from '~/components/PageStatisticCard.vue'
 import ToTop from '~/components/ToTop.vue'
 
 export default {
-  name: 'IndexPage',
+  name: 'S01',
   title: '門市票券(整批發行)',
   components: { PageStatisticCard, ToTop, MyWaiting },
   layout: 'adminLayout',
@@ -190,6 +193,7 @@ export default {
       loadingStatus: false,
       CurrentPageSectionIndex: 0,
       title: '門市票券(整批發行)',
+      scoller_fab: false,
 
       display_settings: [0, 1, 2, 3, 4, 5, 6],
 
@@ -246,6 +250,14 @@ export default {
     }
   },
   computed: {
+    mobile() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return true
+      }
+
+      return false
+    },
     pageStatisticCardItems() {
       return [
         {
@@ -270,7 +282,7 @@ export default {
           title: '庫存空白票券 (張)',
           value: this.$store.getters['S01/getBulkTicketsNum'],
           type: 1,
-          icon: 'mdi-weather-cloudy'
+          icon: 'mdi-note-outline'
         }
       ]
     },
@@ -330,7 +342,15 @@ export default {
       return initArr
     }
   },
-  methods: {}
+  methods: {
+    onScroll(e) {
+      if (typeof window === 'undefined') {
+        return
+      }
+      const top = window.pageYOffset || e.target.scrollTop || 0
+      this.scoller_fab = top > 20
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

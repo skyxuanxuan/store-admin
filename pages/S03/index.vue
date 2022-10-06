@@ -47,26 +47,24 @@
                 <v-col>
                   <v-card
                     class="cus_ui_card py-4"
-                    :class="{'mt-4': !mobile}"
+                    :class="{ 'mt-4': !mobile }"
                     :flat="mobile"
                     :rounded="!mobile ? 'xl' : ''"
                   >
-                    <v-subheader
-                      v-if="!mobile"
-                      class="base-color--text border_title"
-                    >
-                      <v-chip color="brown lighten-3" dark>
-                        產品基本資料
-                      </v-chip>
-                    </v-subheader>
-
                     <v-card-title
-                      v-if="mobile"
                       class="custom-brown1-3--text pt-0"
                     >
-                      <span class="master_title">產品基本資料</span>
+                      <span
+                        class="master_title"
+                        :class="{ ori: !mobile }"
+                      >產品基本資料</span>
                     </v-card-title>
-                    <v-card v-if="mobile" flat class="cus_mobile_card" :class="{'mobile': mobile}">
+                    <v-card
+                      v-if="mobile"
+                      flat
+                      class="cus_mobile_card"
+                      :class="{ mobile: mobile }"
+                    >
                       <v-card flat class="mx-auto">
                         <v-img
                           max-height="60"
@@ -448,23 +446,22 @@
                     :flat="mobile"
                     :rounded="!mobile ? 'xl' : ''"
                   >
-                    <v-subheader
-                      v-if="!mobile"
-                      class="base-color--text border_title"
-                    >
-                      <v-chip color="brown lighten-3" dark>
-                        店家位置
-                      </v-chip>
-                    </v-subheader>
-
                     <v-card-title
-                      v-if="mobile"
                       class="custom-brown1-3--text pt-0"
                     >
-                      <span class="master_title">店家位置</span>
+                      <span
+                        class="master_title"
+                        :class="{ ori: !mobile }"
+                      >店家位置</span>
                     </v-card-title>
+
                     <!-- Mobile -->
-                    <v-card v-if="mobile" flat class="cus_mobile_card" :class="{'mobile': mobile}">
+                    <v-card
+                      v-if="mobile"
+                      flat
+                      class="cus_mobile_card"
+                      :class="{ mobile: mobile }"
+                    >
                       <div class="cus_mobile_card_row">
                         <div class="cus_mobile_card_header">
                           縣市
@@ -905,7 +902,7 @@
 </template>
 <script>
 export default {
-  name: 'S03Page',
+  name: 'S03',
   title: '店家資訊',
   beforeRouteLeave(to, from, next) {
     if (this.storeEdit) {

@@ -406,7 +406,7 @@ import MyWaiting from '~/components/MyWaiting.vue'
 import ToTop from '~/components/ToTop.vue'
 
 export default {
-  name: 'IndexPage',
+  name: 'S05',
   title: '掃碼器',
   components: { ToTop, MyWaiting },
   layout: 'adminLayout',
@@ -798,7 +798,7 @@ export default {
           }
         })
     },
-    qrcodeInit(id) {
+    async qrcodeInit(id) {
       this.qrcodeDialogDetail = Object.assign(
         {},
         {
@@ -809,20 +809,29 @@ export default {
       const detail = this.machines.find(x => x.machineId === id)
 
       if (detail) {
-        const series = `TOK${detail.machineId}${detail.token}1200`
-        if (series.length === 59) {
-          this.qrcodeDialogDetail = Object.assign(
-            {},
-            {
-              d1: detail.machineNo,
-              d2: series
-            }
-          )
-          this.$nextTick(() => {
+        try {
+          const response = await this.$axios.get(`/S05/certification/${id}`)
+          if (response.data.res === 'CODE0000') {
+            this.qrcodeDialogDetail = Object.assign(
+              {},
+              {
+                d1: detail.machineNo,
+                d2: response.data.data.code
+              }
+            )
             this.qrcodeDialog = true
+          } else {
+            this.$swal.fire('小提示', response.msg, 'error')
+          }
+        } catch (err) {
+          this.loading(false)
+          this.$notify({
+            title: '小提示',
+            text: '網路連線異常',
+            type: 'error',
+            duration: 2000
           })
-        } else {
-          this.$swal.fire('小提示', 'QR Code 格式錯誤', 'error')
+          console.log(err)
         }
       } else {
         this.$swal.fire('小提示', '找不到此掃碼器', 'error')

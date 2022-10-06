@@ -36,11 +36,11 @@ const util = {
     }
   },
 
-  paddingLeft(str, lenght) {
-    if (str.length >= lenght) {
+  paddingLeft(str, length) {
+    if (str.length >= length) {
       return str
     } else {
-      return this.paddingLeft('0' + str, lenght)
+      return this.paddingLeft('0' + str, length)
     }
   },
 
@@ -62,7 +62,7 @@ const util = {
         this.paddingLeft(str.getHours().toString(), 2) +
         this.paddingLeft(str.getMinutes().toString(), 2) +
         this.paddingLeft(str.getSeconds().toString(), 2)
-    } else if ((str ?? '').lenght > 0) {
+    } else if ((str ?? '').length > 0) {
       reStr = str.replace(/[-/\s:]/g, '')
     }
     return reStr
@@ -102,6 +102,16 @@ const util = {
       )}`
     }
 
+    return reStr
+  },
+  formatTel(str) {
+    let reStr = ''
+    if ((str ?? '').toString().length === 10) {
+      reStr = `${str.substring(0, 2)}-${str.substring(2, 6)}-${str.substring(
+        6,
+        10
+      )}`
+    }
     return reStr
   }
 }

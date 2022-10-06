@@ -1377,7 +1377,7 @@ import util from '~/assets/js/util'
 
 const integerRegex = /[^0-9]/
 export default {
-  name: 'IndexPage',
+  name: 'S02ProductId',
   title: '商城票券(逐筆發行) - 編輯產品',
   components: { VueSlickCarousel, DatePicker },
   beforeRouteLeave(to, from, next) {

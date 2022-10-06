@@ -12,12 +12,9 @@
 export default {
   name: 'LoginLayout',
   data() {
-    return {
-
-    }
+    return {}
   },
-  created () {
-  }
+  created() {}
 }
 </script>
 
