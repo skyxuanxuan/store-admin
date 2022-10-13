@@ -82,7 +82,7 @@
 
             <v-list-item v-if="CurrentPageSectionIndex === 2">
               <v-list-item-icon>
-                <v-icon>mdi-plus</v-icon>
+                <v-icon>mdi-close</v-icon>
               </v-list-item-icon>
               <v-list-item-title>取消</v-list-item-title>
             </v-list-item>
@@ -205,993 +205,818 @@
         </v-tabs>
       </template>
     </v-app-bar>
-    <div class="pa-4">
-      <v-tabs-items v-model="CurrentPageSectionIndex" touchless>
-        <v-tab-item class="background-color">
-          <v-card flat color="transparent" style="margin-bottom: 64px">
-            <v-card flat color="transparent">
-              <v-card-text>
-                <VueSlickCarousel
-                  class="pa-2"
-                  :arrows="false"
-                  :center-mode="true"
-                  :focus-on-select="true"
-                  :infinite="true"
-                  :slides-to-show="1"
-                  :center-padding="slidesPaddingCarousel"
-                  :autoplay="false"
-                  :autoplay-speed="3000"
-                  :slides-to-scroll="1"
-                  :swipe-to-slide="true"
-                >
-                  <template #prevArrow>
-                    <v-btn
-                      class="mx-2 custom-prev-carousel"
-                      fab
-                      dark
-                      small
-                      color="white"
-                    >
-                      <v-icon color="black">
-                        mdi-chevron-left
-                      </v-icon>
-                    </v-btn>
-                  </template>
-                  <template #nextArrow>
-                    <v-btn
-                      class="mx-2 custom-next-carousel"
-                      fab
-                      dark
-                      small
-                      color="white"
-                    >
-                      <v-icon color="black">
-                        mdi-chevron-right
-                      </v-icon>
-                    </v-btn>
-                  </template>
-                  <v-card
-                    v-for="(pic, i) in productFiles"
-                    :key="`carousel-${i}`"
-                    class="my-caroousel"
-                  >
-                    <v-img :src="imgUrl + pic.filePath" eager aspect-ratio="2">
-                      <template #placeholder>
-                        <v-skeleton-loader type="image" />
-                      </template>
-                    </v-img>
-                  </v-card>
-                </VueSlickCarousel>
-              </v-card-text>
-            </v-card>
-            <v-card
-              v-touch="{
-                right: e => touchEvt(e, 2),
-                left: e => touchEvt(e, 1)
-              }"
-              class="mt-2"
-              flat
-              color="transparent"
+    <v-tabs-items v-model="CurrentPageSectionIndex" touchless>
+      <v-tab-item class="background-color">
+        <v-card flat color="transparent">
+          <v-card-text>
+            <VueSlickCarousel
+              class="pa-2"
+              :arrows="false"
+              :center-mode="true"
+              :focus-on-select="true"
+              :infinite="true"
+              :slides-to-show="1"
+              :center-padding="slidesPaddingCarousel"
+              :autoplay="false"
+              :autoplay-speed="3000"
+              :slides-to-scroll="1"
+              :swipe-to-slide="true"
             >
-              <v-container>
-                <v-row class="">
-                  <v-col>
-                    <v-card class="pa-4" rounded="xl">
-                      <v-card-title class="custom-brown1-3--text pt-0">
-                        <span
-                          class="title_dash_front"
-                          :class="{ ori: !mobile }"
-                        >產品基本資料</span>
-                      </v-card-title>
-                      <v-row dense class="px-4">
-                        <v-col cols="12" sm="3" md="2">
-                          <div class="row_title">
-                            <span>
-                              <v-icon color="brownS1">
-                                mdi-circle-small
-                              </v-icon>
-                            </span>
-                            <span
-                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                            >
-                              產品名稱
-                            </span>
-                          </div>
-                        </v-col>
-                        <v-col cols="12" sm="6">
-                          <div class="row_title font-weight-medium">
-                            {{ product.productName }}
-                          </div>
-                        </v-col>
-                      </v-row>
-                      <v-row dense class="px-4">
-                        <v-col cols="12" sm="3" md="2">
-                          <div class="row_title">
-                            <span>
-                              <v-icon color="brownS1">
-                                mdi-circle-small
-                              </v-icon>
-                            </span>
-                            <span
-                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                            >
-                              產品簡介
-                            </span>
-                          </div>
-                        </v-col>
-                        <v-col cols="12" sm="6">
-                          <div class="row_content font-weight-medium">
-                            <ul>
-                              <li
-                                v-for="(item, index) in productSimpleIntro"
-                                :key="`simpleIntro${index}`"
-                              >
-                                {{ item }}
-                              </li>
-                            </ul>
-                          </div>
-                        </v-col>
-                      </v-row>
-                      <v-row dense class="px-4">
-                        <v-col
-                          cols="12"
-                          sm="5"
-                          md="3"
-                          class="align-self-center"
-                        >
-                          <div class="row_title">
-                            <span>
-                              <v-icon color="brownS1">
-                                mdi-circle-small
-                              </v-icon>
-                            </span>
-                            <span
-                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                            >
-                              是否參與官方優惠活動
-                              <v-tooltip bottom>
-                                <template #activator="{ on, attrs }">
-                                  <v-icon
-                                    small
-                                    v-bind="attrs"
-                                    class="pl-2"
-                                    v-on="on"
-                                  >
-                                    mdi-information-outline
-                                  </v-icon>
-                                </template>
-                                <span> 說明 </span>
-                              </v-tooltip>
-                            </span>
-                          </div>
-                        </v-col>
-                        <v-col cols="12" sm="6">
-                          <v-switch
-                            :value="productCoupon"
-                            :label="productCoupon ? '參與' : '不參與'"
-                            color="greenS1"
-                            hide-details
-                            hide-spin-buttons
-                            class="mt-2"
-                          />
-                        </v-col>
-                      </v-row>
-                      <v-row dense class="px-4">
-                        <v-col cols="12" sm="3" class="align-self-center">
-                          <div class="row_title">
-                            <span>
-                              <v-icon color="brownS1">
-                                mdi-circle-small
-                              </v-icon>
-                            </span>
-                            <span
-                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                            >
-                              產品類型
-                            </span>
-                          </div>
-                        </v-col>
-                        <v-col cols="12" sm="9">
-                          <v-radio-group
-                            :value="productUseType"
-                            row
-                            hide-details
-                            disabled
-                            class="mt-2"
-                          >
-                            <v-radio
-                              label="商品類型"
-                              color="greenS1"
-                              value="1"
-                            />
-                            <v-radio
-                              label="現金類型"
-                              color="greenS1"
-                              value="2"
-                            />
-                          </v-radio-group>
-                        </v-col>
-                      </v-row>
-                      <v-row dense class="px-4">
-                        <v-col cols="12" sm="3" md="2">
-                          <div class="row_title">
-                            <span>
-                              <v-icon color="brownS1">
-                                mdi-circle-small
-                              </v-icon>
-                            </span>
-                            <span
-                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                            >
-                              產品分類
-                            </span>
-                          </div>
-                        </v-col>
-                        <v-col cols="12" sm="9">
-                          <div>
-                            <v-chip
-                              v-for="item in productClass"
-                              :key="item.id"
-                              :color="colors(item.color)"
-                              dark
-                              class="ma-1"
-                            >
-                              {{ item.name }}
-                            </v-chip>
-                          </div>
-                        </v-col>
-                      </v-row>
-                    </v-card>
-                  </v-col>
-                </v-row>
-                <v-row class="mt-8">
-                  <v-col>
-                    <v-form ref="sec1Form1" v-model="sec1_valid">
-                      <v-card class="pa-4" rounded="xl">
-                        <v-tooltip bottom>
-                          <template #activator="{ on, attrs }">
-                            <v-btn
-                              v-show="
-                                sec1ProductEdit && product.productEdit === 1
-                              "
-                              color="pink"
-                              dark
-                              fab
-                              small
-                              absolute
-                              right
-                              top
-                              v-bind="attrs"
-                              v-on="on"
-                              @click="sec1IntroAdd"
-                            >
-                              <v-icon>mdi-plus</v-icon>
-                            </v-btn>
-                          </template>
-                          <span>新增說明</span>
-                        </v-tooltip>
-
-                        <v-card-title class="custom-brown1-3--text pt-0">
-                          <span
-                            class="title_dash_front"
-                            :class="{ ori: !mobile }"
-                          >產品說明</span>
-                        </v-card-title>
-                        <transition-group
-                          name="fadeLeft"
-                          tag="div"
-                          class="mt-4"
-                        >
-                          <v-row
-                            v-for="(item, index) in productIntroFilter"
-                            :key="item.id"
-                            class="px-4 py-4"
-                            :class="{
-                              border_error: item.valid,
-                              border_bottom: introList.length - 1 !== index
-                            }"
-                          >
-                            <v-col
-                              cols="12"
-                              sm="3"
-                              md="2"
-                              class="align-self-start pb-0"
-                            >
-                              <div
-                                v-if="!sec1ProductEdit || item.edit === 0"
-                                :class="{ need: sec1_edit }"
-                                class="row_title"
-                              >
-                                <span>
-                                  <v-icon color="brownS1">
-                                    mdi-circle-small
-                                  </v-icon>
-                                </span>
-                                <span
-                                  class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                                >
-                                  {{ item.title }}
-                                </span>
-                              </div>
-                              <div v-else>
-                                <v-text-field
-                                  v-model="item.title"
-                                  dense
-                                  outlined
-                                  color="#16261f"
-                                  counter="20"
-                                  placeholder="請輸入標題"
-                                  :rules="[rules.required, rules.length(20)]"
-                                  label="請填寫標題"
-                                  single-line
-                                />
-                              </div>
-                              <v-scroll-y-transition>
-                                <div
-                                  v-show="item.valid"
-                                  class="v-text-field__details"
-                                >
-                                  <div
-                                    class="v-messages theme--light error--text"
-                                    role="alert"
-                                  >
-                                    <div class="v-messages__wrapper">
-                                      <div class="v-messages__message">
-                                        此欄位為必填
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </v-scroll-y-transition>
-                            </v-col>
-                            <v-col cols="12" sm="9" style="position: relative">
-                              <v-tooltip bottom>
-                                <template #activator="{ on, attrs }">
-                                  <v-btn
-                                    v-show="
-                                      sec1ProductEdit &&
-                                        product.productEdit === 1 &&
-                                        item.edit === 1
-                                    "
-                                    class="mx-2"
-                                    fab
-                                    x-small
-                                    color="#CCCCCC"
-                                    depressed
-                                    outlined
-                                    v-bind="attrs"
-                                    style="
-                                      position: absolute;
-                                      top: -0.5rem;
-                                      right: -0.8rem;
-                                      background-color: white;
-                                    "
-                                    v-on="on"
-                                    @click="sec1IntroRemove(index)"
-                                  >
-                                    <v-icon dark>
-                                      mdi-window-close
-                                    </v-icon>
-                                  </v-btn>
-                                </template>
-                                <span>刪除</span>
-                              </v-tooltip>
-                              <client-only>
-                                <VueEditor
-                                  v-if="
-                                    sec1ProductEdit && product.productEdit === 1
-                                  "
-                                  v-model="item.content"
-                                  placeholder="請輸入內文"
-                                />
-                                <div v-else v-html="item.content" />
-                              </client-only>
-                            </v-col>
-                          </v-row>
-                        </transition-group>
-                      </v-card>
-                    </v-form>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item class="background-color">
+              <template #prevArrow>
+                <v-btn
+                  class="mx-2 custom-prev-carousel"
+                  fab
+                  dark
+                  small
+                  color="white"
+                >
+                  <v-icon color="black">
+                    mdi-chevron-left
+                  </v-icon>
+                </v-btn>
+              </template>
+              <template #nextArrow>
+                <v-btn
+                  class="mx-2 custom-next-carousel"
+                  fab
+                  dark
+                  small
+                  color="white"
+                >
+                  <v-icon color="black">
+                    mdi-chevron-right
+                  </v-icon>
+                </v-btn>
+              </template>
+              <v-card
+                v-for="(pic, i) in productFiles"
+                :key="`carousel-${i}`"
+                class="my-caroousel"
+              >
+                <v-img :src="imgUrl + pic.filePath" eager aspect-ratio="2">
+                  <template #placeholder>
+                    <v-skeleton-loader type="image" />
+                  </template>
+                </v-img>
+              </v-card>
+            </VueSlickCarousel>
+          </v-card-text>
+        </v-card>
+        <v-divider />
+        <div
+          v-touch="{
+            right: e => touchEvt(e, 2),
+            left: e => touchEvt(e, 1)
+          }"
+        >
           <v-card
-            v-touch="{
-              right: e => touchEvt(e, 2),
-              left: e => touchEvt(e, 1)
-            }"
             flat
-            color="transparent"
+            class="py-8 mx-auto"
+            :class="{ 'mt-8': !mobile }"
+            max-width="1150"
+            :rounded="mobile ? false : 'xl'"
           >
-            <v-container class="white mt-8">
-              <v-toolbar dense flat>
-                <v-text-field
-                  v-model="sec2Search"
-                  class="searchInput top-15"
-                  label="Search"
-                  outlined
-                  dense
-                />
+            <div class="cus_ui_card">
+              <v-card-title
+                class="master_title custom-brown1-3--text pt-0"
+                :class="{ 'px-8': !mobile }"
+              >
+                <span class="">產品基本資料</span>
+              </v-card-title>
+              <div class="cus_mobile_card" :class="{ mobile: mobile }">
+                <div class="cus_mobile_card_row">
+                  <div class="cus_mobile_card_header">
+                    產品名稱
+                  </div>
+                  <div class="cus_mobile_card_cell">
+                    {{ product.productName }}
+                  </div>
+                </div>
+                <div class="cus_mobile_card_row">
+                  <div class="cus_mobile_card_header">
+                    產品簡介
+                  </div>
+                  <div class="cus_mobile_card_cell">
+                    <ul style="list-style-type: none">
+                      <li
+                        v-for="(item, index) in productSimpleIntro"
+                        :key="`simpleIntro${index}`"
+                      >
+                        <v-icon>mdi-circle-small</v-icon>{{ item }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="cus_mobile_card_row">
+                  <div class="cus_mobile_card_header">
+                    官方優惠活動
+                    <v-tooltip bottom>
+                      <template #activator="{ on, attrs }">
+                        <v-icon small v-bind="attrs" class="pl-2" v-on="on">
+                          mdi-information-outline
+                        </v-icon>
+                      </template>
+                      <span> 說明 </span>
+                    </v-tooltip>
+                  </div>
+                  <div class="cus_mobile_card_cell">
+                    {{ productCoupon ? '參與' : '不參與' }}
+                  </div>
+                </div>
+                <div class="cus_mobile_card_row">
+                  <div class="cus_mobile_card_header">
+                    產品類型
+                  </div>
+                  <div class="cus_mobile_card_cell">
+                    {{ productUseType === '1' ? '商品類型' : '現金類型' }}
+                  </div>
+                </div>
+                <div class="cus_mobile_card_row">
+                  <div class="cus_mobile_card_header">
+                    產品分類
+                  </div>
+                  <div class="cus_mobile_card_cell">
+                    <v-chip
+                      v-for="item in productClass"
+                      :key="item.id"
+                      :color="colors(item.color)"
+                      dark
+                      class="mx-1 my-2"
+                    >
+                      {{ item.name }}
+                    </v-chip>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </v-card>
+          <v-card
+            flat
+            class="py-8 mt-6 mx-auto"
+            max-width="1150"
+            :rounded="mobile ? false : 'xl'"
+          >
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <v-btn
+                  v-show="sec1ProductEdit && product.productEdit === 1"
+                  color="pink"
+                  dark
+                  fab
+                  small
+                  absolute
+                  right
+                  top
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="sec1IntroAdd"
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </template>
+              <span>新增說明</span>
+            </v-tooltip>
 
-                <v-menu offset-y :close-on-content-click="false">
+            <v-form ref="sec1Form1" v-model="sec1_valid">
+              <div class="cus_ui_card">
+                <v-card-title
+                  class="master_title custom-brown1-3--text pt-0"
+                  :class="{ 'px-8': !mobile }"
+                >
+                  <span class="">產品說明</span>
+                </v-card-title>
+
+                <transition-group
+                  name="fadeLeft"
+                  tag="div"
+                  class="cus_mobile_card"
+                  :class="{ mobile: mobile }"
+                >
+                  <div
+                    v-for="(item, index) in productIntroFilter"
+                    :key="item.id"
+                    class="cus_mobile_card_row flex_col pa-4 pb-4"
+                    :class="{
+                      border_error: item.valid,
+                      border_bottom: introList.length - 1 !== index
+                    }"
+                  >
+                    <div class="cus_mobile_card_header">
+                      <div
+                        v-if="!sec1ProductEdit || item.edit === 0"
+                        :class="{ need: sec1_edit }"
+                      >
+                        {{ item.title }}
+                      </div>
+                      <div v-else>
+                        <v-text-field
+                          v-model="item.title"
+                          dense
+                          outlined
+                          color="#16261f"
+                          counter="20"
+                          placeholder="請輸入標題"
+                          :rules="[rules.required, rules.length(20)]"
+                          label="請填寫標題"
+                          single-line
+                        />
+                        <v-scroll-y-transition>
+                          <div
+                            v-show="item.valid"
+                            class="v-text-field__details"
+                            style="margin: 0"
+                          >
+                            <div
+                              class="v-messages theme--light error--text"
+                              role="alert"
+                            >
+                              <div class="v-messages__wrapper">
+                                <div class="v-messages__message">
+                                  此欄位為必填
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </v-scroll-y-transition>
+                      </div>
+                    </div>
+                    <div
+                      class="cus_mobile_card_cell"
+                      style="position: relative"
+                    >
+                      <v-tooltip bottom>
+                        <template #activator="{ on, attrs }">
+                          <v-btn
+                            v-show="
+                              sec1ProductEdit &&
+                                product.productEdit === 1 &&
+                                item.edit === 1
+                            "
+                            class="mx-2"
+                            fab
+                            x-small
+                            color="#CCCCCC"
+                            depressed
+                            outlined
+                            v-bind="attrs"
+                            style="
+                              position: absolute;
+                              top: -0.5rem;
+                              right: -0.8rem;
+                              background-color: white;
+                            "
+                            v-on="on"
+                            @click="sec1IntroRemove(index)"
+                          >
+                            <v-icon dark>
+                              mdi-window-close
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>刪除</span>
+                      </v-tooltip>
+                      <client-only>
+                        <VueEditor
+                          v-if="sec1ProductEdit && product.productEdit === 1"
+                          v-model="item.content"
+                          placeholder="請輸入內文"
+                        />
+                        <div
+                          v-else
+                          style="text-align: left"
+                          v-html="item.content"
+                        />
+                      </client-only>
+                    </div>
+                  </div>
+                </transition-group>
+              </div>
+            </v-form>
+          </v-card>
+        </div>
+      </v-tab-item>
+      <v-tab-item class="background-color" :class="{ 'pa-4': !mobile, 'pa-2': mobile }">
+        <v-card
+          v-touch="{
+            right: e => touchEvt(e, 2),
+            left: e => touchEvt(e, 1)
+          }"
+          flat
+          color="transparent"
+        >
+          <v-container class="white mt-8">
+            <v-toolbar dense flat>
+              <v-text-field
+                v-model="sec2Search"
+                class="searchInput top-15"
+                label="Search"
+                outlined
+                dense
+              />
+
+              <v-menu offset-y :close-on-content-click="false">
+                <template #activator="{ on, attrs }">
+                  <v-btn
+                    class="left-10"
+                    outlined
+                    width="80"
+                    v-bind="attrs"
+                    style="top: 2px"
+                    v-on="on"
+                  >
+                    顯示
+                  </v-btn>
+                </template>
+                <v-list flat>
+                  <v-list-item-group v-model="display_settings" multiple>
+                    <v-list-item
+                      v-for="item in sec2TableHeader"
+                      :key="item.text"
+                    >
+                      <template #default="{ active }">
+                        <v-list-item-action>
+                          <v-checkbox :input-value="active" color="greenS1" />
+                        </v-list-item-action>
+
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            {{ item.text }}
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+              </v-menu>
+            </v-toolbar>
+            <v-data-table
+              mobile-breakpoint="770"
+              :headers="sec2_showHeaders"
+              :items="sec2DataList"
+              :items-per-page="10"
+              :search="sec2Search"
+              item-key="d0"
+              calculate-widths
+              :page.sync="sec2TablePage"
+              :footer-props="{
+                'disable-pagination': true,
+                'next-icon': '',
+                'prev-icon': ''
+              }"
+              @page-count="sec2TablePageCount = $event"
+            >
+              <template #item.d3="{ item }">
+                <span>{{ item.d3 | toDollars }}</span>
+              </template>
+              <template #item.d4="{ item }">
+                <span v-if="item.d4 !== -1">{{
+                  item.d4 | numberWithCommas
+                }}</span>
+                <span v-else><v-icon>mdi-infinity</v-icon></span>
+              </template>
+              <template #item.d5="{ item }">
+                <span>{{ item.d5 | numberWithCommas }}</span>
+              </template>
+              <template #item.actions="{ item }">
+                <v-tooltip bottom>
                   <template #activator="{ on, attrs }">
                     <v-btn
-                      class="left-10"
-                      outlined
-                      width="80"
+                      class="no-backgroud-hover white"
+                      elevation="0"
+                      color="white"
+                      fab
+                      x-small
                       v-bind="attrs"
-                      style="top: 2px"
                       v-on="on"
+                      @click="sec2PlanDetail(item.d0)"
                     >
-                      顯示
+                      <v-icon color="brownS1">
+                        mdi-open-in-new
+                      </v-icon>
                     </v-btn>
                   </template>
-                  <v-list flat>
-                    <v-list-item-group v-model="display_settings" multiple>
-                      <v-list-item
-                        v-for="item in sec2TableHeader"
-                        :key="item.text"
-                      >
-                        <template #default="{ active }">
-                          <v-list-item-action>
-                            <v-checkbox :input-value="active" color="greenS1" />
-                          </v-list-item-action>
+                  <span>詳細資料</span>
+                </v-tooltip>
 
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              {{ item.text }}
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </template>
+                <v-menu
+                  open-on-hover
+                  :close-on-content-click="false"
+                  transition="slide-x-transition"
+                  offset-y
+                  bottom
+                  right
+                >
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      class="no-backgroud-hover white"
+                      elevation="0"
+                      color="white"
+                      fab
+                      x-small
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon> mdi-dots-vertical </v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list dense class="py-0">
+                    <v-list-item-group no-action>
+                      <v-list-item
+                        v-show="item.display === 0"
+                        @click="sec2PlanDisplay(item.d0, 1)"
+                      >
+                        <v-list-item-icon>
+                          <v-icon color="brownS2P">
+                            mdi-eye
+                          </v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title class="custom-brown2-4--text">
+                            顯示
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-divider v-show="item.display === 0" />
+                      <v-list-item
+                        v-show="item.display === 1"
+                        @click="sec2PlanDisplay(item.d0, 0)"
+                      >
+                        <v-list-item-icon>
+                          <v-icon color="brownS2M">
+                            mdi-eye-off
+                          </v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title class="custom-brown2-2--text">
+                            隱藏
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-divider v-show="item.display === 1" />
+                      <v-divider v-show="item.display === 0" />
+                      <v-list-item
+                        v-show="item.useType === 0"
+                        color="success"
+                        @click="planUseType(item.d0, 1)"
+                      >
+                        <v-list-item-icon>
+                          <v-icon color="success">
+                            mdi-restart
+                          </v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title class="success--text">
+                            啟用
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-divider v-show="item.useType === 0" />
+                      <v-list-item
+                        v-show="item.useType === 1"
+                        color="other1"
+                        @click="planUseType(item.d0, 0)"
+                      >
+                        <v-list-item-icon>
+                          <v-icon color="other1">
+                            mdi-close
+                          </v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title class="custom-other-1--text">
+                            停用
+                          </v-list-item-title>
+                        </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
                   </v-list>
                 </v-menu>
-              </v-toolbar>
-              <v-data-table
-                mobile-breakpoint="770"
-                :headers="sec2_showHeaders"
-                :items="sec2DataList"
-                :items-per-page="10"
-                :search="sec2Search"
-                item-key="d0"
-                calculate-widths
-                :page.sync="sec2TablePage"
-                :footer-props="{
-                  'disable-pagination': true,
-                  'next-icon': '',
-                  'prev-icon': ''
-                }"
-                @page-count="sec2TablePageCount = $event"
-              >
-                <template #item.d3="{ item }">
-                  <span>{{ item.d3 | toDollars }}</span>
-                </template>
-                <template #item.d4="{ item }">
-                  <span v-if="item.d4 !== -1">{{
-                    item.d4 | numberWithCommas
-                  }}</span>
-                  <span v-else><v-icon>mdi-infinity</v-icon></span>
-                </template>
-                <template #item.d5="{ item }">
-                  <span>{{ item.d5 | numberWithCommas }}</span>
-                </template>
-                <template #item.actions="{ item }">
-                  <v-tooltip bottom>
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        class="no-backgroud-hover white"
-                        elevation="0"
-                        color="white"
-                        fab
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="sec2PlanDetail(item.d0)"
+              </template>
+            </v-data-table>
+          </v-container>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item class="background-color">
+        <div>
+          <v-form ref="vnewplanform" v-model="newPlanForm.valid">
+            <v-card
+              flat
+              class="py-8 mx-auto"
+              :class="{ 'mt-8': !mobile }"
+              max-width="1150"
+              :rounded="mobile ? false : 'xl'"
+            >
+              <div class="cus_ui_card">
+                <v-card-title
+                  class="master_title custom-brown1-3--text pt-0"
+                  :class="{ 'px-8': !mobile }"
+                >
+                  <span class="">新增方案</span>
+                </v-card-title>
+                <div class="cus_mobile_card" :class="{ mobile: mobile }">
+                  <div class="cus_mobile_card_row">
+                    <div class="cus_mobile_card_header">
+                      方案名稱
+                    </div>
+                    <div class="cus_mobile_card_cell">
+                      <v-text-field
+                        v-model="newPlanForm.item.p1"
+                        dense
+                        outlined
+                        color="#16261f"
+                        counter="100"
+                        :rules="[rules.required, rules.length(200)]"
+                        label="請填寫方案名稱"
+                        single-line
+                      />
+                    </div>
+                  </div>
+                  <div class="cus_mobile_card_row">
+                    <div class="cus_mobile_card_header">
+                      產品簡介
+                    </div>
+                    <div class="cus_mobile_card_cell">
+                      <v-textarea
+                        v-model="newPlanForm.item.p2"
+                        outlined
+                        color="#16261f"
+                        counter="100"
+                        :rules="[rules.required, rules.length(250)]"
+                        label="請填寫方案簡介"
+                        auto-grow
+                        single-line
+                        rows="3"
                       >
-                        <v-icon color="brownS1">
-                          mdi-open-in-new
-                        </v-icon>
-                      </v-btn>
-                    </template>
-                    <span>詳細資料</span>
-                  </v-tooltip>
-
-                  <v-menu
-                    open-on-hover
-                    :close-on-content-click="false"
-                    transition="slide-x-transition"
-                    offset-y
-                    bottom
-                    right
-                  >
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        class="no-backgroud-hover white"
-                        elevation="0"
-                        color="white"
-                        fab
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
+                        <template #prepend-inner>
+                          <v-tooltip bottom>
+                            <template #activator="{ on, attrs }">
+                              <v-icon small v-bind="attrs" v-on="on">
+                                mdi-information-outline
+                              </v-icon>
+                            </template>
+                            <span> 每項資訊以換行做為區隔 </span>
+                          </v-tooltip>
+                        </template>
+                      </v-textarea>
+                    </div>
+                  </div>
+                  <div class="cus_mobile_card_row">
+                    <div class="cus_mobile_card_header">
+                      使用期限
+                      <v-tooltip bottom>
+                        <template #activator="{ on, attrs }">
+                          <v-icon small v-bind="attrs" class="pl-2" v-on="on">
+                            mdi-information-outline
+                          </v-icon>
+                        </template>
+                        <span>
+                          如未填寫，系統將自動設定為無期限<br>請注意，本公司提供逐筆類型產品履保時間為購買後三個月
+                        </span>
+                      </v-tooltip>
+                    </div>
+                    <div class="cus_mobile_card_cell">
+                      <v-radio-group
+                        v-model="newPlanForm.item.p3"
+                        class="mt-0 justify-end"
+                        :rules="[rules.required]"
+                        row
                       >
-                        <v-icon> mdi-dots-vertical </v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list dense class="py-0">
-                      <v-list-item-group no-action>
-                        <v-list-item
-                          v-show="item.display === 0"
-                          @click="sec2PlanDisplay(item.d0, 1)"
-                        >
-                          <v-list-item-icon>
-                            <v-icon color="brownS2P">
-                              mdi-eye
-                            </v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-content>
-                            <v-list-item-title class="custom-brown2-4--text">
-                              顯示
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                        <v-divider v-show="item.display === 0" />
-                        <v-list-item
-                          v-show="item.display === 1"
-                          @click="sec2PlanDisplay(item.d0, 0)"
-                        >
-                          <v-list-item-icon>
-                            <v-icon color="brownS2M">
-                              mdi-eye-off
-                            </v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-content>
-                            <v-list-item-title class="custom-brown2-2--text">
-                              隱藏
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                        <v-divider v-show="item.display === 1" />
-                        <v-divider v-show="item.display === 0" />
-                        <v-list-item
-                          v-show="item.useType === 0"
-                          color="success"
-                          @click="planUseType(item.d0, 1)"
-                        >
-                          <v-list-item-icon>
-                            <v-icon color="success">
-                              mdi-restart
-                            </v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-content>
-                            <v-list-item-title class="success--text">
-                              啟用
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                        <v-divider v-show="item.useType === 0" />
-                        <v-list-item
-                          v-show="item.useType === 1"
-                          color="other1"
-                          @click="planUseType(item.d0, 0)"
-                        >
-                          <v-list-item-icon>
-                            <v-icon color="other1">
-                              mdi-close
-                            </v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-content>
-                            <v-list-item-title class="custom-other-1--text">
-                              停用
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list-item-group>
-                    </v-list>
-                  </v-menu>
-                </template>
-              </v-data-table>
-            </v-container>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item class="background-color">
-          <v-card
-            flat
-            max-width="1150"
-            color="transparent"
-            style="margin: 0 auto; margin-bottom: 64px"
-          >
-            <v-form ref="vnewplanform" v-model="newPlanForm.valid">
-              <v-container>
-                <v-col cols="12" class="pa-0 pt-6">
-                  <v-card class="pa-4" rounded="xl">
-                    <v-subheader class="base-color--text border_title">
-                      <v-chip color="brown lighten-3" dark>
-                        新增方案
-                      </v-chip>
-                    </v-subheader>
-                    <v-row dense class="px-4 py-2">
-                      <v-col cols="12" sm="3" md="2">
-                        <div class="row_title font-weight-medium need">
-                          方案名稱
-                        </div>
-                      </v-col>
-                      <v-col cols="12" sm="6">
-                        <v-text-field
-                          v-model="newPlanForm.item.p1"
-                          dense
-                          outlined
-                          color="#16261f"
-                          counter="100"
-                          :rules="[rules.required, rules.length(200)]"
-                          label="請填寫方案名稱"
-                          single-line
+                        <v-radio
+                          color="greenS1"
+                          label="依購買日起計"
+                          value="1"
+                          class="label_size09"
                         />
-                      </v-col>
-                    </v-row>
-                    <v-row dense class="px-4 py-2">
-                      <v-col cols="12" sm="3" md="2">
-                        <div class="row_title font-weight-medium need">
-                          方案簡介
-                        </div>
-                      </v-col>
-                      <v-col cols="12" sm="6">
-                        <v-textarea
-                          v-model="newPlanForm.item.p2"
-                          outlined
-                          color="#16261f"
-                          counter="100"
-                          :rules="[rules.required, rules.length(250)]"
-                          label="請填寫方案簡介"
-                          auto-grow
-                          single-line
-                          rows="3"
-                        >
-                          <template #prepend-inner>
-                            <v-tooltip bottom>
-                              <template #activator="{ on, attrs }">
-                                <v-icon small v-bind="attrs" v-on="on">
-                                  mdi-information-outline
-                                </v-icon>
-                              </template>
-                              <span> 每項資訊以換行做為區隔 </span>
-                            </v-tooltip>
-                          </template>
-                        </v-textarea>
-                      </v-col>
-                    </v-row>
-                    <v-row dense class="px-4 py-2">
-                      <v-col cols="12" sm="3" md="2">
-                        <div class="row_title font-weight-medium">
-                          使用期限
-                          <v-tooltip bottom>
-                            <template #activator="{ on, attrs }">
-                              <v-icon
-                                small
-                                v-bind="attrs"
-                                class="pl-2"
-                                v-on="on"
-                              >
-                                mdi-information-outline
-                              </v-icon>
-                            </template>
-                            <span>
-                              如未填寫，系統將自動設定為無期限<br>請注意，本公司提供逐筆類型產品履保時間為購買後三個月
-                            </span>
-                          </v-tooltip>
-                        </div>
-                      </v-col>
-                      <v-col cols="12" sm="9">
-                        <v-radio-group
-                          v-model="newPlanForm.item.p3"
-                          class="mt-0"
-                          :rules="[rules.required]"
-                          row
-                        >
-                          <v-radio
-                            color="greenS1"
-                            label="依購買日起計"
-                            value="1"
-                            class="label_size09"
+                        <v-radio
+                          color="greenS1"
+                          label="固定到期日"
+                          value="2"
+                          class="label_size09"
+                        />
+                      </v-radio-group>
+                      <v-expand-transition>
+                        <v-card v-if="newPlanForm.item.p3 === '1'" flat>
+                          <v-text-field
+                            v-model="newPlanForm.item.p3_d"
+                            color="#16261f"
+                            label="請填寫天數"
+                            single-line
+                            type="number"
+                            hide-spin-buttons
                           />
-                          <v-radio
-                            color="greenS1"
-                            label="固定到期日"
-                            value="2"
-                            class="label_size09"
-                          />
-                        </v-radio-group>
-                        <v-expand-transition>
-                          <v-card v-if="newPlanForm.item.p3 === '1'" flat>
-                            <v-text-field
-                              v-model="newPlanForm.item.p3_d"
-                              color="#16261f"
-                              label="請填寫天數，如未填寫則以90天計算"
-                              single-line
-                              type="number"
-                              hide-spin-buttons
-                            />
-                          </v-card>
-                        </v-expand-transition>
-                        <v-expand-transition>
-                          <v-card v-if="newPlanForm.item.p3 === '2'" flat>
-                            <v-card
-                              class="justify-start d-none d-sm-flex"
-                              flat
-                              tile
-                            >
-                              <v-card class="pa-2" flat tile>
-                                <date-picker
-                                  v-model="newPlanForm.item.p3_t[0]"
-                                  type="date"
-                                  placeholder="請選擇開始時間"
-                                  :editable="false"
-                                  @change="changeDate(1)"
-                                />
-                              </v-card>
-                              <v-card class="pa-2" flat tile>
-                                <v-icon> mdi-tilde </v-icon>
-                              </v-card>
-                              <v-card class="pa-2" flat tile>
-                                <date-picker
-                                  v-model="newPlanForm.item.p3_t[1]"
-                                  type="date"
-                                  placeholder="請選擇結束時間"
-                                  :editable="false"
-                                  @change="changeDate(1)"
-                                />
-                              </v-card>
-                            </v-card>
-                            <v-card
-                              flat
-                              tile
-                              class="d-flex d-sm-none flex-column"
-                            >
-                              <v-card flat>
-                                <date-picker
-                                  v-model="newPlanForm.item.p3_t[0]"
-                                  type="date"
-                                  placeholder="請選擇開始時間"
-                                  :editable="false"
-                                  :confirm="true"
-                                  @change="changeDate(1)"
-                                />
-                              </v-card>
-                              <v-card class="mt-4" flat tile>
-                                <date-picker
-                                  v-model="newPlanForm.item.p3_t[1]"
-                                  type="date"
-                                  placeholder="請選擇結束時間"
-                                  :editable="false"
-                                  :confirm="true"
-                                  @change="changeDate(1)"
-                                />
-                              </v-card>
-                            </v-card>
-                          </v-card>
-                        </v-expand-transition>
-                      </v-col>
-                    </v-row>
-                    <v-row dense class="px-4 py-2">
-                      <v-col cols="12" sm="3" md="2">
-                        <div class="row_title font-weight-medium">
-                          販售時間
-                          <v-tooltip bottom>
-                            <template #activator="{ on, attrs }">
-                              <v-icon
-                                small
-                                v-bind="attrs"
-                                class="pl-2"
-                                v-on="on"
-                              >
-                                mdi-information-outline
-                              </v-icon>
-                            </template>
-                            <span>
-                              如未點選開始時間，系統將自動以當前時間帶入
-                            </span>
-                          </v-tooltip>
-                        </div>
-                      </v-col>
-                      <v-col cols="12" sm="6">
+                        </v-card>
+                      </v-expand-transition>
+                      <v-expand-transition>
                         <v-card
-                          class="justify-start d-none d-sm-flex"
+                          v-if="newPlanForm.item.p3 === '2'"
+                          flat
+                          :class="{ 'd-flex': !mobile }"
+                        >
+                          <date-picker
+                            v-model="newPlanForm.item.p3_t[0]"
+                            type="date"
+                            placeholder="請選擇開始時間"
+                            :editable="false"
+                            :confirm="true"
+                            :style="{ width: mobile ? '100%' : 'auto' }"
+                            @change="changeDate(1)"
+                          />
+                          <v-card
+                            flat
+                            tile
+                            :class="{ 'px-2': !mobile, 'py-2': mobile }"
+                          >
+                            <v-icon v-show="!mobile">
+                              mdi-tilde
+                            </v-icon>
+                          </v-card>
+                          <date-picker
+                            v-model="newPlanForm.item.p3_t[1]"
+                            type="date"
+                            placeholder="請選擇結束時間"
+                            :editable="false"
+                            :confirm="true"
+                            :style="{ width: mobile ? '100%' : 'auto' }"
+                            @change="changeDate(1)"
+                          />
+                        </v-card>
+                      </v-expand-transition>
+                    </div>
+                  </div>
+                  <div class="cus_mobile_card_row">
+                    <div class="cus_mobile_card_header">
+                      使用期限
+                    </div>
+                    <div class="cus_mobile_card_cell">
+                      <v-card flat :class="{ 'd-flex': !mobile }">
+                        <date-picker
+                          v-model="newPlanForm.item.p4[0]"
+                          type="datetime"
+                          placeholder="請選擇開始時間"
+                          :editable="false"
+                          :confirm="true"
+                          :style="{ width: mobile ? '100%' : 'auto' }"
+                          @change="changeDate(2)"
+                        />
+                        <v-card
                           flat
                           tile
+                          :class="{ 'px-2': !mobile, 'py-2': mobile }"
                         >
-                          <v-card class="pa-2" flat tile>
-                            <v-card flat>
-                              <date-picker
-                                v-model="newPlanForm.item.p4[0]"
-                                type="datetime"
-                                placeholder="請選擇開始時間"
-                                :editable="false"
-                                :confirm="true"
-                                @change="changeDate(2)"
-                              />
-                            </v-card>
-                          </v-card>
-                          <v-card class="pa-2" flat tile>
-                            <v-icon> mdi-tilde </v-icon>
-                          </v-card>
-                          <v-card class="pa-2" flat tile>
-                            <date-picker
-                              v-model="newPlanForm.item.p4[1]"
-                              type="datetime"
-                              placeholder="請選擇結束時間"
-                              :editable="false"
-                              :confirm="true"
-                              @change="changeDate(2)"
-                            />
-                          </v-card>
+                          <v-icon v-show="!mobile">
+                            mdi-tilde
+                          </v-icon>
                         </v-card>
-                        <v-card flat tile class="d-flex d-sm-none flex-column">
-                          <v-card flat>
-                            <date-picker
-                              v-model="newPlanForm.item.p4[0]"
-                              type="datetime"
-                              placeholder="請選擇開始時間"
-                              :editable="false"
-                              :confirm="true"
-                              @change="changeDate(2)"
-                            />
-                          </v-card>
-                          <v-card flat class="mt-4">
-                            <date-picker
-                              v-model="newPlanForm.item.p4[1]"
-                              type="datetime"
-                              placeholder="請選擇開始時間"
-                              :editable="false"
-                              :confirm="true"
-                              @change="changeDate(2)"
-                            />
-                          </v-card>
-                        </v-card>
-                      </v-col>
-                    </v-row>
-                    <v-row dense class="px-4 py-2">
-                      <v-col cols="6" sm="3" md="2">
-                        <div class="row_title font-weight-medium need">
-                          原價
-                        </div>
-                      </v-col>
-                      <v-col cols="6" sm="6">
+                        <date-picker
+                          v-model="newPlanForm.item.p4[1]"
+                          type="datetime"
+                          placeholder="請選擇結束時間"
+                          :editable="false"
+                          :confirm="true"
+                          :style="{ width: mobile ? '100%' : 'auto' }"
+                          @change="changeDate(2)"
+                        />
+                      </v-card>
+                    </div>
+                  </div>
+                  <div class="cus_mobile_card_row">
+                    <div class="cus_mobile_card_header">
+                      原價
+                    </div>
+                    <div class="cus_mobile_card_cell">
+                      <v-text-field
+                        v-model="newPlanForm.item.p5"
+                        type="number"
+                        prefix="NT$"
+                        hide-spin-buttons
+                        :rules="[rules.required, rules.positive, rules.integer]"
+                        class="pt-0"
+                      />
+                    </div>
+                  </div>
+                  <div class="cus_mobile_card_row">
+                    <div class="cus_mobile_card_header">
+                      售價
+                    </div>
+                    <div class="cus_mobile_card_cell">
+                      <v-text-field
+                        v-model="newPlanForm.item.p6"
+                        type="number"
+                        hide-spin-buttons
+                        prefix="NT$"
+                        :rules="[rules.required, rules.positive, rules.integer]"
+                        class="pt-0"
+                      />
+                    </div>
+                  </div>
+                  <div class="cus_mobile_card_row">
+                    <div class="cus_mobile_card_header">
+                      販售數量
+                    </div>
+                    <div class="cus_mobile_card_cell">
+                      <v-switch
+                        v-model="newPlanForm.item.p7_sw"
+                        :label="newPlanForm.item.p7_sw ? '開啟' : '無上限'"
+                        class="mt-0"
+                      />
+                      <v-expand-transition>
                         <v-text-field
-                          v-model="newPlanForm.item.p5"
+                          v-if="newPlanForm.item.p7_sw"
+                          v-model="newPlanForm.item.p7"
                           type="number"
-                          prefix="NT$"
+                          class="text-with-plus-minus"
+                          dense
+                          outlined
                           hide-spin-buttons
-                          :rules="[
-                            rules.required,
-                            rules.positive,
-                            rules.integer
-                          ]"
-                          class="pt-0"
-                        />
-                      </v-col>
-                    </v-row>
-                    <v-row dense class="px-4 py-2">
-                      <v-col cols="6" sm="3" md="2">
-                        <div class="row_title font-weight-medium need">
-                          售價
-                        </div>
-                      </v-col>
-                      <v-col cols="6" sm="6">
-                        <v-text-field
-                          v-model="newPlanForm.item.p6"
-                          type="number"
-                          hide-spin-buttons
-                          prefix="NT$"
-                          :rules="[
-                            rules.required,
-                            rules.positive,
-                            rules.integer
-                          ]"
-                          class="pt-0"
-                        />
-                      </v-col>
-                    </v-row>
-                    <v-row dense class="px-4 py-2">
-                      <v-col cols="6" sm="3" md="2">
-                        <div class="row_title font-weight-medium need">
-                          販售數量
-                        </div>
-                      </v-col>
-                      <v-col cols="6" sm="6">
-                        <v-switch
-                          v-model="newPlanForm.item.p7_sw"
-                          :label="newPlanForm.item.p7_sw ? '開啟' : '無上限'"
-                          class="mt-2"
-                        />
-                        <v-expand-transition>
-                          <v-text-field
-                            v-if="newPlanForm.item.p7_sw"
-                            v-model="newPlanForm.item.p7"
-                            type="number"
-                            hide-spin-buttons
-                            class="pt-0"
-                          >
-                            <v-icon
-                              slot="append-outer"
-                              color="red"
+                          color="brownS1"
+                          label="數量"
+                          :rules="[rules.required]"
+                          single-line
+                        >
+                          <template #append-outer>
+                            <v-btn
+                              color="#aa998f"
+                              dark
+                              fab
+                              x-small
                               @click="sec3NumModify(1, 3)"
                             >
-                              mdi-plus
-                            </v-icon>
-                            <v-icon
-                              slot="prepend"
-                              color="green"
+                              <v-icon> mdi-plus-thick </v-icon>
+                            </v-btn>
+                          </template>
+
+                          <template #prepend>
+                            <v-btn
+                              color="#aa998f"
+                              dark
+                              fab
+                              x-small
                               @click="sec3NumModify(2, 3)"
                             >
-                              mdi-minus
-                            </v-icon>
-                          </v-text-field>
-                        </v-expand-transition>
-                      </v-col>
-                    </v-row>
-                    <v-row dense class="px-4 py-2">
-                      <v-col cols="6" sm="3" md="2">
-                        <div class="row_title font-weight-medium">
-                          單次購買上限
-                          <v-tooltip bottom>
-                            <template #activator="{ on, attrs }">
-                              <v-icon
-                                small
-                                v-bind="attrs"
-                                class="pl-2"
-                                v-on="on"
-                              >
-                                mdi-information-outline
-                              </v-icon>
-                            </template>
-                            <span> 單次購買上限最多為20 </span>
-                          </v-tooltip>
-                        </div>
-                      </v-col>
-                      <v-col cols="6" sm="6">
-                        <v-switch
-                          v-model="newPlanForm.item.p8_sw"
-                          :label="newPlanForm.item.p8_sw ? '開啟' : '無上限'"
-                          class="mt-2"
-                        />
-                        <v-expand-transition>
-                          <v-text-field
-                            v-if="newPlanForm.item.p8_sw"
-                            v-model="newPlanForm.item.p8"
-                            type="number"
-                            hide-spin-buttons
-                            :rules="[rules.buyLimit]"
-                            class="pt-0"
-                          >
-                            <v-icon
-                              slot="append-outer"
-                              color="red"
+                              <v-icon> mdi-minus-thick </v-icon>
+                            </v-btn>
+                          </template>
+                        </v-text-field>
+                      </v-expand-transition>
+                    </div>
+                  </div>
+                  <div class="cus_mobile_card_row">
+                    <div class="cus_mobile_card_header">
+                      單次購買上限
+                    </div>
+                    <div class="cus_mobile_card_cell">
+                      <v-switch
+                        v-model="newPlanForm.item.p8_sw"
+                        :label="newPlanForm.item.p8_sw ? '開啟' : '無上限'"
+                        class="mt-0"
+                      />
+                      <v-expand-transition>
+                        <v-text-field
+                          v-if="newPlanForm.item.p8_sw"
+                          v-model="newPlanForm.item.p8"
+                          type="number"
+                          class="text-with-plus-minus"
+                          dense
+                          outlined
+                          hide-spin-buttons
+                          color="brownS1"
+                          label="單次購買上限"
+                          :rules="[rules.required]"
+                          single-line
+                        >
+                          <template #append-outer>
+                            <v-btn
+                              color="#aa998f"
+                              dark
+                              fab
+                              x-small
                               @click="sec3NumModify(1, 4)"
                             >
-                              mdi-plus
-                            </v-icon>
-                            <v-icon
-                              slot="prepend"
-                              color="green"
+                              <v-icon> mdi-plus-thick </v-icon>
+                            </v-btn>
+                          </template>
+
+                          <template #prepend>
+                            <v-btn
+                              color="#aa998f"
+                              dark
+                              fab
+                              x-small
                               @click="sec3NumModify(2, 4)"
                             >
-                              mdi-minus
-                            </v-icon>
-                          </v-text-field>
-                        </v-expand-transition>
-                      </v-col>
-                    </v-row>
-                  </v-card>
-                </v-col>
-              </v-container>
-            </v-form>
-          </v-card>
-        </v-tab-item>
-      </v-tabs-items>
-    </div>
+                              <v-icon> mdi-minus-thick </v-icon>
+                            </v-btn>
+                          </template>
+                        </v-text-field>
+                      </v-expand-transition>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </v-card>
+          </v-form>
+        </div>
+      </v-tab-item>
+    </v-tabs-items>
     <v-dialog v-model="planDetailDialog" max-width="580">
       <v-card>
         <v-card-title class="text-h5 font-weight-bold">
@@ -1563,6 +1388,14 @@ export default {
     }
   },
   computed: {
+    mobile() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return true
+      }
+
+      return false
+    },
     title() {
       return `商城票券(逐筆發行) - ${this.product.productName}`
     },
@@ -2347,5 +2180,12 @@ export default {
 
 .font_size1-1 {
   font-size: 1.1rem !important;
+}
+
+:deep(.text-with-plus-minus .v-input__append-outer) {
+  margin-top: 4px !important;
+}
+:deep(.text-with-plus-minus .v-input__prepend-outer) {
+  margin-top: 4px !important;
 }
 </style>

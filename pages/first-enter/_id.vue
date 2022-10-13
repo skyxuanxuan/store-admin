@@ -2,81 +2,93 @@
   <div class="bg">
     <v-container fill-height fluid>
       <v-row justify="center" align="center">
-        <v-form ref="modifyForm" v-model="modifyValid">
-          <v-card class="pa-2 glass-effect" elevation="5" width="450">
-            <v-card-title class="justify-center">
-              <span class="text-h5 font-weight-bold"> 修改密碼 </span>
-            </v-card-title>
-            <div class="account_box" :class="{ mobile: mobile }">
-              <div class="account_box_row">
-                <div class="account_box_row_header">
-                  店家碼
-                </div>
-                <div class="account_box_row_cell">
-                  {{ no }}
-                </div>
-              </div>
-              <div class="account_box_row">
-                <div class="account_box_row_header">
-                  帳號
-                </div>
-                <div class="account_box_row_cell">
-                  {{ ac }}
-                </div>
-              </div>
-              <div class="account_box_row">
-                <div class="account_box_row_header">
-                  密碼
-                </div>
-                <div class="account_box_row_cell">
-                  <v-text-field
-                    v-model="modifyObj.pw1"
-                    outlined
-                    dense
-                    :rules="[
-                      rules.required,
-                      rules.atleast,
-                      rules.length(100),
-                      rules.number,
-                      rules.alpha,
-                      rules.badchar
-                    ]"
-                    :type="showPwd1 ? 'text' : 'password'"
-                    :append-icon="showPwd1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="showPwd1 = !showPwd1"
-                  />
-                </div>
-              </div>
-              <div class="account_box_row">
-                <div class="account_box_row_header">
-                  確認密碼
-                </div>
-                <div class="account_box_row_cell">
-                  <v-text-field
-                    v-model="modifyObj.pw2"
-                    outlined
-                    dense
-                    :rules="[rules.required, rules.confirm]"
-                    :type="showPwd2 ? 'text' : 'password'"
-                    :append-icon="showPwd2 ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="showPwd2 = !showPwd2"
-                  />
-                </div>
-              </div>
-            </div>
-            <v-card-actions>
-              <v-btn
-                :dark="modifyValid"
-                :disabled="!modifyValid"
-                color="brownS1"
-                width="100%"
-                @click="submit"
+        <v-card class="pa-2 glass-effect" flat width="450" rounded="xl">
+          <v-form ref="modifyForm" v-model="modifyValid">
+            <v-hover v-slot="{ hover }">
+              <v-card
+                class="pa-2"
+                :elevation="hover ? 10 : 2"
+                :color="hover ? 'white' : '#fafafa'"
+                rounded="xl"
+                width="450"
+                style="box-shadow: 0px 0px 6px #00000029 !imporant"
               >
-                修改
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-form>
+                <v-card-title class="justify-center">
+                  <span class="text-h5 font-weight-bold"> 修改密碼 </span>
+                </v-card-title>
+                <div class="account_box" :class="{ mobile: mobile }">
+                  <div class="account_box_row">
+                    <div class="account_box_row_header">
+                      店家碼
+                    </div>
+                    <div class="account_box_row_cell">
+                      {{ no }}
+                    </div>
+                  </div>
+                  <div class="account_box_row">
+                    <div class="account_box_row_header">
+                      帳號
+                    </div>
+                    <div class="account_box_row_cell">
+                      {{ ac }}
+                    </div>
+                  </div>
+                  <div class="account_box_row">
+                    <div class="account_box_row_header">
+                      密碼
+                    </div>
+                    <div class="account_box_row_cell">
+                      <v-text-field
+                        v-model="modifyObj.pw1"
+                        outlined
+                        dense
+                        :rules="[
+                          rules.required,
+                          rules.atleast,
+                          rules.length(100),
+                          rules.number,
+                          rules.alpha,
+                          rules.badchar
+                        ]"
+                        :type="showPwd1 ? 'text' : 'password'"
+                        :append-icon="showPwd1 ? 'mdi-eye' : 'mdi-eye-off'"
+                        @click:append="showPwd1 = !showPwd1"
+                      />
+                    </div>
+                  </div>
+                  <div class="account_box_row">
+                    <div class="account_box_row_header">
+                      確認密碼
+                    </div>
+                    <div class="account_box_row_cell">
+                      <v-text-field
+                        v-model="modifyObj.pw2"
+                        outlined
+                        dense
+                        :rules="[rules.required, rules.confirm]"
+                        :type="showPwd2 ? 'text' : 'password'"
+                        :append-icon="showPwd2 ? 'mdi-eye' : 'mdi-eye-off'"
+                        @click:append="showPwd2 = !showPwd2"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <v-card-actions>
+                  <v-btn
+                    :dark="modifyValid"
+                    :disabled="!modifyValid"
+                    rounded
+                    color="brownS1"
+                    width="100%"
+                    @click="submit"
+                  >
+                    修改
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-hover>
+          </v-form>
+        </v-card>
       </v-row>
     </v-container>
     <my-waiting :loading="loadingStatus" />
@@ -225,13 +237,15 @@ export default {
   background-size: cover;
   height: 100vh;
 }
+
 .glass-effect {
-  background: rgba(255, 255, 255, 0.87);
-  border-radius: 16px;
+  background: rgb(170, 153, 143, 0.1) 0% 0% no-repeat padding-box;
+  border-radius: 26px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(13.2px);
+  -webkit-backdrop-filter: blur(13.2px);
 }
+
 .account_box {
   padding: 0px 32px;
   .account_box_row {

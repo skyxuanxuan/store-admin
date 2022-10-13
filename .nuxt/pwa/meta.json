@@ -1,5 +1,5 @@
 {
-  "title": "sunpay-coupon-store-admin",
+  "title": "紅陽票券-店家後臺",
   "meta": [
     {
       "hid": "charset",
@@ -8,7 +8,7 @@
     {
       "hid": "viewport",
       "name": "viewport",
-      "content": "width=device-width, initial-scale=1"
+      "content": "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
     },
     {
       "hid": "mobile-web-app-capable",
@@ -16,14 +16,29 @@
       "content": "yes"
     },
     {
+      "hid": "apple-mobile-web-app-status-bar-style",
+      "name": "apple-mobile-web-app-status-bar-style",
+      "content": "black"
+    },
+    {
       "hid": "apple-mobile-web-app-title",
       "name": "apple-mobile-web-app-title",
-      "content": "sunpay-coupon-store-admin"
+      "content": "紅陽票券-店家後臺"
+    },
+    {
+      "hid": "author",
+      "name": "author",
+      "content": "Userstar"
     },
     {
       "hid": "description",
       "name": "description",
-      "content": "## Build Setup"
+      "content": "紅陽票券店家專用後台"
+    },
+    {
+      "hid": "theme-color",
+      "name": "theme-color",
+      "content": "#d6beb2"
     },
     {
       "hid": "og:type",
@@ -35,19 +50,49 @@
       "hid": "og:title",
       "name": "og:title",
       "property": "og:title",
-      "content": "sunpay-coupon-store-admin"
+      "content": "紅陽票券-店家後臺"
     },
     {
       "hid": "og:site_name",
       "name": "og:site_name",
       "property": "og:site_name",
-      "content": "sunpay-coupon-store-admin"
+      "content": "紅陽票券-店家後臺"
     },
     {
       "hid": "og:description",
       "name": "og:description",
       "property": "og:description",
-      "content": "## Build Setup"
+      "content": "紅陽票券店家專用後台"
+    },
+    {
+      "hid": "og:url",
+      "name": "og:url",
+      "property": "og:url",
+      "content": "https://tw.userstar.net/"
+    },
+    {
+      "hid": "og:image",
+      "name": "og:image",
+      "property": "og:image",
+      "content": "https://tw.userstar.net//_nuxt/icons/icon_512x512.e3e9fb.png"
+    },
+    {
+      "hid": "og:image:width",
+      "name": "og:image:width",
+      "property": "og:image:width",
+      "content": 512
+    },
+    {
+      "hid": "og:image:height",
+      "name": "og:image:height",
+      "property": "og:image:height",
+      "content": 512
+    },
+    {
+      "hid": "og:image:type",
+      "name": "og:image:type",
+      "property": "og:image:type",
+      "content": "image/png"
     }
   ],
   "link": [
@@ -64,11 +109,11 @@
     },
     {
       "rel": "manifest",
-      "href": "/_nuxt/manifest.8a235e58.json",
+      "href": "/_nuxt/manifest.7ba9667a.json",
       "hid": "manifest"
     }
   ],
   "htmlAttrs": {
-    "lang": "en"
+    "lang": "zh-Hant-TW"
   }
 }

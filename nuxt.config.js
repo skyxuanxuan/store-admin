@@ -23,6 +23,9 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['@mdi/font/css/materialdesignicons.min.css', '~/assets/transition.css'],
 
+  loading: {
+    color: '#9b6e57'
+  },
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
     imgUrl: process.env.IMAGE_URL || 'http://localhost:8080/resources'
@@ -162,8 +165,45 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
+    meta: {
+      title: '紅陽票券',
+      name: '紅陽票券-店家後臺',
+      short_name: '店家後臺',
+      author: 'Userstar',
+      description: '紅陽票券店家專用後台',
+      // 網站語系
+      lang: 'zh-Hant-TW',
+      // Viewport
+      viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
+      // 修改網站佈景顏色
+      theme_color: '#d6beb2',
+      // Apple 螢幕上方狀態列顏色
+      appleStatusBarStyle: 'black',
+      // OGP
+      ogHost: 'https://tw.userstar.net/'
+    },
     manifest: {
-      lang: 'en'
+      name: '紅陽票券-店家後臺',
+      short_name: '店家後臺',
+      description: '紅陽票券店家專用後台',
+      // 調整網站起始連結
+      start_url: '/?standalone=true',
+      // 網站顯示模式
+      display: 'standalone',
+      // 設定 Splash Screen 背景顏色
+      background_color: '#d6beb2',
+      // 修改網站佈景顏色
+      theme_color: '#d6beb2',
+      // 文字顯示方向，由左至右
+      dir: 'ltr',
+      // 網站語系
+      lang: 'zh-Hant-TW',
+      // 文件擴展名設置為 .json 或 .webmanifest
+      useWebmanifestExtension: false
+    },
+    icon: {
+      fileName: 'icon.png',
+      sizes: [64, 120, 144, 152, 192, 384, 512]
     }
   },
 

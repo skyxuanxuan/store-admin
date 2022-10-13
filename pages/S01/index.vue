@@ -40,7 +40,7 @@
         票券庫
       </v-btn>
     </v-app-bar>
-    <div class="pa-4">
+    <div :class="{'pa-4': !mobile}">
       <v-tabs-items
         v-model="CurrentPageSectionIndex"
         :class="{ none: loadingStatus }"

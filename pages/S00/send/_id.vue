@@ -30,233 +30,199 @@
         訂單成立
       </v-btn>
     </v-app-bar>
-    <div class="ma-4">
+
+    <div style="padding-bottom: 64px">
       <v-card
-        max-width="1150"
         flat
-        color="transparent"
-        style="margin: 0 auto; margin-bottom: 64px"
+        class="py-8 mx-auto"
+        :class="{ 'mt-8': !mobile }"
+        max-width="1150"
+        :rounded="mobile ? false : 'xl'"
       >
-        <v-container :class="{ 'pa-0': mobile }">
-          <v-row class="">
-            <v-col>
-              <v-card
-                class="cus_ui_card py-4"
-                :class="{ 'mt-4': !mobile }"
-                :flat="mobile"
-                :rounded="!mobile ? 'xl' : ''"
-              >
-                <v-card-title class="custom-brown1-3--text pt-0">
-                  <span
-                    class="master_title"
-                    :class="{ ori: !mobile }"
-                  >產品基本資料</span>
-                </v-card-title>
-
-                <v-card
-                  flat
-                  class="cus_mobile_card"
-                  :class="{ mobile: mobile }"
-                >
-                  <div class="cus_mobile_card_row">
-                    <div class="cus_mobile_card_header">
-                      名稱
-                    </div>
-                    <div class="cus_mobile_card_cell text-left">
-                      {{ productDetail.name }}
-                    </div>
-                  </div>
-                  <div class="cus_mobile_card_row">
-                    <div class="cus_mobile_card_header">
-                      價格
-                    </div>
-                    <div class="cus_mobile_card_cell text-left">
-                      {{ productDetail.price | toDollars }}
-                    </div>
-                  </div>
-                  <div class="cus_mobile_card_row">
-                    <div class="cus_mobile_card_header">
-                      剩餘數量
-                    </div>
-                    <div class="cus_mobile_card_cell text-left">
-                      {{ productDetail.remaining | numberWithCommas }}
-                    </div>
-                  </div>
-                </v-card>
-              </v-card>
-            </v-col>
-          </v-row>
-          <v-row :class="mobile ? '' : 'mt-8'">
-            <v-col>
-              <v-form ref="modifyform" v-model="send_order_valid">
-                <v-card
-                  class="cus_ui_card py-4"
-                  :flat="mobile"
-                  :rounded="!mobile ? 'xl' : ''"
-                >
-                  <v-card-title class="custom-brown1-3--text pt-0">
-                    <span
-                      class="master_title"
-                      :class="{ ori: !mobile }"
-                    >購買資訊</span>
-                  </v-card-title>
-
-                  <v-card
-                    flat
-                    class="cus_mobile_card"
-                    :class="{ mobile: mobile }"
+        <div class="cus_ui_card">
+          <v-card-title
+            class="master_title custom-brown1-3--text pt-0"
+            :class="{ 'px-8': !mobile }"
+          >
+            <span class="">產品基本資料</span>
+          </v-card-title>
+          <div class="cus_mobile_card" :class="{ mobile: mobile }">
+            <div class="cus_mobile_card_row">
+              <div class="cus_mobile_card_header">
+                名稱
+              </div>
+              <div class="cus_mobile_card_cell">
+                {{ productDetail.name }}
+              </div>
+            </div>
+            <div class="cus_mobile_card_row">
+              <div class="cus_mobile_card_header">
+                價格
+              </div>
+              <div class="cus_mobile_card_cell">
+                {{ productDetail.price | toDollars }}
+              </div>
+            </div>
+            <div class="cus_mobile_card_row">
+              <div class="cus_mobile_card_header">
+                剩餘數量
+              </div>
+              <div class="cus_mobile_card_cell">
+                {{ productDetail.remaining | numberWithCommas }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </v-card>
+      <v-card
+        flat
+        class="py-8 mt-6 mx-auto"
+        max-width="1150"
+        :rounded="mobile ? false : 'xl'"
+      >
+        <v-form ref="modifyform" v-model="send_order_valid">
+          <div class="cus_ui_card">
+            <v-card-title
+              class="master_title custom-brown1-3--text pt-0"
+              :class="{ 'px-8': !mobile }"
+            >
+              <span class="">購買資訊</span>
+            </v-card-title>
+            <div class="cus_mobile_card" :class="{ mobile: mobile }">
+              <div class="cus_mobile_card_row">
+                <div class="cus_mobile_card_header">
+                  手機號碼
+                </div>
+                <div class="cus_mobile_card_cell">
+                  <v-text-field
+                    v-model="send_order_tel"
+                    type="tel"
+                    dense
+                    outlined
+                    hide-spin-buttons
+                    color="brownS1"
+                    counter="10"
+                    label="請填寫手機號碼"
+                    :rules="[rules.required, rules.length(10)]"
+                    single-line
+                  />
+                </div>
+              </div>
+              <div class="cus_mobile_card_row">
+                <div class="cus_mobile_card_header">
+                  購買數量
+                </div>
+                <div class="cus_mobile_card_cell">
+                  <v-text-field
+                    v-model="send_order_num"
+                    type="number"
+                    class="text-with-plus-minus"
+                    dense
+                    outlined
+                    hide-spin-buttons
+                    color="brownS1"
+                    label="數量"
+                    :rules="[rules.required]"
+                    single-line
                   >
-                    <div class="cus_mobile_card_row">
-                      <div class="cus_mobile_card_header">
-                        手機號碼
-                      </div>
-                      <div class="cus_mobile_card_cell">
-                        <v-text-field
-                          v-model="send_order_tel"
-                          type="number"
-                          dense
-                          outlined
-                          hide-spin-buttons
-                          color="brownS1"
-                          counter="10"
-                          label="請填寫手機號碼"
-                          :rules="[rules.required, rules.length(10)]"
-                          single-line
-                        />
-                      </div>
-                    </div>
-                    <div class="cus_mobile_card_row">
-                      <div class="cus_mobile_card_header">
-                        購買數量
-                      </div>
-                      <div class="cus_mobile_card_cell">
-                        <v-text-field
-                          v-model="send_order_num"
-                          type="number"
-                          class="text-with-plus-minus"
-                          dense
-                          outlined
-                          hide-spin-buttons
-                          color="brownS1"
-                          label="數量"
-                          :rules="[rules.required]"
-                          single-line
-                        >
-                          <template #append-outer>
-                            <v-btn
-                              color="#aa998f"
-                              dark
-                              fab
-                              x-small
-                              @click="increse"
-                            >
-                              <v-icon> mdi-plus-thick </v-icon>
-                            </v-btn>
-                          </template>
+                    <template #append-outer>
+                      <v-btn color="#aa998f" dark fab x-small @click="increse">
+                        <v-icon> mdi-plus-thick </v-icon>
+                      </v-btn>
+                    </template>
 
-                          <template #prepend>
-                            <v-btn
-                              color="#aa998f"
-                              dark
-                              fab
-                              x-small
-                              @click="decrease"
-                            >
-                              <v-icon> mdi-minus-thick </v-icon>
-                            </v-btn>
-                          </template>
-                        </v-text-field>
-                      </div>
-                    </div>
-                    <div class="cus_mobile_card_row">
-                      <div class="cus_mobile_card_header">
-                        付款方式
-                      </div>
-                      <div class="cus_mobile_card_cell">
-                        <v-select
-                          v-model="send_order_paykind"
-                          :items="payKindOfflineList"
-                          label="請選擇付款方式"
-                          item-text="name"
-                          item-value="id"
-                          dense
-                          single-line
-                          :rules="[rules.required]"
-                          outlined
-                        />
-                      </div>
-                    </div>
-                    <div class="cus_mobile_card_row">
-                      <div class="cus_mobile_card_header">
-                        交易金額
-                      </div>
-                      <div class="cus_mobile_card_cell">
-                        <v-text-field
-                          v-model="send_order_amt"
-                          type="number"
-                          dense
-                          outlined
-                          hide-spin-buttons
-                          color="brownS1"
-                          label="請填寫交易金額"
-                          :rules="[rules.required]"
-                          single-line
-                        />
-                      </div>
-                    </div>
-                    <div class="cus_mobile_card_row">
-                      <div class="cus_mobile_card_header">
-                        店家備註
-                      </div>
-                      <div class="cus_mobile_card_cell">
-                        <v-textarea
-                          v-model="send_order_note"
-                          outlined
-                          single-line
-                          color="brownS1"
-                          label="請輸入備註"
-                          rows="2"
-                          counter="200"
-                          :rules="[rules.length(200)]"
-                        />
-                      </div>
-                    </div>
-                    <div class="cus_mobile_card_row" style="height: 66px">
-                      <div
-                        class="cus_mobile_card_header"
-                        style="min-width: 120px"
-                      >
-                        訂單合計金額
-                      </div>
-                      <div
-                        class="cus_mobile_card_cell custom-other-1--text"
-                        style="font-weight: bold !important"
-                      >
-                        {{ totalAmt | toDollars }}
-                      </div>
-                    </div>
-                    <div v-show="mobile" class="cus_mobile_card_row">
-                      <div style="width: 100%">
-                        <v-btn
-                          width="100%"
-                          color="brownS1"
-                          rounded
-                          :dark="send_order_valid"
-                          :disabled="!send_order_valid"
-                          @click="orderSubmit"
-                        >
-                          訂單成立
-                        </v-btn>
-                      </div>
-                    </div>
-                  </v-card>
-                </v-card>
-              </v-form>
-            </v-col>
-          </v-row>
-        </v-container>
+                    <template #prepend>
+                      <v-btn color="#aa998f" dark fab x-small @click="decrease">
+                        <v-icon> mdi-minus-thick </v-icon>
+                      </v-btn>
+                    </template>
+                  </v-text-field>
+                </div>
+              </div>
+              <div class="cus_mobile_card_row">
+                <div class="cus_mobile_card_header">
+                  付款方式
+                </div>
+                <div class="cus_mobile_card_cell">
+                  <v-select
+                    v-model="send_order_paykind"
+                    :items="payKindOfflineList"
+                    label="請選擇付款方式"
+                    item-text="name"
+                    item-value="id"
+                    dense
+                    single-line
+                    :rules="[rules.required]"
+                    outlined
+                  />
+                </div>
+              </div>
+              <div class="cus_mobile_card_row">
+                <div class="cus_mobile_card_header">
+                  交易金額
+                </div>
+                <div class="cus_mobile_card_cell">
+                  <v-text-field
+                    v-model="send_order_amt"
+                    type="number"
+                    dense
+                    outlined
+                    hide-spin-buttons
+                    color="brownS1"
+                    label="請填寫交易金額"
+                    :rules="[rules.required]"
+                    single-line
+                  />
+                </div>
+              </div>
+              <div class="cus_mobile_card_row">
+                <div class="cus_mobile_card_header">
+                  店家備註
+                </div>
+                <div class="cus_mobile_card_cell">
+                  <v-textarea
+                    v-model="send_order_note"
+                    outlined
+                    single-line
+                    color="brownS1"
+                    label="請輸入備註"
+                    rows="3"
+                    counter="200"
+                    :rules="[rules.length(200)]"
+                  />
+                </div>
+              </div>
+              <div class="cus_mobile_card_row">
+                <div class="cus_mobile_card_header">
+                  訂單合計金額
+                </div>
+                <div
+                  class="cus_mobile_card_cell custom-other-1--text"
+                  style="font-weight: bold !important"
+                >
+                  {{ totalAmt | toDollars }}
+                </div>
+              </div>
+              <div v-show="mobile" class="cus_mobile_card_row">
+                <div style="width: 100%">
+                  <v-btn
+                    width="100%"
+                    color="brownS1"
+                    rounded
+                    :dark="send_order_valid"
+                    :disabled="!send_order_valid"
+                    @click="orderSubmit"
+                  >
+                    訂單成立
+                  </v-btn>
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-form>
       </v-card>
     </div>
+
     <to-top />
     <my-waiting :loading="loadingStatus" />
   </div>

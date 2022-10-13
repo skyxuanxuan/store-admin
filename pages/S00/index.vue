@@ -22,7 +22,7 @@
         </v-tabs>
       </template>
     </v-app-bar>
-    <div class="pa-4">
+    <div :class="{'pa-4': !mobile}">
       <v-tabs-items v-model="CurrentPageSectionIndex">
         <v-tab-item class="background-color">
           <v-container class="mt-2 pa-3">

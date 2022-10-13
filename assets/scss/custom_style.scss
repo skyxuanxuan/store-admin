@@ -163,6 +163,9 @@ body {
         font-weight: bold !important;
         padding-right: 16px;
       }
+      .cus_mobile_card_header.vcenter {
+        align-self: center;
+      }
 
       .cus_mobile_card_cell {
         text-align: right;
@@ -197,9 +200,12 @@ body {
         padding-right: 16px;
         min-width: 120px;
       }
+      .cus_mobile_card_header.vcenter {
+        align-self: center;
+      }
 
       .cus_mobile_card_cell {
-        text-align: right;
+        text-align: left;
         font-weight: 300;
         max-width: 750px;
         width: 100%;
@@ -234,4 +240,25 @@ body {
   margin-right: 7px;
   background-color: #d1be9c;
   border-radius: 99rem;
+}
+
+.message_box_content {
+  max-width: 390px;
+  margin: auto;
+  .message_box_content_row {
+    display: flex;
+    justify-content: space-between;
+    .message_box_content_header {
+      min-width: 40px;
+      text-align: left;
+    }
+    .message_box_content_cell {
+      width: 100%;
+      text-align: right;
+    }
+  }
+}
+
+.message_box_content_row + .message_box_content_row {
+  margin-top: 10px;
 }

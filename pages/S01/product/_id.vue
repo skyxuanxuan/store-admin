@@ -19,70 +19,15 @@
 
       <v-spacer />
 
-      <v-menu v-if="product.productEdit === 1" bottom left>
-        <template #activator="{ on, attrs }">
-          <v-btn class="d-flex d-sm-none" icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item-group>
-            <v-list-item
-              v-if="CurrentPageSectionIndex === 0 && sec1ProductEdit"
-              color="other1"
-              @click="sec1ModifyCancel"
-            >
-              <v-list-item-icon>
-                <v-icon color="other1">
-                  mdi-close
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-title class="custom-other-1--text">
-                取消
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              v-if="CurrentPageSectionIndex === 0 && sec1ProductEdit"
-              color="other2"
-              @click="sec1Modify"
-            >
-              <v-list-item-icon>
-                <v-icon color="other2">
-                  mdi-pencil
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-title class="custom-other-2--text">
-                儲存
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              v-if="CurrentPageSectionIndex === 0 && !sec1ProductEdit"
-              color="other2"
-              @click="sec1Modify"
-            >
-              <v-list-item-icon>
-                <v-icon color="other2">
-                  mdi-pencil
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-title class="custom-other-2--text">
-                編輯
-              </v-list-item-title>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-menu>
-
       <v-btn
         v-if="
           CurrentPageSectionIndex === 0 &&
             sec1ProductEdit &&
             product.productEdit === 1
         "
-        class="d-none d-sm-flex right-10"
-        color="brownS1"
-        width="140"
+        class="right-10"
+        color="other1"
+        :width="mobile ? 80 : 140"
         outlined
         rounded
         @click="sec1ModifyCancel"
@@ -95,9 +40,8 @@
             sec1ProductEdit &&
             product.productEdit === 1
         "
-        class="d-none d-sm-flex"
-        color="brownS1"
-        width="140"
+        color="other2"
+        :width="mobile ? 80 : 140"
         rounded
         :dark="sec1_valid"
         :disabled="!sec1_valid"
@@ -105,359 +49,269 @@
       >
         儲存
       </v-btn>
-      <v-btn
-        v-if="
-          CurrentPageSectionIndex === 0 &&
-            !sec1ProductEdit &&
-            product.productEdit === 1
-        "
-        class="d-none d-sm-flex"
-        color="brownS1"
-        width="140"
-        dark
-        rounded
-        @click="sec1Modify"
-      >
-        編輯
-      </v-btn>
     </v-app-bar>
-    <div class="ma-4 mt-8">
-      <v-card flat color="transparent" style="margin-bottom: 64px">
-        <v-card class="mt-2" flat color="transparent">
-          <v-container>
-            <v-row class="">
-              <v-col>
-                <v-card class="pa-4" rounded="xl">
-                  <v-card-title class="custom-brown1-3--text pt-0">
-                    <span
-                      class="title_dash_front"
-                      :class="{ ori: !mobile }"
-                    >產品基本資料</span>
-                  </v-card-title>
-                  <v-row dense class="px-4">
-                    <v-col cols="12" sm="3" md="2">
-                      <div class="row_title">
-                        <span>
-                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
-                        </span>
-                        <span
-                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                        >
-                          產品名稱
-                        </span>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <div class="row_title font-weight-light">
-                        {{ product.productName }}
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row dense class="px-4">
-                    <v-col cols="12" sm="3" md="2">
-                      <div class="row_title">
-                        <span>
-                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
-                        </span>
-                        <span
-                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                        >
-                          產品簡介
-                        </span>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <div class="row_content font-weight-light">
-                        <ul>
-                          <li
-                            v-for="(item, index) in productSimpleIntro"
-                            :key="`simpleIntro${index}`"
-                          >
-                            {{ item }}
-                          </li>
-                        </ul>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row dense class="px-4">
-                    <v-col cols="12" sm="3" md="2" class="align-self-center">
-                      <div class="row_title">
-                        <span>
-                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
-                        </span>
-                        <span
-                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                        >
-                          產品類型
-                        </span>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="9">
-                      <v-radio-group
-                        :value="productUseType"
-                        row
-                        hide-details
-                        disabled
-                        class="mt-2"
-                      >
-                        <v-radio label="商品類型" color="greenS1" value="1" />
-                        <v-radio label="現金類型" color="greenS1" value="2" />
-                      </v-radio-group>
-                    </v-col>
-                  </v-row>
-                  <v-row dense class="px-4">
-                    <v-col cols="12" sm="3" md="2">
-                      <div class="row_title">
-                        <span>
-                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
-                        </span>
-                        <span
-                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                        >
-                          產品分類
-                        </span>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="9">
-                      <div>
-                        <v-chip
-                          v-for="item in productClass"
-                          :key="item.id"
-                          :color="colors(item.color)"
-                          dark
-                          class="mx-1 my-2"
-                        >
-                          {{ item.name }}
-                        </v-chip>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row dense class="px-4">
-                    <v-col cols="12" sm="3" md="2">
-                      <div class="row_title">
-                        <span>
-                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
-                        </span>
-                        <span
-                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                        >
-                          使用期限
-                        </span>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <div class="row_title font-weight-light">
-                        {{ productUseTime }}
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row dense class="px-4">
-                    <v-col cols="12" sm="3" md="2">
-                      <div class="row_title">
-                        <span>
-                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
-                        </span>
-                        <span
-                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                        >
-                          面額
-                        </span>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <div class="row_title font-weight-light">
-                        {{ productReimburse | toDollars }}
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row dense class="px-4">
-                    <v-col cols="12" sm="3" md="2">
-                      <div class="row_title">
-                        <span>
-                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
-                        </span>
-                        <span
-                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                        >
-                          售價
-                        </span>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <div class="row_title font-weight-light">
-                        {{ productPrice | toDollars }}
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row dense class="px-4">
-                    <v-col cols="12" sm="3" md="2">
-                      <div class="row_title">
-                        <span>
-                          <v-icon color="brownS1"> mdi-circle-small </v-icon>
-                        </span>
-                        <span
-                          class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                        >
-                          販售數量
-                        </span>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <div class="row_title font-weight-light">
-                        {{ productNum | numberWithCommas }}
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-card>
-              </v-col>
-            </v-row>
-            <v-row class="mt-8">
-              <v-col>
-                <v-form ref="sec1Form1" v-model="sec1_valid">
-                  <v-card class="pa-4" rounded="xl">
-                    <v-tooltip bottom>
-                      <template #activator="{ on, attrs }">
-                        <v-btn
-                          v-show="sec1ProductEdit && product.productEdit === 1"
-                          color="pink"
-                          dark
-                          fab
-                          small
-                          absolute
-                          right
-                          top
-                          v-bind="attrs"
-                          v-on="on"
-                          @click="sec1IntroAdd"
-                        >
-                          <v-icon>mdi-plus</v-icon>
-                        </v-btn>
-                      </template>
-                      <span>新增說明</span>
-                    </v-tooltip>
+    <div>
+      <v-card
+        flat
+        class="py-8 mx-auto"
+        :class="{ 'mt-8': !mobile }"
+        max-width="1150"
+        :rounded="mobile ? false : 'xl'"
+      >
+        <div class="cus_ui_card">
+          <v-card-title
+            class="master_title custom-brown1-3--text pt-0"
+            :class="{ 'px-8': !mobile }"
+          >
+            <span class="">產品基本資料</span>
+          </v-card-title>
+          <div class="cus_mobile_card" :class="{ mobile: mobile }">
+            <div class="cus_mobile_card_row">
+              <div class="cus_mobile_card_header">
+                產品名稱
+              </div>
+              <div class="cus_mobile_card_cell">
+                {{ product.productName }}
+              </div>
+            </div>
+            <div class="cus_mobile_card_row">
+              <div class="cus_mobile_card_header">
+                產品簡介
+              </div>
+              <div class="cus_mobile_card_cell">
+                <ul style="list-style-type: none">
+                  <li
+                    v-for="(item, index) in productSimpleIntro"
+                    :key="`simpleIntro${index}`"
+                  >
+                    <v-icon>mdi-circle-small</v-icon>{{ item }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="cus_mobile_card_row">
+              <div class="cus_mobile_card_header">
+                產品類型
+              </div>
+              <div class="cus_mobile_card_cell">
+                {{ productUseType === '1' ? '商品類型' : '現金類型' }}
+              </div>
+            </div>
+            <div class="cus_mobile_card_row">
+              <div class="cus_mobile_card_header vcenter">
+                產品分類
+              </div>
+              <div class="cus_mobile_card_cell">
+                <v-chip
+                  v-for="item in productClass"
+                  :key="item.id"
+                  :color="colors(item.color)"
+                  dark
+                  class="mx-1 my-2"
+                >
+                  {{ item.name }}
+                </v-chip>
+              </div>
+            </div>
+            <div class="cus_mobile_card_row">
+              <div class="cus_mobile_card_header">
+                使用期限
+              </div>
+              <div v-if="mobile" class="cus_mobile_card_cell">
+                <div>{{ productUseTimeMobile[0] }}</div>
+                <div>~ {{ productUseTimeMobile[1] }}</div>
+              </div>
+              <div v-else>
+                {{ productUseTime }}
+              </div>
+            </div>
+            <div class="cus_mobile_card_row">
+              <div class="cus_mobile_card_header">
+                面額
+              </div>
+              <div class="cus_mobile_card_cell">
+                {{ productPrice | toDollars }}
+              </div>
+            </div>
+            <div class="cus_mobile_card_row">
+              <div class="cus_mobile_card_header">
+                販售數量
+              </div>
+              <div class="cus_mobile_card_cell">
+                {{ productNum | numberWithCommas }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </v-card>
 
-                    <v-card-title class="custom-brown1-3--text pt-0">
-                      <span
-                        class="title_dash_front"
-                        :class="{ ori: !mobile }"
-                      >產品說明</span>
-                    </v-card-title>
-                    <transition-group name="fadeLeft" tag="div" class="mt-4">
-                      <v-row
-                        v-for="(item, index) in productIntroFilter"
-                        :key="item.id"
-                        class="px-4 py-4"
-                        :class="{
-                          border_error: item.valid,
-                          border_bottom: introList.length - 1 !== index
-                        }"
+      <v-card
+        flat
+        class="py-8 mt-6 mx-auto"
+        max-width="1150"
+        :rounded="mobile ? false : 'xl'"
+      >
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <v-btn
+              v-show="sec1ProductEdit && product.productEdit === 1"
+              color="pink"
+              dark
+              fab
+              small
+              absolute
+              right
+              top
+              v-bind="attrs"
+              v-on="on"
+              @click="sec1IntroAdd"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <span>新增說明</span>
+        </v-tooltip>
+
+        <v-form ref="sec1Form1" v-model="sec1_valid">
+          <div class="cus_ui_card">
+            <v-card-title
+              class="master_title custom-brown1-3--text pt-0"
+              :class="{ 'px-8': !mobile }"
+            >
+              <span class="">產品說明</span>
+            </v-card-title>
+
+            <transition-group
+              name="fadeLeft"
+              tag="div"
+              class="cus_mobile_card"
+              :class="{ mobile: mobile }"
+            >
+              <div
+                v-for="(item, index) in productIntroFilter"
+                :key="item.id"
+                class="cus_mobile_card_row flex_col pa-4 pb-4"
+                :class="{
+                  border_error: item.valid,
+                  border_bottom: introList.length - 1 !== index
+                }"
+              >
+                <div class="cus_mobile_card_header">
+                  <div
+                    v-if="!sec1ProductEdit || item.edit === 0"
+                    :class="{ need: sec1_edit }"
+                  >
+                    {{ item.title }}
+                  </div>
+                  <div v-else>
+                    <v-text-field
+                      v-model="item.title"
+                      dense
+                      outlined
+                      color="#16261f"
+                      counter="20"
+                      placeholder="請輸入標題"
+                      :rules="[rules.required, rules.length(20)]"
+                      label="請填寫標題"
+                      single-line
+                    />
+                    <v-scroll-y-transition>
+                      <div
+                        v-show="item.valid"
+                        class="v-text-field__details"
+                        style="margin: 0"
                       >
-                        <v-col
-                          cols="12"
-                          sm="3"
-                          md="2"
-                          class="align-self-start pb-0"
+                        <div
+                          class="v-messages theme--light error--text"
+                          role="alert"
                         >
-                          <div
-                            v-if="!sec1ProductEdit || item.edit === 0"
-                            class="row_title"
-                            :class="{ need: sec1_edit }"
-                          >
-                            <span>
-                              <v-icon color="brownS1">
-                                mdi-circle-small
-                              </v-icon>
-                            </span>
-                            <span
-                              class="font-weight-bold font_size1-1 custom-brown1-2--text"
-                            >
-                              {{ item.title }}
-                            </span>
-                          </div>
-                          <div v-else>
-                            <v-text-field
-                              v-model="item.title"
-                              dense
-                              outlined
-                              color="#16261f"
-                              counter="20"
-                              placeholder="請輸入標題"
-                              :rules="[rules.required, rules.length(20)]"
-                              label="請填寫標題"
-                              single-line
-                            />
-                          </div>
-                          <v-scroll-y-transition>
-                            <div
-                              v-show="item.valid"
-                              class="v-text-field__details"
-                            >
-                              <div
-                                class="v-messages theme--light error--text"
-                                role="alert"
-                              >
-                                <div class="v-messages__wrapper">
-                                  <div class="v-messages__message">
-                                    此欄位為必填
-                                  </div>
-                                </div>
-                              </div>
+                          <div class="v-messages__wrapper">
+                            <div class="v-messages__message">
+                              此欄位為必填
                             </div>
-                          </v-scroll-y-transition>
-                        </v-col>
-                        <v-col cols="12" sm="9" style="position: relative">
-                          <v-tooltip bottom>
-                            <template #activator="{ on, attrs }">
-                              <v-btn
-                                v-show="
-                                  sec1ProductEdit &&
-                                    product.productEdit === 1 &&
-                                    item.edit === 1
-                                "
-                                class="mx-2"
-                                fab
-                                x-small
-                                color="#CCCCCC"
-                                depressed
-                                outlined
-                                v-bind="attrs"
-                                style="
-                                  position: absolute;
-                                  top: -0.5rem;
-                                  right: -0.8rem;
-                                  background-color: white;
-                                "
-                                v-on="on"
-                                @click="sec1IntroRemove(index)"
-                              >
-                                <v-icon dark>
-                                  mdi-window-close
-                                </v-icon>
-                              </v-btn>
-                            </template>
-                            <span>刪除</span>
-                          </v-tooltip>
-                          <client-only>
-                            <VueEditor
-                              v-if="
-                                sec1ProductEdit && product.productEdit === 1
-                              "
-                              v-model="item.content"
-                              placeholder="請輸入內文"
-                            />
-                            <div v-else v-html="item.content" />
-                          </client-only>
-                        </v-col>
-                      </v-row>
-                    </transition-group>
-                  </v-card>
-                </v-form>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
+                          </div>
+                        </div>
+                      </div>
+                    </v-scroll-y-transition>
+                  </div>
+                </div>
+                <div class="cus_mobile_card_cell" style="position: relative">
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        v-show="
+                          sec1ProductEdit &&
+                            product.productEdit === 1 &&
+                            item.edit === 1
+                        "
+                        class="mx-2"
+                        fab
+                        x-small
+                        color="#CCCCCC"
+                        depressed
+                        outlined
+                        v-bind="attrs"
+                        style="
+                          position: absolute;
+                          top: -0.5rem;
+                          right: -0.8rem;
+                          background-color: white;
+                        "
+                        v-on="on"
+                        @click="sec1IntroRemove(index)"
+                      >
+                        <v-icon dark>
+                          mdi-window-close
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <span>刪除</span>
+                  </v-tooltip>
+                  <client-only>
+                    <VueEditor
+                      v-if="sec1ProductEdit && product.productEdit === 1"
+                      v-model="item.content"
+                      placeholder="請輸入內文"
+                    />
+                    <div
+                      v-else
+                      style="text-align: left"
+                      v-html="item.content"
+                    />
+                  </client-only>
+                </div>
+              </div>
+            </transition-group>
+          </div>
+        </v-form>
       </v-card>
     </div>
+
+    <v-tooltip top>
+      <template #activator="{ on, attrs }">
+        <v-btn
+          v-show="
+            CurrentPageSectionIndex === 0 &&
+              !sec1ProductEdit &&
+              product.productEdit === 1
+          "
+          v-scroll="onScroll"
+          fab
+          dark
+          fixed
+          right
+          color="rgb(117, 73, 51, 0.8)"
+          style="transition: bottom 0.5s"
+          :style="{ bottom: (scoller_fab ? 88 : 16) + 'px' }"
+          v-bind="attrs"
+          v-on="on"
+          @click="sec1Modify"
+        >
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+      </template>
+      <span>編輯</span>
+    </v-tooltip>
     <to-top />
     <my-waiting :loading="loadingStatus" />
   </div>
@@ -543,6 +397,7 @@ export default {
     return {
       loadingStatus: false,
       CurrentPageSectionIndex: 0,
+      scoller_fab: false,
 
       basicProductClasses: this.$store.getters['basic/getClasses'],
       sec1_edit: false,
@@ -562,8 +417,16 @@ export default {
     }
   },
   computed: {
+    mobile() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return true
+      }
+
+      return false
+    },
     title() {
-      return `商城票券(逐筆發行) - ${this.product.productName}`
+      return `門市票券(整批發行) - ${this.product.productName}`
     },
     slidesPaddingCarousel() {
       switch (this.$vuetify.breakpoint.name) {
@@ -627,6 +490,22 @@ export default {
       }
       return time
     },
+    productUseTimeMobile() {
+      let time = ['', '']
+      const plan = this.product.productPlanDTOSet[0]
+      if (plan) {
+        if (plan.useDays !== -1) {
+          time = `依購買後起訖 ${plan.useDays}天`
+        } else {
+          const stime =
+            plan.useStime.length > 0 ? util.formatTimeMinus(plan.useStime) : ''
+          const etime =
+            plan.useEtime.length > 0 ? util.formatTimeMinus(plan.useEtime) : ''
+          time = [stime, etime]
+        }
+      }
+      return time
+    },
 
     productReimburse() {
       let reimburse = 0
@@ -669,6 +548,13 @@ export default {
   },
   created() {},
   methods: {
+    onScroll(e) {
+      if (typeof window === 'undefined') {
+        return
+      }
+      const top = window.pageYOffset || e.target.scrollTop || 0
+      this.scoller_fab = top > 20
+    },
     loading(flag) {
       if (flag) {
         this.loadingStatus = true

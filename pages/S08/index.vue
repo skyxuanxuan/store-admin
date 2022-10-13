@@ -140,7 +140,10 @@
                         </v-list-item-content>
                       </v-list-item>
                       <v-divider />
-                      <v-list-item v-show="item.statusCode === 1">
+                      <v-list-item
+                        v-show="item.statusCode === 1"
+                        @click="toggleStatus(item.d0, 0)"
+                      >
                         <v-list-item-icon>
                           <v-icon color="other1">
                             mdi-close
@@ -153,7 +156,10 @@
                         </v-list-item-content>
                       </v-list-item>
                       <v-divider v-show="item.statusCode === 1" />
-                      <v-list-item v-show="item.statusCode === 0">
+                      <v-list-item
+                        v-show="item.statusCode === 0"
+                        @click="toggleStatus(item.d0, 1)"
+                      >
                         <v-list-item-icon>
                           <v-icon color="other1">
                             mdi-restart
@@ -209,7 +215,6 @@
                   label="權限"
                   item-text="name"
                   item-value="id"
-                  return-object
                   single-line
                   hide-details
                   dense
@@ -506,8 +511,8 @@ export default {
           let status = '未知'
           const statusCode = item.useType
           if (statusCode === 1) {
-            status = '正常'
-          } else if (statusCode === 1) {
+            status = '使用中'
+          } else if (statusCode === 0) {
             status = '停用'
           }
           initArr.push({
@@ -550,6 +555,99 @@ export default {
         }, 500)
       }
     },
+
+    toggleStatus(id, status) {
+      const member = this.members.find(x => x.id === id)
+      if (member) {
+        const group = this.groups.find(x => x.id === member.storeGroup)
+        if (group) {
+          let title = ''
+          if (status === 1) {
+            title = '確定要啟用此帳號嗎？'
+          } else {
+            title = '確定要停用此帳號嗎？'
+          }
+          const content = `
+            <div class="message_box_content">
+              <div class="message_box_content_row">
+                <div class="message_box_content_header">稱謂</div>
+                <div class="message_box_content_cell">${member.name}</div>
+              </div>
+              <div class="message_box_content_row">
+                <div class="message_box_content_header">帳號</div>
+                <div class="message_box_content_cell">${member.storeAc}</div>
+              </div>
+              <div class="message_box_content_row">
+                <div class="message_box_content_header">信箱</div>
+                <div class="message_box_content_cell">${member.email}</div>
+              </div>
+              <div class="message_box_content_row">
+                <div class="message_box_content_header">權限</div>
+                <div class="message_box_content_cell">${group.name}</div>
+              </div>
+            </div>
+          `
+          this.$swal
+            .fire({
+              title,
+              html: content,
+              showCancelButton: true,
+              cancelButtonText: '取消',
+              confirmButtonText: '確定',
+              reverseButtons: true,
+              showClass: {
+                popup: '',
+                backdrop: 'swal2-backdrop-show',
+                icon: 'swal2-icon-show'
+              }
+            })
+            .then(async (result) => {
+              if (result.isConfirmed) {
+                this.loading(true)
+                const form = {}
+                form.user = id
+                form.status = status
+                try {
+                  const response = await this.$axios.put(
+                    '/S08/account-status',
+                    form
+                  )
+                  const data = response.data
+                  if (data.res === 'CODE0000') {
+                    const newRes = await this.$axios.get('S08/load')
+                    const newData = newRes.data
+                    if (newData.res === 'CODE0000') {
+                      this.members = newData.data.members
+                      this.groups = newData.data.groups
+                    }
+                    this.groupEditDialog = false
+                    this.$swal.fire('小提示', '修改成功', 'success')
+                  } else {
+                    this.$swal.fire('小提示', data.msg, 'error')
+                  }
+                  this.$nextTick(() => {
+                    this.loading(false)
+                  })
+                } catch (err) {
+                  this.loading(false)
+                  this.$notify({
+                    title: '小提示',
+                    text: '網路連線異常',
+                    type: 'error',
+                    duration: 2000
+                  })
+                  console.log(err)
+                }
+              }
+            })
+        } else {
+          this.$swal.fire('小提示', '部分項目錯誤')
+        }
+      } else {
+        this.$swal.fire('小提示', '部分項目錯誤')
+      }
+    },
+
     groupEditInit(id) {
       const member = this.members.find(x => x.id === id)
       if (member) {
@@ -577,7 +675,10 @@ export default {
             this.groupEditDialog = false
           } else {
             try {
-              const response = await this.$axios.put('S08/account')
+              const form = {}
+              form.user = this.groupEditDialogObj.id
+              form.group = this.groupEditDialogObj.group
+              const response = await this.$axios.put('S08/account', form)
               const data = response.data
               if (data.res === 'CODE0000') {
                 const newRes = await this.$axios.get('S08/load')
@@ -586,6 +687,7 @@ export default {
                   this.members = newData.data.members
                   this.groups = newData.data.groups
                 }
+                this.groupEditDialog = false
                 this.$swal.fire('小提示', '修改成功', 'success')
               } else {
                 this.$swal.fire('小提示', data.msg, 'error')
@@ -629,57 +731,86 @@ export default {
         return
       }
 
-      if (this.memberNewDialogValid) {
-        const content = `
-        <div>
-          帳號
+      const group = this.groups.find(
+        x => x.id === this.memberNewDialogObj.group
+      )
+      if (group) {
+        if (this.memberNewDialogValid) {
+          const content = `
+        <div class="message_box_content">
+          <div class="message_box_content_row">
+            <div class="message_box_content_header">稱謂</div>
+            <div class="message_box_content_cell">${this.memberNewDialogObj.d1}</div>
+          </div>
+          <div class="message_box_content_row">
+            <div class="message_box_content_header">帳號</div>
+            <div class="message_box_content_cell">${this.memberNewDialogObj.d2}</div>
+          </div>
+          <div class="message_box_content_row">
+            <div class="message_box_content_header">信箱</div>
+            <div class="message_box_content_cell">${this.memberNewDialogObj.d3}</div>
+          </div>
+          <div class="message_box_content_row">
+            <div class="message_box_content_header">權限</div>
+            <div class="message_box_content_cell">${group.name}</div>
+          </div>
         </div>
         `
-        this.$swal
-          .fire({
-            title: '確定要新增帳號嗎？',
-            html: content,
-            showCancelButton: true,
-            cancelButtonText: '取消',
-            confirmButtonText: '確定',
-            reverseButtons: true,
-            showClass: {
-              popup: '',
-              backdrop: 'swal2-backdrop-show',
-              icon: 'swal2-icon-show'
-            }
-          })
-          .then(async (result) => {
-            if (result.isConfirmed) {
-              this.loading(true)
-              const form = {}
-              form.name = this.memberNewDialogObj.d1
-              form.ac = this.memberNewDialogObj.d2
-              form.email = this.memberNewDialogObj.d3
-              form.group = this.memberNewDialogObj.group
-              try {
-                const response = await this.$axios.post('/S08/account', form)
-                const data = response.data
-                if (data.res === 'CODE0000') {
-                  this.$swal.fire('小提示', '修改成功', 'success')
-                } else {
-                  this.$swal.fire('小提示', data.msg, 'error')
-                }
-                this.$nextTick(() => {
-                  this.loading(false)
-                })
-              } catch (err) {
-                this.loading(false)
-                this.$notify({
-                  title: '小提示',
-                  text: '網路連線異常',
-                  type: 'error',
-                  duration: 2000
-                })
-                console.log(err)
+          this.$swal
+            .fire({
+              title: '確定要新增帳號嗎？',
+              html: content,
+              showCancelButton: true,
+              cancelButtonText: '取消',
+              confirmButtonText: '確定',
+              reverseButtons: true,
+              showClass: {
+                popup: '',
+                backdrop: 'swal2-backdrop-show',
+                icon: 'swal2-icon-show'
               }
-            }
-          })
+            })
+            .then(async (result) => {
+              if (result.isConfirmed) {
+                this.loading(true)
+                const form = {}
+                form.name = this.memberNewDialogObj.d1
+                form.ac = this.memberNewDialogObj.d2
+                form.email = this.memberNewDialogObj.d3
+                form.group = this.memberNewDialogObj.group
+                try {
+                  const response = await this.$axios.post('/S08/account', form)
+                  const data = response.data
+                  if (data.res === 'CODE0000') {
+                    const newRes = await this.$axios.get('S08/load')
+                    const newData = newRes.data
+                    if (newData.res === 'CODE0000') {
+                      this.members = newData.data.members
+                      this.groups = newData.data.groups
+                    }
+                    this.memberNewDialog = false
+                    this.$swal.fire('小提示', '新增成功', 'success')
+                  } else {
+                    this.$swal.fire('小提示', data.msg, 'error')
+                  }
+                  this.$nextTick(() => {
+                    this.loading(false)
+                  })
+                } catch (err) {
+                  this.loading(false)
+                  this.$notify({
+                    title: '小提示',
+                    text: '網路連線異常',
+                    type: 'error',
+                    duration: 2000
+                  })
+                  console.log(err)
+                }
+              }
+            })
+        } else {
+          this.$swal.fire('小提示', '部分項目錯誤')
+        }
       } else {
         this.$swal.fire('小提示', '部分項目錯誤')
       }

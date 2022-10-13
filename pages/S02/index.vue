@@ -9,30 +9,11 @@
 
       <v-spacer />
 
-      <v-menu bottom left>
-        <template #activator="{ on, attrs }">
-          <v-btn class="d-flex d-sm-none" icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item-group>
-            <v-list-item nuxt to="/S02/product/create">
-              <v-list-item-icon>
-                <v-icon>mdi-plus</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>建立產品</v-list-item-title>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-menu>
-
       <!-- <v-btn class="d-none d-sm-flex" color="#666666" width="140" dark>
         發送票券
       </v-btn> -->
     </v-app-bar>
-    <div class="pa-4">
+    <div :class="{'pa-4': !mobile}">
       <v-tabs-items v-model="CurrentPageSectionIndex">
         <v-tab-item class="background-color">
           <PageStatisticCard :items="pageStatisticCardItems" />
@@ -134,8 +115,8 @@
                           v-bind="attrs"
                           v-on="on"
                         >
-                          <v-icon color="other2">
-                            mdi-pencil
+                          <v-icon color="brownS1">
+                            mdi-open-in-new
                           </v-icon>
                         </v-btn>
                       </template>
@@ -382,6 +363,14 @@ export default {
     }
   },
   computed: {
+    mobile() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return true
+      }
+
+      return false
+    },
     pageStatisticCardItems() {
       return [
         {

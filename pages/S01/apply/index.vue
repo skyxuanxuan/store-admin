@@ -48,7 +48,7 @@
         申請
       </v-btn>
     </v-app-bar>
-    <div class="pa-4">
+    <div :class="{'pa-4': !mobile}">
       <v-tabs-items
         v-model="CurrentPageSectionIndex"
         :class="{ none: loadingStatus }"
@@ -552,6 +552,14 @@ export default {
     }
   },
   computed: {
+    mobile() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return true
+      }
+
+      return false
+    },
     pageStatisticCardItems() {
       return [
         {

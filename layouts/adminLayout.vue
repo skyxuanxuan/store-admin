@@ -40,7 +40,13 @@
       </v-list>
       <template #append>
         <div class="pa-2">
-          <v-btn v-show="!miniVariant" outlined block nuxt to="/change-password">
+          <v-btn
+            v-show="!miniVariant"
+            outlined
+            block
+            nuxt
+            to="/change-password"
+          >
             修改密碼
           </v-btn>
           <v-btn v-show="miniVariant" icon block @click="userLogOut">
@@ -69,6 +75,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import util from '~/assets/js/util'
 export default {
   name: 'AdminLayout',
   data() {
@@ -97,6 +104,7 @@ export default {
     const pToken = this.userInfo.pToken
     this.$fire.messaging.getToken().then((token) => {
       if (pToken !== token) {
+        console.log(token)
         const form = new FormData()
         form.append('token', token)
         this.$axios.put('/auth/p-token', form)
@@ -106,19 +114,31 @@ export default {
     this.$fire.messaging.onMessage((payload) => {
       const title = payload.notification.title ?? '小提示'
       const text = payload.notification.body ?? ''
-      const type = payload.data.type ?? 'success'
-      this.$notify({
-        title,
-        text,
-        type,
-        duration: 5000
-      })
+      const data = payload.data
+      if (data) {
+        this.$store.dispatch('S07/addMessagesAction', {
+          content: text,
+          data: JSON.stringify(data),
+          id: util._uuid(),
+          sendTime: util.dateTime2String(new Date()),
+          status: 0,
+          title,
+          type: 2
+        })
+        const type = payload.data.type ?? 'info'
+        this.$notify({
+          title,
+          type,
+          duration: 5000
+        })
+      }
     })
   },
 
   methods: {
     userLogOut() {
       this.$store.dispatch('userInfo/cleanInfo')
+      this.$store.dispatch('S07/clearS07')
       this.$auth.logout()
     },
 
@@ -133,5 +153,4 @@ export default {
   color: #2196f3 !important;
   caret-color: #2196f3 !important;
 }
-
 </style>

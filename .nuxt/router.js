@@ -12,6 +12,7 @@ const _9f4504c8 = () => interopDefault(import('..\\pages\\S02\\index.vue' /* web
 const _8fe1ba0a = () => interopDefault(import('..\\pages\\S03\\index.vue' /* webpackChunkName: "pages/S03/index" */))
 const _807e6f4c = () => interopDefault(import('..\\pages\\S04\\index.vue' /* webpackChunkName: "pages/S04/index" */))
 const _711b248e = () => interopDefault(import('..\\pages\\S05\\index.vue' /* webpackChunkName: "pages/S05/index" */))
+const _52548f12 = () => interopDefault(import('..\\pages\\S07\\index.vue' /* webpackChunkName: "pages/S07/index" */))
 const _42f14454 = () => interopDefault(import('..\\pages\\S08\\index.vue' /* webpackChunkName: "pages/S08/index" */))
 const _46c14cee = () => interopDefault(import('..\\pages\\S01\\apply\\index.vue' /* webpackChunkName: "pages/S01/apply/index" */))
 const _352c57d8 = () => interopDefault(import('..\\pages\\S08\\group-list.vue' /* webpackChunkName: "pages/S08/group-list" */))
@@ -68,6 +69,10 @@ export const routerOptions = {
     path: "/S05",
     component: _711b248e,
     name: "S05"
+  }, {
+    path: "/S07",
+    component: _52548f12,
+    name: "S07"
   }, {
     path: "/S08",
     component: _42f14454,
