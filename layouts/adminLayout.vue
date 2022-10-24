@@ -38,30 +38,22 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-      <template #append>
-        <div class="pa-2">
-          <v-btn
-            v-show="!miniVariant"
-            outlined
-            block
-            nuxt
-            to="/change-password"
-          >
-            修改密碼
-          </v-btn>
-          <v-btn v-show="miniVariant" icon block @click="userLogOut">
-            <v-icon>mdi-account-edit</v-icon>
-          </v-btn>
-        </div>
-        <div class="pa-2">
-          <v-btn v-show="!miniVariant" outlined block @click="userLogOut">
-            登出
-          </v-btn>
-          <v-btn v-show="miniVariant" icon block @click="userLogOut">
-            <v-icon>mdi-logout</v-icon>
-          </v-btn>
-        </div>
-      </template>
+      <div class="pa-2">
+        <v-btn v-show="!miniVariant" outlined block nuxt to="/change-password">
+          修改密碼
+        </v-btn>
+        <v-btn v-show="miniVariant" icon block @click="userLogOut">
+          <v-icon>mdi-account-edit</v-icon>
+        </v-btn>
+      </div>
+      <div class="pa-2">
+        <v-btn v-show="!miniVariant" outlined block @click="userLogOut">
+          登出
+        </v-btn>
+        <v-btn v-show="miniVariant" icon block @click="userLogOut">
+          <v-icon>mdi-logout</v-icon>
+        </v-btn>
+      </div>
     </v-navigation-drawer>
 
     <v-main>

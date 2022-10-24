@@ -12,7 +12,7 @@ export const getters = {
         const itemData = JSON.parse(item.data)
         let jump = 0
         let url = ''
-        if (itemData.func === '2') {
+        if (item.func === 2) {
           jump = 1
           url = itemData.url
         }
