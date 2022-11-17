@@ -844,7 +844,7 @@
                   </div>
                   <div class="cus_mobile_card_row">
                     <div class="cus_mobile_card_header">
-                      使用期限
+                      販售期限
                     </div>
                     <div class="cus_mobile_card_cell">
                       <v-card flat :class="{ 'd-flex': !mobile }">
